@@ -1,8 +1,17 @@
 import "./App.css";
+import "@fontsource/roboto";
+import RegisterPage from "./pages/RegisterPage";
+import RegisterPageSuccess from "./pages/RegisterPageSuccess";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <h1 className="text-3xl font-bold underline text-red-500 ">Hello world!</h1>
+    <Router>
+      <Routes>
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/register/success" element={<RegisterPageSuccess />} />
+      </Routes>
+    </Router>
   );
 }
 
