@@ -12,8 +12,8 @@ export function CustomInput({ label, ...props }) {
         {...props}
         className={
           meta.touched && meta.error
-            ? "outline-none border border-red-600 rounded-[4px] w-[380px] h-[48px] p-[12px] placeholder-gray-500"
-            : "rounded-[4px] w-[380px] h-[48px] p-[12px] placeholder-gray-500"
+            ? "outline-none border border-red-600 rounded-[4px] w-[380px] h-[48px] p-[12px] placeholder-gray-500 max-[375px]:w-[343px]"
+            : "rounded-[4px] w-[380px] h-[48px] p-[12px] placeholder-gray-500 max-[375px]:w-[343px]"
         }
       />
       {meta.touched && meta.error && (
