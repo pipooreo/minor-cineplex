@@ -9,42 +9,52 @@ function MoviePage() {
       className="bg-[#101525] relative"
       style={{ fontFamily: "Roboto Condensed" }}
     >
-      <div className="absolute w-full h-[400px]">
-        <div className="bg-[url('public/movie_background.png')]  bg-center bg-no-repeat bg-cover w-full h-full"></div>
+      <div className="absolute  w-full h-[500px] hidden sm:block">
+        <div
+          className=" bg-center bg-no-repeat w-full h-full"
+          style={{
+            backgroundImage:
+              "linear-gradient(360deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 100%), url('public/movie_background.png')",
+            backgroundSize: "100% 650px",
+          }}
+        ></div>
       </div>
-      <div className="relative z-10">
+      <div className="relative">
         <Navbar />
-        <section className="relative flex justify-center items-center  my-[60px]">
-          <div className="w-[80%] h-[100%] absolute rounded-xl backdrop-blur-md bg-[#070C1BB2]/70  "></div>
-          <div className="relative z-10 flex gap-10 rounded-xl justify-center items-center w-[80%] text-white">
+        <section className="relative  flex justify-center items-center mt-[100px] ">
+          <div className="w-[100%] md:w-[80%] h-[100%] absolute md:rounded-xl backdrop-blur-md bg-[#070C1BB2]/70  "></div>
+          <div className="flex flex-col md:flex-row gap-10 z-10 md:rounded-xl md:justify-center md:items-center md:w-[80%] w-100% text-white">
             <img
-              className="w-[411px] h-[600px] rounded-xl"
+              className="w-full sm:w-[411px] sm:h-[600px] md:rounded-xl "
               src="public\movie_img.png"
               alt=""
             />
-            <div className="flex flex-col gap-[20px] h-[600px]">
-              <div className="py-[50px]">
+            <div className="flex flex-col gap-[20px] h-[600px] p-[50px]">
+              <div className="">
                 <h1 className="text-[36px] leading-[44px] font-bold pb-[20px]">
                   The Dark Knight
                 </h1>
-                <p className="flex justify-left items-center gap-[10px]">
-                  <span className="bg-[#21263F] text-[#8B93B0] rounded-[4px]  px-[6px] py-[12px] ">
-                    Action
-                  </span>
-                  <span className="bg-[#21263F] text-[#8B93B0] rounded-[4px]  px-[6px] py-[12px]">
-                    Crime
-                  </span>
-                  <span className="bg-[#21263F] text-[#8B93B0] rounded-[4px] px-[10px] py-[12px] ">
-                    TH
-                  </span>
-                  <div className="border-l-2 border-[#565F7E] mx-[10px] p-[5px]">
+                <div className="flex flex-col md:flex-row justify-start md:items-center">
+                  <div className="border-r-2 border-[#565F7E] mx-[10px] p-[5px]">
+                    <p className="flex justify-start items-center gap-[10px]">
+                      <span className="bg-[#21263F] text-[#8B93B0] rounded-[4px]  px-[6px] py-[12px] ">
+                        Action
+                      </span>
+                      <span className="bg-[#21263F] text-[#8B93B0] rounded-[4px]  px-[6px] py-[12px]">
+                        Crime
+                      </span>
+                      <span className="bg-[#21263F] text-[#8B93B0] rounded-[4px] px-[10px] py-[12px] ">
+                        TH
+                      </span>
+                    </p>
+                  </div>
+                  <p>
                     <span className="text-[#C8CEDD] text-[16px] leading-[24px] px-[5px]">
                       Release date: 18 Jun 2024
                     </span>
-                  </div>
-                </p>
+                  </p>
+                </div>
               </div>
-
               <button className="my-[20px] px-[40px] py-[12px] bg-[#4E7BEE] rounded-md w-[153px] h-[48px]">
                 Book ticket
               </button>
@@ -78,7 +88,7 @@ function MoviePage() {
                   alt=""
                 />
                 <div>
-                  <h3>Christopher Nolan</h3>
+                  <h3>Christopher KaNolan</h3>
                   <p>24 Jun 2024</p>
                 </div>
               </div>
