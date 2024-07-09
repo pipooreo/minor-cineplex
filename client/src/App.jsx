@@ -1,6 +1,7 @@
 import "./App.css";
 import RegisterPage from "./pages/RegisterPage";
 import RegisterPageSuccess from "./pages/RegisterPageSuccess";
+import MoviePage from "./pages/MoviePage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 

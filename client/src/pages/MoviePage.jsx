@@ -21,21 +21,21 @@ function MoviePage() {
       </div>
       <div className="relative">
         <Navbar />
-        <section className="relative  flex justify-center items-center mt-[100px] ">
-          <div className="w-[100%] md:w-[80%] h-[100%] absolute md:rounded-xl backdrop-blur-md bg-[#070C1BB2]/70  "></div>
-          <div className="flex flex-col md:flex-row gap-10 z-10 md:rounded-xl md:justify-center md:items-center md:w-[80%] w-100% text-white">
+        <section className="relative  flex justify-center items-center md:mt-[100px] ">
+          <div className="w-[100%] md:w-[80%] h-[100%] absolute md:rounded-xl backdrop-blur-md bg-[#070C1BB2]/70 "></div>
+          <div className="flex flex-col lg:flex-row gap-10 z-10 md:rounded-xl justify-center items-center md:w-[80%] w-100% text-white">
             <img
-              className="w-full sm:w-[411px] sm:h-[600px] md:rounded-xl "
+              className="w-full sm:w-[411px] sm:h-[600px] md:rounded-xl"
               src="public\movie_img.png"
               alt=""
             />
-            <div className="flex flex-col gap-[20px] h-[600px] p-[50px]">
-              <div className="">
-                <h1 className="text-[36px] leading-[44px] font-bold pb-[20px]">
+            <div className="flex flex-col gap-[50px] md:p-[50px] px-[15px] pb-[50px] pt-0">
+              <div>
+                <h1 className="text-[36px] leading-[44px] font-bold ">
                   The Dark Knight
                 </h1>
                 <div className="flex flex-col md:flex-row justify-start md:items-center">
-                  <div className="border-r-2 border-[#565F7E] mx-[10px] p-[5px]">
+                  <div className=" py-[10px] pr-[10px] w-fit">
                     <p className="flex justify-start items-center gap-[10px]">
                       <span className="bg-[#21263F] text-[#8B93B0] rounded-[4px]  px-[6px] py-[12px] ">
                         Action
@@ -46,10 +46,11 @@ function MoviePage() {
                       <span className="bg-[#21263F] text-[#8B93B0] rounded-[4px] px-[10px] py-[12px] ">
                         TH
                       </span>
+                      <img className="h-[35px]" src="\public\pipe.png" alt="" />
                     </p>
                   </div>
                   <p>
-                    <span className="text-[#C8CEDD] text-[16px] leading-[24px] px-[5px]">
+                    <span className="text-[#C8CEDD] text-[16px] leading-[24px] px-[10px]">
                       Release date: 18 Jun 2024
                     </span>
                   </p>
@@ -58,28 +59,31 @@ function MoviePage() {
               <button className="my-[20px] px-[40px] py-[12px] bg-[#4E7BEE] rounded-md w-[153px] h-[48px]">
                 Book ticket
               </button>
-              <p className="my-[20px]">
-                With the help of allies Lt. Jim Gordon (Gary Oldman) and DA
-                Harvey Dent (Aaron Eckhart), Batman (Christian Bale) has been
-                able to keep a tight lid on crime in Gotham City.
-              </p>
-              <p>
-                But when a vile young criminal calling himself the Joker (Heath
-                Ledger) suddenly throws the town into chaos, the caped Crusader
-                begins to tread a fine line between heroism and vigilantism.
-              </p>
+              <div className="md:my-[20px] lg:mr-[35%] flex flex-col gap-5">
+                <p>
+                  With the help of allies Lt. Jim Gordon (Gary Oldman) and DA
+                  Harvey Dent (Aaron Eckhart), Batman (Christian Bale) has been
+                  able to keep a tight lid on crime in Gotham City.
+                </p>
+                <p>
+                  But when a vile young criminal calling himself the Joker
+                  (Heath Ledger) suddenly throws the town into chaos, the caped
+                  Crusader begins to tread a fine line between heroism and
+                  vigilantism.
+                </p>
+              </div>
             </div>
           </div>
         </section>
-        <section className="text-white flex flex-col justify-center items-center">
-          <div className="flex gap-3 justify-start items-center w-[794px] m-[50px]">
+        <section className="text-white flex flex-col justify-center  items-center my-[20px] ">
+          <div className="flex gap-3 justify-start items-center md:w-[50%] my-[30px] mx-0 md:m-[50px]">
             <p className="bg-[#21263F] px-[16px] py-[12px]">
               <i className="fas fa-star text-[#4E7BEE] px-2"></i>
               4.6
             </p>
             <h2>Rating & Reviews</h2>
           </div>
-          <div className="w-[794px] border-b-2 border-[#21263F] py-[50px]">
+          <div className=" border-b-2 border-[#21263F] pb-[50px] w-[50%]">
             <div className="flex justify-between gap-2">
               <div className="flex gap-[10px]">
                 <img
@@ -109,7 +113,7 @@ function MoviePage() {
               distinctio nobis veniam culpa? Eveniet in eaque voluptates.
             </p>
           </div>
-          <div className="w-[794px] border-b-2 border-[#21263F] py-[50px]">
+          <div className="w-[50%] border-b-2 border-[#21263F] py-[50px]">
             <div className="flex justify-between gap-2">
               <div className="flex gap-[10px]">
                 <img
