@@ -5,16 +5,16 @@ function HomePage() {
         className="box-border p-0 m-0"
         style={{ fontFamily: "Roboto Condensed" }}
       >
-        <section className="flex flex-col items-center relative">
+        <section className="flex flex-col items-center relative ">
           <div
-            className="w-[100%] h-[400px] bg-bottom bg-cover bg-[length:100%_1100px] max-[375px]:w-[375px]"
+            className="w-[100%] h-[400px] bg-bottom bg-cover bg-[length:100%_1100px] max-[375px]:w-[375px] max-[375px]:h-[265px]"
             style={{
               backgroundImage:
                 "linear-gradient(360deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%), url('https://s3-alpha-sig.figma.com/img/66bd/f9bc/e87b78b1ce0343d72f5934b7d8ea0e25?Expires=1721606400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=cMl-mDW5BsFzI1weTzgTddRPq8LJ-0IPGoqpC8OjWfLevS4870qX2HYoZdpKm~8VzzxEPpUwlPU~Y2nzKAvPJpDZ4kGOSLh0ddN4imQBghIUJq7O1577IGgnwJ9qnhRYY~gKhqNp2IL3x4SwBpI8Vn2gctt0FXRxCobCXHimRqRwmP9Hw59iv~pp2~graHq~CxyuH1OhEyYNJ51-UIbhkPc~LjUVcii8XE2CSQvXRGJRA3OyHLi4kxztkPfWl6VqnMY~~IJSgQUT1HlYg~7QZv2j-9wpWWCTHrVkUUM9xQsMaj6w2y6LfSc7FipHEF-qnS6mDCFPojwsb1HgPu-TtQ__')",
             }}
           ></div>
-          <div className="w-[1200px] h-[128px] rounded-[4px] bg-[#070C1B] flex justify-center items-center gap-[6px] absolute top-[340px] max-[375px]:w-[375px]">
-            <div className="w-[1024px] h-[48px] flex flex-row justify-between items-center gap-[12px]">
+          <div className="w-[1200px] h-[128px] rounded-[4px] bg-[#070C1B] flex justify-center items-center gap-[6px] absolute top-[340px] max-[375px]:w-[344px] max-[375px]:h-[264px] max-[375px]:flex max-[375px]:flex-col max-[375px]:absolute max-[375px]:top-[133px]">
+            <div className="w-[1024px] h-[48px] flex flex-row justify-between items-center gap-[12px] max-[375px]:flex max-[375px]:flex-col">
               <select
                 className="w-[267px] h-[48px] rounded-[4px] bg-[#21263F] border-[#565F7E] text-[#8B93B0] border-[1px] p-[12px]"
                 name="movie"
@@ -64,7 +64,7 @@ function HomePage() {
             </button>
           </div>
         </section>
-        <section className="h-[828px] px-[120px] pt-[144px] pb-[80px] bg-[#21263F] flex justify-center">
+        <section className="px-[120px] pt-[144px] pb-[80px] bg-[#21263F] flex justify-center">
           <div className="flex flex-col gap-[16px]">
             <div className="w-[294px] h-[38px] flex flex-row justify-between items-center">
               <button className="w-[136px] h-[30px] text-[#8B93B0] text-[24px] font-[700] underline md:underline-offset-8 leading-[30px] p-[4px]">
