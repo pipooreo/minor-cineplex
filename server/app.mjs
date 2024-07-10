@@ -3,7 +3,10 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectionPool from "./utils/db.mjs";
 import authRouter from "./routers/auth.mjs";
-
+import moviesRouter from "./routers/movies.mjs";
+import cinemasRouter from "./routers/cinemas.mjs";
+import cityRouter from "./routers/city.mjs";
+import commentRouter from "./routers/comments.mjs";
 dotenv.config();
 
 const app = express();
@@ -18,10 +21,18 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("/users", async (req, res) => {
-  const results = await connectionPool.query(`select * from users`);
-  res.status(200).json({ data: results.rows });
-});
+app.use("/get", authRouter);
+
+app.use("/movies", moviesRouter); //done
+
+app.use("/movies/:moviesId", authRouter); //done
+
+app.use("/cinemas", cinemasRouter); //done
+
+// app.get("/cinemas/:city", async);
+
+app.use("/comments", commentRouter); //done
+app.use("/city", cityRouter); //done
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
