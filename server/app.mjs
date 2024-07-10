@@ -25,14 +25,8 @@ app.use("/get", authRouter);
 
 app.use("/movies", moviesRouter); //done
 app.use("/cinemas", cinemasRouter); //done
-
-app.get("/cinemas/:city", cinemasRouter);
-
 app.use("/comments", commentRouter); //done
-app.use("/comments/:commentId", commentRouter); //done
-app.use("/comments/moviesComment/:commentMovieIdSearch", commentRouter); //done
 app.use("/city", cityRouter); //done
-app.use("/city/:id", cityRouter); //done
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

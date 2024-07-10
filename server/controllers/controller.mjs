@@ -90,7 +90,7 @@ export async function getCinemasById(req, res, next) {
     );
     if (results.rowCount == 0) {
       return res.status(404).json({
-        message: "Cinema notd found",
+        message: "Cinema not found",
       });
     }
     return res.status(200).json({
@@ -188,24 +188,25 @@ export async function getMoviesById(req, res, next) {
 export async function getMoviesByGenres(req, res) {
   let results;
   try {
-    const genreName = req.params.genreName;
+    const moviesGenres = req.params.moviesGenres;
     results = await connectionPool.query(
       `
       SELECT movies.name
-      FROM movies_genres
-      INNER JOIN movies ON movies.id = movies_genres.movie_id
-      INNER JOIN genres ON genres.id = movies_genres.genre_id
+      FROM movies
+      INNER JOIN movies_genres ON movies.id = movies_genres.movie_id
+      INNER JOIN genres ON movies_genres.genre_id = genres.id
       WHERE genres.genres_name = $1
-      GROUP BY movies.name
       `,
-      [genreName]
+      [moviesGenres]
     );
-//127.0.0.1:4000/movies/genres/Drama
 
     if (results.rowCount === 0) {
-      console.log("No movies found for genre:", genreName);
+      console.log("No movies found for genre:", moviesGenres);
     } else {
       console.log("Movies found:", results.rows);
+      return res.status(200).json({
+        data: results.rows,
+      });
     }
   } catch (error) {
     console.error("Error fetching movies by genre:", error);
