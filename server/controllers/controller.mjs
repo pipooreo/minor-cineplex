@@ -8,15 +8,16 @@ export async function getCityAll(req, res, next) {
     const results = await connectionPool.query(
       `
       select
-        city.id,
         city.city_name,
-        cinemas.name,
-        cinemas.address
+        array_agg(cinemas.name) as cinemas_name,
+        array_agg(cinemas.address) as cinemas_address
       from cinemas
       inner join
         city_cinemas on cinemas.id = city_cinemas.cinema_id
       inner join
-        city on city_cinemas.city_id = city.id`
+        city on city_cinemas.city_id = city.id
+      group by
+        city.city_name`
     );
     return res.status(200).json({
       message: "data fetch succesfully",
@@ -83,7 +84,8 @@ export async function getCinemasAll(req, res, next) {
     res.status(200).json({ data: results.rows });
   } catch (error) {
     return res.status(500).json({
-      message: "Server could not read assignment because database connection",
+      message:
+        "Server could not get the filted cinemas because database connection",
     });
   }
 }
