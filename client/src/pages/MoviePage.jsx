@@ -1,6 +1,4 @@
 // import { useNavigate } from "react-router-dom";
-import Navbar from "../componants/Navbar";
-import Footer from "../componants/Footer";
 
 function MoviePage() {
   //   const navigate = useNavigate();
@@ -18,17 +16,16 @@ function MoviePage() {
           }}
         ></div>
       </div>
-      <div className="relative top-0">
-        <Navbar />
-        <section className="movie-detail relative  flex justify-center items-center  xl:mt-[100px] ">
+      <div>
+        <section className="movie-detail relative  flex justify-center items-center xl:pt-[150px]">
           <div className="w-[100%] xl:w-[70%] h-[100%] xl:h-[600px] absolute xl:rounded-xl backdrop-blur-md bg-[#070C1BB2]/70 "></div>
           <div className="flex flex-col xl:flex-row gap-10 z-10 xl:rounded-xl justify-center items-center md:w-[70%] w-100% text-white">
             <img
-              className="w-[100%] md:w-[411px] md:h-[600px] xl:rounded-xl"
+              className="w-[100%] md:w-[411px] md:h-[600px] xl:rounded-xl "
               src="public\movie_img.png"
               alt=""
             />
-            <div className="flex flex-col xl:gap-[50px] xl:p-[50px] px-[15px] pb-[50px] pt-0">
+            <div className="flex flex-col xl:gap-[50px] xl:p-[50px] px-[15px] pb-[50px] pt-0 xl:mt-[100px]">
               <div>
                 <h1 className="text-[36px] leading-[44px] font-bold ">
                   The Dark Knight
@@ -74,7 +71,7 @@ function MoviePage() {
             </div>
           </div>
         </section>
-        <section className="reviews text-white flex flex-col justify-center px-[10px] items-center my-[20px] ">
+        <section className="reviews text-white flex flex-col justify-center px-[10px] items-center p-[20px] ">
           <div className="flex gap-3 justify-start items-center w-[100%]  mt-0 md:w-[50%] my-[30px] mx-0 md:m-[50px]">
             <p className="bg-[#21263F] px-[16px] py-[12px]">
               <i className="fas fa-star text-[#4E7BEE] px-2"></i>
@@ -144,7 +141,7 @@ function MoviePage() {
           </div>
         </section>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

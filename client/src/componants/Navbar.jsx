@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 function Navbar() {
+  const nevigate = useNavigate();
   return (
     <nav
-      className="relative bg-[rgba(0,0,0,0.2)] border-b-[1px] border-[#21263F] "
+      className="absolute top-0 left-0 w-full bg-[rgba(0,0,0,0.2)] border-b-[1px] border-[#21263F] z-100"
       style={{ fontFamily: "Roboto Condensed" }}
     >
       <div className="w-[100%] h-[100%] absolute backdrop-blur-sm bg-black/20 z-0"></div>
@@ -13,15 +16,18 @@ function Navbar() {
           alt=""
         />
         <div className="hidden md:flex gap-[24px]">
-          <a href="/login" className="text-gray-400 px-[20px] py-[12px]">
+          <button
+            className="text-gray-400 px-[20px] py-[12px]"
+            onClick={() => nevigate("/login")}
+          >
             Login
-          </a>
-          <a
-            href="/register"
+          </button>
+          <button
             className="border border-[#8B93B0] rounded px-[40px] py-[12px] text-white font-bold"
+            onClick={() => nevigate("/register")}
           >
             Register
-          </a>
+          </button>
         </div>
 
         <div className="flex md:hidden cursor-pointer">
