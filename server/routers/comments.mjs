@@ -3,15 +3,12 @@ import connectionPool from "../utils/db.mjs";
 import {
   getCommentsAll,
   getCommentsById,
-  getCommentsByMoviesId,
+  getCommentsByMoviesName,
 } from "../controllers/controller.mjs";
 const commentRouter = Router();
 
 commentRouter.get("/", getCommentsAll);
-commentRouter.get("/:commentId", getCommentsById);
-commentRouter.get(
-  "/moviesComment/:commentMovieIdSearch",
-  getCommentsByMoviesId
-);
+commentRouter.get("/commentId", getCommentsById);
+commentRouter.get("/moviesComment", getCommentsByMoviesName);
 
 export default commentRouter;

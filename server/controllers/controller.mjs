@@ -31,7 +31,7 @@ export async function getCityAll(req, res, next) {
 
 export async function getCinemasByCity(req, res, next) {
   try {
-    const citySearch = req.params.citySearch;
+    const citySearch = req.query.citySearch;
     const results = await connectionPool.query(
       `
       select
@@ -44,10 +44,10 @@ export async function getCinemasByCity(req, res, next) {
       FROM city
       INNER JOIN city_cinemas ON city.id = city_cinemas.city_id
       INNER JOIN cinemas ON cinemas.id = city_cinemas.cinema_id
-      where city.city_name = $1
+      where city.city_name ilike $1
       GROUP BY city.id, city.city_name;
     `,
-      [citySearch]
+      [`%${citySearch}%`]
     );
     if (results.rowCount == 0) {
       return res.status(404).json({
@@ -90,7 +90,7 @@ export async function getCinemasAll(req, res, next) {
 
 export async function getCinemasById(req, res) {
   try {
-    const cinemaId = req.params.cinemaId;
+    const cinemaId = req.query.cinemaId;
     const results = await connectionPool.query(
       `select * from cinemas where id = $1`,
       [cinemaId]
@@ -106,7 +106,7 @@ export async function getCinemasById(req, res) {
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Server could not read question because database connection",
+      message: "Server could not find the cinemas because database connection",
     });
   }
 }
@@ -151,7 +151,8 @@ export async function getMoviesAll(req, res, next) {
 
 export async function getMoviesById(req, res, next) {
   try {
-    const movieSearch = req.params.movieSearch;
+    const movieSearch = req.query.movieSearch;
+    console.log("result:", movieSearch);
     const results = await connectionPool.query(
       `
       select 
@@ -169,7 +170,7 @@ export async function getMoviesById(req, res, next) {
       inner join
         genres on movies_genres.genre_id = genres.id
       where
-        movies.id = $1
+        movies.title ilike $1
       group by
         movies.id,
         movies.title,
@@ -178,8 +179,9 @@ export async function getMoviesById(req, res, next) {
         movies.rating,
         movies.language
         `,
-      [movieSearch]
+      [`%${movieSearch}%`]
     );
+    console.log("results2:, ", results);
     if (results.rowCount == 0) {
       return res.status(404).json({
         message: "Movie not found",
@@ -190,7 +192,8 @@ export async function getMoviesById(req, res, next) {
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Server could not read question because database connection",
+      message:
+        "Server could not find the desired movies because database connection",
     });
   }
 }
@@ -198,7 +201,7 @@ export async function getMoviesById(req, res, next) {
 export async function getMoviesByGenres(req, res) {
   let results;
   try {
-    const moviesGenres = req.params.moviesGenres;
+    const moviesGenres = req.query.moviesGenres;
     results = await connectionPool.query(
       `
       SELECT movies.title
@@ -223,6 +226,9 @@ export async function getMoviesByGenres(req, res) {
     }
   } catch (error) {
     console.error("Error fetching movies by genre:", error);
+    return res.status(500).json({
+      message: "Server error",
+    });
   }
 }
 
@@ -249,7 +255,7 @@ export async function getCommentsAll(req, res, next) {
 
 export async function getCommentsById(req, res, next) {
   try {
-    const commentId = req.params.commentId;
+    const commentId = req.query.commentId;
     const results = await connectionPool.query(
       `select * from comments where id = $1`,
       [commentId]
@@ -269,9 +275,9 @@ export async function getCommentsById(req, res, next) {
   }
 }
 
-export async function getCommentsByMoviesId(req, res, next) {
+export async function getCommentsByMoviesName(req, res, next) {
   try {
-    const movieId = req.params.commentMovieIdSearch;
+    const movieName = req.query.movieName;
     const results = await connectionPool.query(
       `
       select
@@ -285,9 +291,9 @@ export async function getCommentsByMoviesId(req, res, next) {
         comments
       inner join movies on movies.id = comments.movie_id
       inner join users on users.id = comments.user_id
-      WHERE movies.id = $1
+      WHERE movies.title ilike $1
       `,
-      [movieId]
+      [`%${movieName}%`]
     );
     if (results.rowCount == 0) {
       return res.status(404).json({

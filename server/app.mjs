@@ -23,10 +23,10 @@ app.get("/", (req, res) => {
 
 app.use("/get", authRouter);
 
-app.use("/movies", moviesRouter); //done
-app.use("/cinemas", cinemasRouter); //done
-app.use("/comments", commentRouter); //done
-app.use("/city", cityRouter); //done
+app.use("/movies", moviesRouter); //done query done
+app.use("/cinemas", cinemasRouter); //done query done
+app.use("/comments", commentRouter); //done query donne
+app.use("/city", cityRouter); //done qeury done
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

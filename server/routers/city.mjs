@@ -4,5 +4,5 @@ import connectionPool from "../utils/db.mjs";
 // const express = require("express");
 const cityRouter = Router();
 cityRouter.get("/", getCityAll);
-cityRouter.get("/:citySearch", getCinemasByCity);
+cityRouter.get("/filteredCinema", getCinemasByCity);
 export default cityRouter;

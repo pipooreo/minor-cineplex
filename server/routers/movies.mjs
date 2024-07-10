@@ -9,7 +9,7 @@ import {
 const moviesRouter = Router();
 
 moviesRouter.get("/", getMoviesAll);
-moviesRouter.get("/:movieSearch", getMoviesById);
-moviesRouter.get("/genres/:moviesGenres", getMoviesByGenres);
+moviesRouter.get("/genres", getMoviesByGenres);
+moviesRouter.get("/movie", getMoviesById);
 
 export default moviesRouter;
