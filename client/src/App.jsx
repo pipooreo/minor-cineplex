@@ -1,13 +1,16 @@
 import "./App.css";
+import "@fontsource/roboto";
 import RegisterPage from "./pages/RegisterPage";
 import RegisterPageSuccess from "./pages/RegisterPageSuccess";
 import MoviePage from "./pages/MoviePage";
+import LoginPage from "./pages/LoginPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Navbar from "./componants/Navbar";
 import Footer from "./componants/Footer";
+import { useAuth } from "./contexts/authentication";
 
-const App = () => {
+function App() {
   return (
     <>
       <Router>
@@ -16,12 +19,13 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/registersuccess" element={<RegisterPageSuccess />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/movie/:title" element={<MoviePage />} />
         </Routes>
         <Footer />
       </Router>
     </>
   );
-};
+}
 
 export default App;

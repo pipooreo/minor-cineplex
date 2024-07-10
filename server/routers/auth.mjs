@@ -1,6 +1,7 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import connectionPool from "../utils/db.mjs";
+import jwt from "jsonwebtoken";
 
 const authRouter = Router();
 
@@ -25,6 +26,32 @@ authRouter.post("/register", async (req, res) => {
       .json({ message: "Server could not connect Database" });
   }
   return res.status(201).json({ message: "User created successfully" });
+});
+
+authRouter.post("/login", async (req, res) => {
+  let user = await connectionPool.query(
+    `select * from users where email = $1`,
+    [req.body.email]
+  );
+  user = user.rows[0];
+  if (!user) {
+    return res.status(404).json({ message: "Email not found" });
+  }
+
+  const isValidPassword = await bcrypt.compare(
+    req.body.password,
+    user.password
+  );
+
+  if (!isValidPassword) {
+    return res.status(404).json({ message: "PAssword not valid" });
+  }
+  const token = jwt.sign(
+    { id: user._id, name: user.name, email: user.email },
+    process.env.SECRET_KEY,
+    { expiresIn: "1d" }
+  );
+  return res.status(200).json({ message: "Login successfully", token });
 });
 
 export default authRouter;
