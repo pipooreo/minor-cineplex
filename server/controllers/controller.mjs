@@ -28,7 +28,7 @@ export async function getCityAll(req, res, next) {
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Server could not read assignment because database connection",
+      message: "Server could not ready assignment because database connection",
     });
   }
 }
