@@ -1,5 +1,4 @@
 import "./App.css";
-import "@fontsource/roboto";
 import RegisterPage from "./pages/RegisterPage";
 import RegisterPageSuccess from "./pages/RegisterPageSuccess";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
