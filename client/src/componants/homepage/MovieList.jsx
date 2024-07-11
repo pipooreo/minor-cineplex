@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function MovieList() {
   const [Movie, setMovie] = useState([]);
@@ -18,6 +19,8 @@ function MovieList() {
     getDataMovie();
   }, []);
 
+  const navigate = useNavigate();
+
   return (
     <section className="px-[120px] pt-[144px] pb-[80px] bg-[#21263F] flex justify-center max-[375px]:px-[16px] max-[375px]:pb-[40px]">
       <div className="flex flex-col gap-[16px]">
@@ -29,7 +32,7 @@ function MovieList() {
             Coming soon
           </button>
         </div>
-        <div className="flex flex-wrap gap-[20px]">
+        <div className="flex flex-wrap gap-[14px] min-[1920px]:flex min-[1441px]:justify-between ">
           {Movie &&
             Movie.map((data) => {
               return (
@@ -38,6 +41,9 @@ function MovieList() {
                     className="w-[285px] h-[416px] max-[375px]:w-[161px] max-[375px]:h-[235px]"
                     src={data.image}
                     alt=""
+                    onClick={() => {
+                      navigate(`/movie/${data.title}`);
+                    }}
                   />
                   <div className="w-[285px] flex flex-col max-[375px]:w-[161px]">
                     <div className="flex flex-row justify-between text-[14px]">
