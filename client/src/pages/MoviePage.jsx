@@ -1,7 +1,26 @@
 // import { useNavigate } from "react-router-dom";
 
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+
 function MoviePage() {
-  const getMovie = async () => {};
+  const [nameMovie, setNameMovie] = useState("");
+  const [keepNameMovie, setKeepNameMovie] = useState([]);
+
+  const getAllMovie = async () => {
+    const params = useParams();
+    console.log(params);
+    const response = await axios.get(
+      `http://localhost:4000/movies/movie?movieSearch=${nameMovie}`
+    );
+    setKeepNameMovie(response);
+    console.log(response);
+  };
+
+  useEffect(() => {
+    getAllMovie();
+  }, []);
   //   const navigate = useNavigate();
   return (
     <div
