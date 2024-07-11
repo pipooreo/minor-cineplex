@@ -65,6 +65,7 @@ export async function getCinemasByCity(req, res, next) {
   } catch (error) {
     return res.status(500).json({
       message: "Server could not get cinemas because database connection",
+      message: "Server could not get cinemas because database connection",
     });
   }
 }
@@ -132,9 +133,9 @@ export async function getMoviesAll(req, res, next) {
           COALESCE(array_agg(genres.genres_name), '{}') as genres,
           movies.language
         from 
-          movies_genres
+          movies
         inner join
-          movies ON movies.id = movies_genres.movie_id
+          movies_genres ON movies.id = movies_genres.movie_id
         inner join
           genres ON genres.id = movies_genres.genre_id
         group by
@@ -172,9 +173,9 @@ export async function getMoviesById(req, res, next) {
         movies.language
       from
         movies
-      left join
+      inner join
         movies_genres on movies.id = movies_genres.movie_id
-      left join
+      inner join
         genres on movies_genres.genre_id = genres.id
       where
         movies.title ilike $1
