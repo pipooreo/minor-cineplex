@@ -175,9 +175,9 @@ export async function getMoviesById(req, res, next) {
         movies.language
       FROM
         movies
-      LEFT JOIN
+      inner JOIN
         movies_genres ON movies.id = movies_genres.movie_id
-      LEFT JOIN
+      inner JOIN
         genres ON movies_genres.genre_id = genres.id
       WHERE
         movies.title ILIKE $1
