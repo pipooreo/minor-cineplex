@@ -14,6 +14,16 @@ function AuthProvider(props) {
 
   const nevigate = useNavigate();
 
+  async function register(data, actions) {
+    try {
+      await axios.post("http://localhost:4000/auth/register", data);
+      nevigate("/registersuccess");
+    } catch (err) {
+      console.log(err);
+      actions.setErrors({ email: err.response.data.message });
+    }
+  }
+
   async function login(data, actions) {
     console.log(data);
     try {
@@ -33,15 +43,23 @@ function AuthProvider(props) {
     }
   }
 
+  function logout() {
+    localStorage.removeItem("token");
+    setState({ ...state, user: null });
+  }
+
   const isAuthenticated = Boolean(localStorage.getItem("token"));
 
   return (
-    <AuthContext.Provider value={{ state, login, isAuthenticated }}>
+    <AuthContext.Provider
+      value={{ state, login, register, logout, isAuthenticated }}
+    >
       {props.children}
     </AuthContext.Provider>
   );
 }
-
-const useAuth = () => useContext(AuthContext);
+function useAuth() {
+  return useContext(AuthContext);
+}
 
 export { AuthProvider, useAuth };

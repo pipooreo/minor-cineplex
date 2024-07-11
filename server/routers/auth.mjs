@@ -11,6 +11,18 @@ authRouter.post("/register", async (req, res) => {
     password: req.body.password,
     email: req.body.email,
   };
+  let getEmailUsed = await connectionPool.query(
+    `select * from users where email = $1`,
+    [user.email]
+  );
+  getEmailUsed = getEmailUsed.rows[0];
+
+  if (getEmailUsed) {
+    return res
+      .status(400)
+      .json({ message: "Email is already taken, Please try another email" });
+  }
+
   const salt = await bcrypt.genSalt(10);
 
   user.password = await bcrypt.hash(user.password, salt);

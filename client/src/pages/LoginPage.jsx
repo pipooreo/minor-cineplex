@@ -11,8 +11,8 @@ function LoginPage() {
   const { login } = useAuth();
 
   function onSubmit(values, actions) {
-    console.log(values);
-    console.log(login);
+    // console.log(values);
+    // console.log(login);
     // // console.log(actions);
     // try {
     //   const results = await axios.post("http://localhost:4000/auth/login", values);
