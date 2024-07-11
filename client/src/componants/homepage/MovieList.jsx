@@ -19,7 +19,7 @@ function MovieList() {
   }, []);
 
   return (
-    <section className="px-[120px] pt-[144px] pb-[80px] bg-[#21263F] flex justify-center max-[375px]:px-[16px] max-[375px]:pb-[40px]">
+    <section className="xs:px-[10px] px-[120px] pt-[144px] pb-[80px] bg-[#21263F] flex justify-center ">
       <div className="flex flex-col gap-[16px]">
         <div className="w-[294px] h-[38px] flex flex-row justify-between items-center">
           <button className="w-[136px] h-[30px] text-[#8B93B0] text-[24px] font-[700] underline md:underline-offset-8 leading-[30px] p-[4px] max-[375px]:underline-offset-8">
@@ -29,17 +29,20 @@ function MovieList() {
             Coming soon
           </button>
         </div>
-        <div className="flex flex-wrap gap-[20px]">
+        <div className="grid grid-cols-2 gap-[20px] xl:grid-cols-4">
           {Movie &&
             Movie.map((data) => {
               return (
-                <div className="flex flex-col gap-[16px] max-[375px]:w-[161px]">
+                <div
+                  className="flex flex-col gap-[16px] w-[161px] xs:w-[100%]"
+                  key={data.id}
+                >
                   <img
-                    className="w-[285px] h-[416px] max-[375px]:w-[161px] max-[375px]:h-[235px]"
+                    className="lg:w-[285px] lg:h-[416px] md:w-[100%] md:h-[359px] w-[161px] h-[235px]"
                     src={data.image}
                     alt=""
                   />
-                  <div className="w-[285px] flex flex-col max-[375px]:w-[161px]">
+                  <div className=" flex flex-col lg:w-[285px] md:w-[100%] w-[161px]">
                     <div className="flex flex-row justify-between text-[14px]">
                       <div className="text-[#8B93B0]">
                         {data.theatrical_release}
@@ -48,16 +51,20 @@ function MovieList() {
                     </div>
                     <div className="text-[white] text-[20px]">{data.title}</div>
                   </div>
-                  <div className="flex flex-row gap-[8px] max-[375px]:flex max-[375px]:flex-wrap">
-                    {data.genres.map((genre) => {
-                      return (
-                        <div className="h-[32px] rounded-[4px] text-[#8B93B0] bg-[#0d0f1a] px-[12px] py-[6px] max-[375px]:text-[14px]">
-                          {genre}
-                        </div>
-                      );
-                    })}
-
-                    <div className="h-[32px] rounded-[4px] text-[#C8CEDD] bg-[#0d0f1a] px-[12px] py-[6px] max-[375px]:text-[14px]">
+                  <div className="flex flex-col md:flex-row md:gap-[10px] gap-[10px]">
+                    <div className="grid gap-[8px] flex-wrap  w-fit grid-cols-3 md:flex md:flex-row">
+                      {data.genres.map((genre) => {
+                        return (
+                          <div
+                            className="h-[32px] w-fit rounded-[4px] text-[#8B93B0] bg-[#0d0f1a] px-[6px] py-[6px] max-[375px]:text-[14px]"
+                            key={genre}
+                          >
+                            {genre}
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div className="h-[32px] w-fit rounded-[4px] text-[#C8CEDD] bg-[#0d0f1a] px-[12px] py-[6px] text-[14px]">
                       {data.language}
                     </div>
                   </div>
