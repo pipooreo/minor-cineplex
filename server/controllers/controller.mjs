@@ -29,6 +29,7 @@ export async function getCityAll(req, res, next) {
   } catch (error) {
     return res.status(500).json({
       message: "Server could not get city because database connection",
+      message: "Server could not get city because database connection",
     });
   }
 }
