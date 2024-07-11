@@ -46,6 +46,7 @@ function AuthProvider(props) {
   function logout() {
     localStorage.removeItem("token");
     setState({ ...state, user: null });
+    nevigate("/");
   }
 
   const isAuthenticated = Boolean(localStorage.getItem("token"));

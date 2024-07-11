@@ -7,10 +7,12 @@ import LoginPage from "./pages/LoginPage";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import Navbar from "./componants/Navbar";
+import NavbarUser from "./componants/NavbarUser";
 import Footer from "./componants/Footer";
 import { useAuth } from "./contexts/authentication";
 
 function App() {
+  const auth = useAuth();
   return (
     <>
       <Router>
