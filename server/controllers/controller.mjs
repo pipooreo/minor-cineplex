@@ -28,7 +28,8 @@ export async function getCityAll(req, res, next) {
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Server could not ready assignment because database connection",
+      message: "Server could not get city because database connection",
+
     });
   }
 }
@@ -64,7 +65,7 @@ export async function getCinemasByCity(req, res, next) {
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Server could not read question because database connection",
+      message: "Server could not get cinemas because database connection",
     });
   }
 }
@@ -88,7 +89,7 @@ export async function getCinemasAll(req, res, next) {
   } catch (error) {
     return res.status(500).json({
       message:
-        "Server could not get the filted cinemas because database connection",
+        "Server could not get the filtered cinemas because database connection",
     });
   }
 }
@@ -129,12 +130,12 @@ export async function getMoviesAll(req, res, next) {
           movies.theatrical_release,
           movies.out_of_theaters,
           movies.rating, 
-          array_agg(genres.genres_name) as genres,
+          COALESCE(array_agg(genres.genres_name), '{}') as genres,
           movies.language
         from 
-          movies_genres
+          movies
         inner join
-          movies ON movies.id = movies_genres.movie_id
+          movies_genres ON movies.id = movies_genres.movie_id
         inner join
           genres ON genres.id = movies_genres.genre_id
         group by
@@ -145,11 +146,12 @@ export async function getMoviesAll(req, res, next) {
           movies.out_of_theaters, 
           movies.rating,
           movies.language
+        order by movies.id
       `);
     res.status(200).json({ data: results.rows });
   } catch (error) {
     return res.status(500).json({
-      message: "Server could not read assignment because database connection",
+      message: "Server could not get  the movies because database connection",
     });
   }
 }
@@ -165,6 +167,7 @@ export async function getMoviesById(req, res, next) {
         movies.title,
         movies.image,
         movies.theatrical_release,
+        movies.out_of_theaters,
         movies.rating,
         array_agg(genres.genres_name),
         movies.language
@@ -181,12 +184,12 @@ export async function getMoviesById(req, res, next) {
         movies.title,
         movies.image,
         movies.theatrical_release,
+        movies.out_of_theaters,
         movies.rating,
         movies.language
         `,
       [`%${movieSearch}%`]
     );
-    console.log("results2:, ", results);
     if (results.rowCount == 0) {
       return res.status(404).json({
         message: "Movie not found",
@@ -253,7 +256,7 @@ export async function getCommentsAll(req, res, next) {
     res.status(200).json({ data: results.rows });
   } catch (error) {
     return res.status(500).json({
-      message: "Server could not read assignment because database connection",
+      message: "Server could not get the comments because database connection",
     });
   }
 }
@@ -275,7 +278,7 @@ export async function getCommentsById(req, res, next) {
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Server could not read question because database connection",
+      message: "Server could not get the comments because database connection",
     });
   }
 }
@@ -306,12 +309,11 @@ export async function getCommentsByMoviesName(req, res, next) {
       });
     }
     return res.status(200).json({
-      message: "succesfully fetch comment from the selected movie",
       data: results.rows,
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Server could not read question because database connection",
+      message: "Server could not get the comment because database connection",
     });
   }
 }
