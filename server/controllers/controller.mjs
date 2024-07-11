@@ -28,7 +28,8 @@ export async function getCityAll(req, res, next) {
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Server could not ready assignment because database connection",
+      message: "Server could not get city because database connection",
+
     });
   }
 }
@@ -159,49 +160,55 @@ export async function getMoviesAll(req, res, next) {
 export async function getMoviesById(req, res, next) {
   try {
     const movieSearch = req.query.movieSearch;
-    console.log("result:", movieSearch);
+    // console.log("Search term:", movieSearch);
+
+    const normalizedSearchTerm = movieSearch.replace(/-/g, " ");
     const results = await connectionPool.query(
       `
-      select 
+      SELECT 
         movies.id,
         movies.title,
         movies.image,
+        movies.description,
         movies.theatrical_release,
         movies.out_of_theaters,
         movies.rating,
-        array_agg(genres.genres_name),
+        ARRAY_AGG(genres.genres_name) AS genres,
         movies.language
-      from
+      FROM
         movies
-      inner join
-        movies_genres on movies.id = movies_genres.movie_id
-      inner join
-        genres on movies_genres.genre_id = genres.id
-      where
-        movies.title ilike $1
-      group by
+      inner JOIN
+        movies_genres ON movies.id = movies_genres.movie_id
+      inner JOIN
+        genres ON movies_genres.genre_id = genres.id
+      WHERE
+        movies.title ILIKE $1
+      GROUP BY
         movies.id,
         movies.title,
         movies.image,
+        movies.description,
         movies.theatrical_release,
         movies.out_of_theaters,
         movies.rating,
         movies.language
-        `,
-      [`%${movieSearch}%`]
+      `,
+      [`%${normalizedSearchTerm}%`]
     );
-    if (results.rowCount == 0) {
+
+    if (results.rows.length === 0) {
       return res.status(404).json({
         message: "Movie not found",
       });
     }
+
     return res.status(200).json({
       data: results.rows,
     });
   } catch (error) {
+    console.error("Error fetching movies:", error);
     return res.status(500).json({
-      message:
-        "Server could not find the desired movies because database connection",
+      message: "Internal server error",
     });
   }
 }
