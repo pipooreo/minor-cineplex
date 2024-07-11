@@ -1,6 +1,7 @@
 // import { useNavigate } from "react-router-dom";
 
 function MoviePage() {
+  const getMovie = async () => {};
   //   const navigate = useNavigate();
   return (
     <div
@@ -60,12 +61,6 @@ function MoviePage() {
                   With the help of allies Lt. Jim Gordon (Gary Oldman) and DA
                   Harvey Dent (Aaron Eckhart), Batman (Christian Bale) has been
                   able to keep a tight lid on crime in Gotham City.
-                </p>
-                <p>
-                  But when a vile young criminal calling himself the Joker
-                  (Heath Ledger) suddenly throws the town into chaos, the caped
-                  Crusader begins to tread a fine line between heroism and
-                  vigilantism.
                 </p>
               </div>
             </div>
