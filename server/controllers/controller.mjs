@@ -28,8 +28,7 @@ export async function getCityAll(req, res, next) {
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Server could not get city because database connection",
-
+      message: "Server could not ready assignment because database connection",
     });
   }
 }
@@ -133,9 +132,9 @@ export async function getMoviesAll(req, res, next) {
           COALESCE(array_agg(genres.genres_name), '{}') as genres,
           movies.language
         from 
-          movies
+          movies_genres
         inner join
-          movies_genres ON movies.id = movies_genres.movie_id
+          movies ON movies.id = movies_genres.movie_id
         inner join
           genres ON genres.id = movies_genres.genre_id
         group by
@@ -173,9 +172,9 @@ export async function getMoviesById(req, res, next) {
         movies.language
       from
         movies
-      inner join
+      left join
         movies_genres on movies.id = movies_genres.movie_id
-      inner join
+      left join
         genres on movies_genres.genre_id = genres.id
       where
         movies.title ilike $1
