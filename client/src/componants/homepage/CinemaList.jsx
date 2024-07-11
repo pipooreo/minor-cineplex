@@ -40,16 +40,19 @@ function CinemaList() {
           province.map((city) => (
             <div
               key={city.id}
-              className="text-[white] flex flex-col gap-[24px]"
+              className="text-[#ffffff] flex flex-col gap-[24px]"
             >
               <div className="text-[24px]">{city.city_name}</div>
               <div className="flex flex-wrap gap-[20px]">
                 {city.cinema.map((cinema, index) => (
                   <div
                     key={index}
-                    className="w-[590px] h-[90px] p-[16px] border-[#565F7E] border-[1px] flex flex-row items-center gap-[16px]"
+                    className="w-[590px] p-[16px] border-[#565F7E] border-[1px] flex flex-row items-center gap-[16px]"
                   >
-                    <i className="fa-solid fa-location-dot w-[52px] h-[52px] border-[#565F7E] border-[1px] rounded-[50%] bg-[#474e6e] flex justify-center items-center"></i>
+                    <div>
+                      <i className="fa-solid fa-location-dot w-[52px] h-[52px] border-[#565F7E] border-[1px] rounded-[50%] bg-[#474e6e] flex justify-center items-center max-[375px]:w-[52px]"></i>
+                    </div>
+
                     <div>
                       <div className="text-[24px] text-[#ffffff]">
                         {cinema.name}
