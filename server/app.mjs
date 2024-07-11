@@ -21,8 +21,6 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.use("/get", authRouter);
-
 app.use("/movies", moviesRouter); //done query done
 app.use("/cinemas", cinemasRouter); //done query done
 app.use("/comments", commentRouter); //done query donne

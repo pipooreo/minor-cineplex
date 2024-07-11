@@ -7,17 +7,20 @@ export async function getCityAll(req, res, next) {
   try {
     const results = await connectionPool.query(
       `
-      select
-        city.city_name,
-        array_agg(cinemas.name) as cinemas_name,
-        array_agg(cinemas.address) as cinemas_address
-      from cinemas
-      inner join
-        city_cinemas on cinemas.id = city_cinemas.cinema_id
-      inner join
-        city on city_cinemas.city_id = city.id
-      group by
-        city.city_name`
+       SELECT
+      city.id,
+      city.city_name,
+      json_agg(
+      json_build_object(
+      'name', cinemas.name,
+      'address', cinemas.address
+      )) AS cinema
+       FROM
+       cinemas
+       INNER JOIN
+        city_cinemas ON cinemas.id = city_cinemas.cinema_id
+        INNER JOIN
+        city ON city_cinemas.city_id = city.id GROUP BY city.id, city.city_name`
     );
     return res.status(200).json({
       message: "data fetch succesfully",
@@ -36,7 +39,7 @@ export async function getCinemasByCity(req, res, next) {
     const results = await connectionPool.query(
       `
       select
-        city.id as city_i,
+        city.id as city_id,
         city.city_name,
         json_agg(json_build_object('name',
         cinemas.name,'address', cinemas.address
