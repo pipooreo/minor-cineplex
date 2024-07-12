@@ -44,8 +44,8 @@ function MoviePage() {
         ></div>
       </div>
       <div>
-        <section className="movie-detail flex justify-center items-center">
-          <div className="relative xl:w-[100%] flex justify-center items-center xl:pt-[180px]">
+        <section className="movie-detail">
+          <div className="relative flex justify-center items-center xl:pt-[180px]">
             <div className="w-[100%] xl:w-[80%] h-[100%] xl:h-[600px] absolute xl:rounded-xl backdrop-blur-md bg-[#070C1BB2]/70 "></div>
             {movie && (
               <div className="flex flex-col xl:flex-row gap-10 z-10 xl:rounded-xl justify-start items-center xl:w-[80%] w-100% text-white">
