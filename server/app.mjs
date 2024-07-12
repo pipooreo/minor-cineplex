@@ -7,6 +7,7 @@ import moviesRouter from "./routers/movies.mjs";
 import cinemasRouter from "./routers/cinemas.mjs";
 import cityRouter from "./routers/city.mjs";
 import commentRouter from "./routers/comments.mjs";
+import searchBarRouter from "./routers/searchBar.mjs";
 dotenv.config();
 
 const app = express();
@@ -25,6 +26,7 @@ app.use("/movies", moviesRouter); //done query done
 app.use("/cinemas", cinemasRouter); //done query done
 app.use("/comments", commentRouter); //done query donne
 app.use("/city", cityRouter); //done qeury done
+app.use("/search", searchBarRouter)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

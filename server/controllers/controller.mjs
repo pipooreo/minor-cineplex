@@ -65,6 +65,7 @@ export async function getCinemasByCity(req, res, next) {
   } catch (error) {
     return res.status(500).json({
       message: "Server could not get cinemas because database connection",
+      message: "Server could not get cinemas because database connection",
     });
   }
 }
@@ -294,17 +295,17 @@ export async function getCommentsByMoviesName(req, res, next) {
     const results = await connectionPool.query(
       `
       select
-        comments.movie_id,
         comments.id as comment_id,
         movies.title as moviesname,
         users.name as name,
+        to_char(to_date(comments.created_at, 'YYYY-MM-DD'), 'DD Mon YYYY') as post_date,
         comments.comment,
         comments.rating
       from
         comments
       inner join movies on movies.id = comments.movie_id
       inner join users on users.id = comments.user_id
-      WHERE movies.title ilike $1
+      where movies.title ilike $1
       `,
       [`%${movieName}%`]
     );
@@ -319,6 +320,119 @@ export async function getCommentsByMoviesName(req, res, next) {
   } catch (error) {
     return res.status(500).json({
       message: "Server could not get the comment because database connection",
+    });
+  }
+}
+
+export async function getMoviesBySearchBar(req, res, next) {
+  try {
+    const { movieName, moviesGenres, moviesLanguage, moviesCity } = req.query;
+    const releasedDate = "2024-10-02"; // Example hardcoded release date
+    const current_date = new Date();
+    console.log("test current_date", current_date);
+
+    let params = [];
+    let query = `
+          SELECT 
+              movies.id AS movie_id,
+              movies.title AS movie_title,
+              movies.image AS movie_image,
+              movies.description AS movie_description,
+              movies.theatrical_release AS theatrical_release,
+              movies.out_of_theaters AS out_of_theaters,
+              movies.rating AS movie_rating,
+              ARRAY_AGG(DISTINCT genres.genres_name) AS genres,
+              movies.language AS movie_language,
+              city.city_name AS city_name,
+              cinemas.name AS cinemas_name
+          FROM
+              movies
+          INNER JOIN
+              movies_genres ON movies.id = movies_genres.movie_id
+          INNER JOIN
+              genres ON movies_genres.genre_id = genres.id
+          INNER JOIN
+              movies_city ON movies.id = movies_city.movies_id
+          INNER JOIN
+              city ON city.id = movies_city.city_id
+          INNER JOIN
+              movies_cinemas ON movies.id = movies_cinemas.movies_id
+          INNER JOIN
+              cinemas ON movies_cinemas.cinemas_id = cinemas.id
+          WHERE 1=1`;
+
+    if (movieName) {
+      query += ` AND movies.title ILIKE $${params.length + 1}`;
+      params.push(`%${movieName}%`);
+    }
+    if (moviesGenres) {
+      query += ` AND genres.genres_name ILIKE $${params.length + 1}`;
+      params.push(`%${moviesGenres}%`);
+    }
+    if (moviesLanguage) {
+      query += ` AND movies.language ILIKE $${params.length + 1}`;
+      params.push(`%${moviesLanguage}%`);
+    }
+    if (moviesCity) {
+      query += ` AND city.city_name ILIKE $${params.length + 1}`;
+      params.push(`%${moviesCity}%`);
+    }
+
+    query += `
+          AND TO_DATE($${
+            params.length + 1
+          }, 'YYYY-MM-DD') BETWEEN TO_DATE(movies.theatrical_release, 'YYYY-MM-DD') AND TO_DATE(movies.out_of_theaters, 'YYYY-MM-DD')
+          GROUP BY movies.id, movies.title, movies.image, movies.description, movies.theatrical_release, movies.out_of_theaters, movies.rating, movies.language, city.city_name, cinemas.name
+          ORDER BY city.city_name, cinemas.name, movies.id;`;
+
+    params.push(releasedDate);
+
+    const { rows } = await connectionPool.query(query, params);
+
+    if (rows.length === 0) {
+      return res.status(404).json({
+        message: "There are no movies matching the search criteria",
+      });
+    }
+
+    let moviesData = {};
+    rows.forEach((row) => {
+      const { city_name, cinemas_name, ...movieDetails } = row;
+      const cinemaInfo = {
+        cinemas_name,
+        movie_details: {
+          id: movieDetails.movie_id,
+          title: movieDetails.movie_title,
+          image: movieDetails.movie_image,
+          description: movieDetails.movie_description,
+          theatrical_release: movieDetails.theatrical_release,
+          out_of_theaters: movieDetails.out_of_theaters,
+          rating: movieDetails.movie_rating,
+          genres: movieDetails.genres
+            ? movieDetails.genres.map((genre) => genre.trim())
+            : [],
+          language: movieDetails.movie_language,
+          city_name,
+        },
+      };
+
+      if (!moviesData[city_name]) {
+        moviesData[city_name] = [];
+      }
+      moviesData[city_name].push(cinemaInfo);
+    });
+    const formattedResult = Object.keys(moviesData).map((city) => ({
+      city_name: city,
+      cinemas: moviesData[city],
+    }));
+
+    return res.status(200).json({
+      data: formattedResult,
+    });
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+    return res.status(500).json({
+      message: "Server could not retrieve movies due to an internal error",
     });
   }
 }

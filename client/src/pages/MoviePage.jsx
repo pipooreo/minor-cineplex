@@ -1,6 +1,26 @@
 // import { useNavigate } from "react-router-dom";
 
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+
 function MoviePage() {
+  const [nameMovie, setNameMovie] = useState("");
+  const [keepNameMovie, setKeepNameMovie] = useState([]);
+
+  const getAllMovie = async () => {
+    const params = useParams();
+    console.log(params);
+    const response = await axios.get(
+      `http://localhost:4000/movies/movie?movieSearch=${nameMovie}`
+    );
+    setKeepNameMovie(response);
+    console.log(response);
+  };
+
+  useEffect(() => {
+    getAllMovie();
+  }, []);
   //   const navigate = useNavigate();
   return (
     <div
@@ -60,12 +80,6 @@ function MoviePage() {
                   With the help of allies Lt. Jim Gordon (Gary Oldman) and DA
                   Harvey Dent (Aaron Eckhart), Batman (Christian Bale) has been
                   able to keep a tight lid on crime in Gotham City.
-                </p>
-                <p>
-                  But when a vile young criminal calling himself the Joker
-                  (Heath Ledger) suddenly throws the town into chaos, the caped
-                  Crusader begins to tread a fine line between heroism and
-                  vigilantism.
                 </p>
               </div>
             </div>
