@@ -54,48 +54,53 @@ function MoviePage() {
                   src={movie.image}
                   alt=""
                 />
-                <div className="flex flex-col xl:gap-[50px] md:px-[20px] px-[15px] pb-[50px]  xl:mt-[100px]">
-                  <div>
-                    <h1 className="text-[36px] leading-[44px] font-bold ">
-                      {movie.title}
-                    </h1>
-                    <div className="flex flex-col xl:flex-row justify-start xl:items-center">
-                      <div className=" py-[10px] pr-[10px] w-fit">
-                        <p className="flex justify-start items-center gap-[10px]">
-                          {movie.genres.map((item, index) => {
-                            return (
-                              <span
-                                className="bg-[#21263F] text-[#8B93B0] rounded-[4px]  px-[6px] py-[12px] "
-                                key={index}
-                              >
-                                {item}
-                              </span>
-                            );
-                          })}
-                          <span className="bg-[#21263F] text-[#8B93B0] rounded-[4px]  px-[6px] py-[12px] ">
-                            {movie.language}
+                <div>
+                  <div className="flex flex-col gap-[20px] xl:gap-[50px] md:px-[25%] xl:px-[20px] px-[15px] pb-[50px] ">
+                    <div>
+                      <h1 className="text-[36px] leading-[44px] font-bold ">
+                        {movie.title}
+                      </h1>
+                      <div className="flex flex-col xl:flex-row justify-start xl:items-center">
+                        <div className=" py-[10px] pr-[10px] w-fit">
+                          <p className="flex justify-start items-center gap-[10px]">
+                            {movie.genres.map((item, index) => {
+                              return (
+                                <span
+                                  className="bg-[#21263F] text-[#8B93B0] rounded-[4px]  px-[6px] py-[12px] "
+                                  key={index}
+                                >
+                                  {item}
+                                </span>
+                              );
+                            })}
+                            <span className="bg-[#21263F] text-[#8B93B0] rounded-[4px]  px-[6px] py-[12px] ">
+                              {movie.language}
+                            </span>
+                            <img
+                              className="h-[35px]"
+                              src="\public\pipe.png"
+                              alt=""
+                            />
+                          </p>
+                        </div>
+                        <p>
+                          <span className="text-[#C8CEDD] text-[16px] leading-[24px] px-[10px]">
+                            Release date: {movie.theatrical_release}
                           </span>
-                          <img
-                            className="h-[35px]"
-                            src="\public\pipe.png"
-                            alt=""
-                          />
                         </p>
                       </div>
-                      <p>
-                        <span className="text-[#C8CEDD] text-[16px] leading-[24px] px-[10px]">
-                          Release date: {movie.theatrical_release}
-                        </span>
-                      </p>
                     </div>
-                  </div>
-                  <button className="my-[20px] px-[40px] py-[12px] bg-[#4E7BEE] rounded-md w-[153px] h-[48px]">
-                    Book ticket
-                  </button>
-                  <div className="md:my-[20px] xl:w-[80%] flex flex-col gap-5 ">
-                    <p className="text-[16px] leading-[24px]">
-                      {movie.description}
-                    </p>
+
+                    <div>
+                      <button className="my-[10px] xs:my-[20px] xs:px-[40px] py-[12px] bg-[#4E7BEE] rounded-md w-[153px] h-[48px]">
+                        Book ticket
+                      </button>
+                      <div className="my-[10px] xl:my-[50px] w-[100%] md:w-[90%] xl:w-[80%] flex flex-col gap-5 ">
+                        <p className="text-[16px] leading-[24px]">
+                          {movie.description}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
