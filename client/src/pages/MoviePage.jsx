@@ -17,7 +17,7 @@ function MoviePage() {
         ></div>
       </div>
       <div>
-        <section className="movie-detail relative  flex justify-center items-center xl:pt-[150px]">
+        <section className="movie-detail relative  flex justify-center items-center xl:pt-[180px]">
           <div className="w-[100%] xl:w-[70%] h-[100%] xl:h-[600px] absolute xl:rounded-xl backdrop-blur-md bg-[#070C1BB2]/70 "></div>
           <div className="flex flex-col xl:flex-row gap-10 z-10 xl:rounded-xl justify-center items-center md:w-[70%] w-100% text-white">
             <img
@@ -25,7 +25,7 @@ function MoviePage() {
               src="public\movie_img.png"
               alt=""
             />
-            <div className="flex flex-col xl:gap-[50px] xl:p-[50px] px-[15px] pb-[50px] pt-0 xl:mt-[100px]">
+            <div className="flex flex-col xl:gap-[50px]  px-[15px] pb-[50px]  xl:mt-[100px]">
               <div>
                 <h1 className="text-[36px] leading-[44px] font-bold ">
                   The Dark Knight
