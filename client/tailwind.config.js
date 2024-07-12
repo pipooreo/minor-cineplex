@@ -89,7 +89,7 @@ export default {
           fontWeight: "400",
         },
       ],
-      body2M: [
+      body3: [
         "12px",
         {
           lineHeight: "18px",
