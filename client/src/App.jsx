@@ -15,17 +15,15 @@ function App() {
   const auth = useAuth();
   return (
     <>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/registersuccess" element={<RegisterPageSuccess />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/movie/:title" element={<MoviePage />} />
-        </Routes>
-        <Footer />
-      </Router>
+      {auth.isAuthenticated ? <NavbarUser /> : <Navbar />}
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/registersuccess" element={<RegisterPageSuccess />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/movie/:title" element={<MoviePage />} />
+      </Routes>
+      <Footer />
     </>
   );
 }
