@@ -1,5 +1,7 @@
-import Navbar from "../Navbar";
+import { useNavigate } from "react-router-dom";
+
 function Header() {
+  const navigate = useNavigate();
   return (
     <section className="relative flex flex-col items-center">
       <div
@@ -55,7 +57,12 @@ function Header() {
             placeholder="Release date"
           />
         </div>
-        <button className="w-[72px] h-[48px] bg-[#4E7BEE] rounded-[4px] active:w-[71.5px] active:h-[47.5px]">
+        <button
+          className="w-[72px] h-[48px] bg-[#4E7BEE] rounded-[4px] active:w-[71.5px] active:h-[47.5px]"
+          onClick={() => {
+            navigate("/moviesearch");
+          }}
+        >
           <i className="fa-solid fa-magnifying-glass"></i>
         </button>
       </div>
