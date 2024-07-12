@@ -53,12 +53,12 @@ function SearchResultPage() {
           </button>
         </div>
 
-        <div className="xl:w-[1200px] xl:h-[24px] border-[1px] border-[yellow]">
+        <div className="xl:w-[1200px] xl:h-[24px] border-[1px] border-[yellow] xl:flex xl:flex-row xl:justify-between">
           <div className="xl:flex xl:flex-row xl:gap-[24px]">
             <div className="text-white">Wheelchair access</div>
             <div className="text-white">Hearing assistance</div>
           </div>
-          <div>2</div>
+          <div className="text-white underline underline-offset-2">Clear</div>
         </div>
       </section>
       {/* <section className="flex flex-col items-center">
