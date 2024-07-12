@@ -324,22 +324,12 @@ export async function getCommentsByMoviesName(req, res, next) {
   }
 }
 
-// Assuming you have already imported connectionPool correctly
-// import { connectionPool } from '../path/to/your/connectionPool';
-
-// Assuming you have already imported connectionPool correctly
-// import { connectionPool } from '../path/to/your/connectionPool';
-
-// Assuming you have already imported connectionPool correctly
-// import { connectionPool } from '../path/to/your/connectionPool';
-
-// Assuming you have already imported connectionPool correctly
-// import { connectionPool } from '../path/to/your/connectionPool';
-
 export async function getMoviesBySearchBar(req, res, next) {
   try {
     const { movieName, moviesGenres, moviesLanguage, moviesCity } = req.query;
     const releasedDate = "2024-10-02"; // Example hardcoded release date
+    const current_date = new Date();
+    console.log("test current_date", current_date);
 
     let params = [];
     let query = `
@@ -405,7 +395,6 @@ export async function getMoviesBySearchBar(req, res, next) {
       });
     }
 
-    // Transform rows into desired format with cinemas grouped by city
     let moviesData = {};
     rows.forEach((row) => {
       const { city_name, cinemas_name, ...movieDetails } = row;
@@ -432,8 +421,6 @@ export async function getMoviesBySearchBar(req, res, next) {
       }
       moviesData[city_name].push(cinemaInfo);
     });
-
-    // Format the result as an array of cities with cinemas and movie details
     const formattedResult = Object.keys(moviesData).map((city) => ({
       city_name: city,
       cinemas: moviesData[city],
