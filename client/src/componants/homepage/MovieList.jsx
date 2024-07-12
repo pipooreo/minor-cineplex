@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function MovieList() {
   const [Movie, setMovie] = useState([]);
+  const nevigate = useNavigate();
 
   const getDataMovie = async () => {
     try {
@@ -36,13 +37,16 @@ function MovieList() {
           {Movie &&
             Movie.map((data) => {
               return (
-                <div className="flex flex-col gap-[16px] max-[375px]:w-[161px]">
+                <div
+                  className="flex flex-col gap-[16px] max-[375px]:w-[161px]"
+                  key={data.id}
+                >
                   <img
-                    className="w-[285px] h-[416px] max-[375px]:w-[161px] max-[375px]:h-[235px]"
+                    className="w-[285px] h-[416px] max-[375px]:w-[161px] max-[375px]:h-[235px] cursor-pointer hover:border-[#57a1ebcf] hover:border hover:shadow-[0px_0px_60px_-15px_#57a1ebcf] rounded"
                     src={data.image}
                     alt=""
                     onClick={() => {
-                      navigate(`/movie/${data.title}`);
+                      nevigate(`/movie/${data.title}`);
                     }}
                   />
                   <div className="w-[285px] flex flex-col max-[375px]:w-[161px]">
@@ -52,7 +56,14 @@ function MovieList() {
                       </div>
                       <div className="text-[#8B93B0]">{data.rating}</div>
                     </div>
-                    <div className="text-[white] text-[20px]">{data.title}</div>
+                    <div
+                      className="text-[white] text-[20px] cursor-pointer hover:underline"
+                      onClick={() => {
+                        nevigate(`/movie/${data.title}`);
+                      }}
+                    >
+                      {data.title}
+                    </div>
                   </div>
                   <div className="flex flex-row gap-[8px] max-[375px]:flex max-[375px]:flex-wrap">
                     {data.genres.map((genre) => {

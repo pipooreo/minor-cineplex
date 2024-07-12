@@ -62,11 +62,17 @@ function Navbar() {
     >
       <div className="w-[100%] h-[100%] absolute backdrop-blur-sm bg-black/20 z-0"></div>
       <div className="relative z-[100] flex justify-between items-center md:px-[80px] md:py-[15px] px-[10px] py-[10px]">
-        <img
-          className="md:w-[42px] md:h-[48px] w-[28px] h-[32px]"
-          src="public/m_logo.png"
-          alt=""
-        />
+        <button
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          <img
+            className="md:w-[42px] md:h-[48px] w-[28px] h-[32px]"
+            src="https://res.cloudinary.com/diah9m6gw/image/upload/v1720699560/m_logo_vf5qo2.png"
+            alt=""
+          />
+        </button>
         <div className="hidden md:flex gap-[24px]">
           <button
             className="text-gray-400 px-[20px] py-[12px]"
