@@ -34,13 +34,9 @@ function MoviePage() {
       style={{ fontFamily: "Roboto Condensed" }}
     >
       <div className="absolute  w-full h-[500px] hidden sm:block">
-        <div
-          className=" bg-center bg-cover bg-no-repeat w-full h-full"
-          style={{
-            backgroundImage:
-              "linear-gradient(360deg, rgba(0, 0, 0, 0) 0%, rgba(33, 38, 63, 1) 100%), url('public/movie_background.png')",
-          }}
-        ></div>
+ <div className=" bg-top bg-no-repeat w-full h-full bg-[length:100%_1000px]" 
+          style={{backgroundImage: `linear-gradient(360deg, rgba(0, 0, 0, 0) 0%, rgba(33, 38, 63, 1) 100%), url('${movie && movie.image }')`,}} >
+        </div> 
       </div>
       <div>
         <section className="movie-detail relative  flex justify-center items-center xl:pt-[180px]">
