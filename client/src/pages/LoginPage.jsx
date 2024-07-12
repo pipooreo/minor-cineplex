@@ -26,7 +26,7 @@ function LoginPage() {
     login({ email: values.email, password: values.password }, actions);
   }
   return (
-    <section className="w-full h-screen flex flex-col items-center justify-center max-[375px]:w-[375px] bg-gray-900">
+    <section className="w-full absolute  h-screen flex flex-col items-center justify-center max-[375px]:w-[375px] bg-gray-0">
       <div className="w-[380px] h-[512px] flex flex-col items-center justify-center gap-[40px] max-[375px]:w-[375px]">
         <h1 className="h-[44px] text-[36px] font-bold text-white">Login</h1>
 
@@ -47,6 +47,7 @@ function LoginPage() {
                   name="email"
                   type="email"
                   placeholder="Email"
+                  className="text-gray-400"
                 />
                 <CustomInput
                   label="Password"
@@ -66,7 +67,7 @@ function LoginPage() {
               </div>
               <button
                 // disabled={isSubmitting}
-                className="btn btn-primary h-[48px] w-[383px] bg-[color:hsla(223, 82%, 62%, 1)]] text-white text-[16px] font-bold max-[375px]:w-[343px]"
+                className="btn bg-blue-100 h-[48px] w-[383px] bg-[color:hsla(223, 82%, 62%, 1)]] text-white text-[16px] font-bold max-[375px]:w-[343px]"
                 type="submit"
               >
                 Login

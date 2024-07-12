@@ -5,6 +5,7 @@ export default {
     extend: {
       zIndex: {
         100: "100",
+        1: "1",
       },
     },
     screens: {
