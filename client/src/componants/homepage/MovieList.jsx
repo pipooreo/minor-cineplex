@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function MovieList() {
   const [Movie, setMovie] = useState([]);
+  const nevigate = useNavigate();
 
   const getDataMovie = async () => {
     try {
       const response = await axios.get("http://localhost:4000/movies");
       setMovie(response.data.data);
-      console.log(response.data.data);
+      // console.log(response.data.data);
     } catch (error) {
       console.log("Failed to fetch data", error);
     }
@@ -17,6 +19,8 @@ function MovieList() {
   useEffect(() => {
     getDataMovie();
   }, []);
+
+  const navigate = useNavigate();
 
   return (
     <section className="xs:px-[10px] px-[120px] pt-[144px] pb-[80px] bg-[#21263F] flex justify-center ">
@@ -41,6 +45,9 @@ function MovieList() {
                     className="lg:w-[285px] lg:h-[416px] md:w-[100%] md:h-[359px] w-[161px] h-[235px]"
                     src={data.image}
                     alt=""
+                    onClick={() => {
+                      nevigate(`/movie/${data.title}`);
+                    }}
                   />
                   <div className=" flex flex-col lg:w-[285px] md:w-[100%] w-[161px]">
                     <div className="flex flex-row justify-between text-[14px]">
@@ -49,7 +56,14 @@ function MovieList() {
                       </div>
                       <div className="text-[#8B93B0]">{data.rating}</div>
                     </div>
-                    <div className="text-[white] text-[20px]">{data.title}</div>
+                    <div
+                      className="text-[white] text-[20px] cursor-pointer hover:underline"
+                      onClick={() => {
+                        nevigate(`/movie/${data.title}`);
+                      }}
+                    >
+                      {data.title}
+                    </div>
                   </div>
                   <div className="flex flex-col md:flex-row md:gap-[10px] gap-[10px]">
                     <div className="grid gap-[8px] flex-wrap  w-fit grid-cols-3 md:flex md:flex-row">

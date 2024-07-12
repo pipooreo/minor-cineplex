@@ -3,7 +3,7 @@ import { useField } from "formik";
 export function CustomInput({ label, ...props }) {
   const [field, meta] = useField(props);
   //   console.log(`field: ${field}  meta: ${meta}`);
-  console.log(field, meta);
+  // console.log(field, meta);
   return (
     <div className="flex flex-col">
       <label>{label}</label>
@@ -19,6 +19,17 @@ export function CustomInput({ label, ...props }) {
       {meta.touched && meta.error && (
         <div className="text-red-600 text-[12px]">{meta.error}</div>
       )}
+    </div>
+  );
+}
+export function CustomCheckBox({ label, ...props }) {
+  const [field, meta] = useField(props);
+  //   console.log(`field: ${field}  meta: ${meta}`);
+  // console.log(field, meta);
+  return (
+    <div className="flex gap-[16px]">
+      <input {...field} {...props} className="w-[20px] h-[20px]" />
+      <span>Remember</span>
     </div>
   );
 }

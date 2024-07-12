@@ -4,25 +4,27 @@ import { registerSchema } from "../schemas/schema";
 import { CustomInput } from "../componants/CustomInput";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../componants/Navbar";
+import { useAuth } from "../contexts/authentication";
 
 function RegisterPage() {
   const nevigate = useNavigate();
+  const { register } = useAuth();
   async function onSubmit(values, actions) {
     // console.log(values);
     // console.log(actions);
-    try {
-      await axios.post("http://localhost:4000/auth/register", values);
-      nevigate("/register/success");
-    } catch {
-      actions.resetForm();
-    }
+    // try {
+    //   await axios.post("http://localhost:4000/auth/register", values);
+    //   nevigate("/register/success");
+    // } catch {
+    //   actions.resetForm();
+    // }
+    register(values, actions);
   }
   return (
     <div className="bg-gray-900">
       <section className="w-full h-screen flex flex-col items-center justify-center max-[375px]:w-[375px] bg-gray-900">
         <div className="w-[380px] h-[512px] flex flex-col items-center justify-center gap-[40px] max-[375px]:w-[375px]">
-          <h1 className="w-[121px] h-[44px] text-[36px] font-bold text-white">
+          <h1 className="h-[44px] text-[36px] font-bold text-white">
             Register
           </h1>
           <Formik

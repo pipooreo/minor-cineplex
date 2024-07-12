@@ -1,5 +1,6 @@
 import { Router } from "express";
 import connectionPool from "../utils/db.mjs";
+import { protect } from "../middlewares/protect.mjs";
 
 import {
   getMoviesAll,
@@ -9,7 +10,7 @@ import {
 const moviesRouter = Router();
 
 moviesRouter.get("/", getMoviesAll);
-moviesRouter.get("/genres", getMoviesByGenres);
-moviesRouter.get("/movie", getMoviesById);
+moviesRouter.get("/genres", [protect], getMoviesByGenres);
+moviesRouter.get("/movie", [protect], getMoviesById);
 
 export default moviesRouter;

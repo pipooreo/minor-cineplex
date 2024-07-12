@@ -13,3 +13,9 @@ export const registerSchema = yup.object().shape({
     })
     .required("Required"),
 });
+
+export const loginSchema = yup.object().shape({
+  email: yup.string().required("Enter your email"),
+  password: yup.string().required("Enter your password"),
+  remember: yup.boolean(),
+});
