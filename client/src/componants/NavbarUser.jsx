@@ -32,7 +32,7 @@ function NavbarUser() {
         >
           <img
             className="md:w-[42px] md:h-[48px] w-[28px] h-[32px]"
-            src="public/m_logo.png"
+            src="https://res.cloudinary.com/diah9m6gw/image/upload/v1720699560/m_logo_vf5qo2.png"
             alt=""
           />
         </button>
