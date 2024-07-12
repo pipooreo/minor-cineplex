@@ -35,69 +35,77 @@ function MoviePage() {
     >
       <div className="absolute  w-full h-[500px] hidden sm:block">
         <div
-          className=" bg-center bg-cover bg-no-repeat w-full h-full"
+          className=" bg-top bg-no-repeat w-full h-full bg-[length:100%_1000px]"
           style={{
-            backgroundImage:
-              "linear-gradient(360deg, rgba(0, 0, 0, 0) 0%, rgba(33, 38, 63, 1) 100%), url('public/movie_background.png')",
+            backgroundImage: `linear-gradient(360deg, rgba(0, 0, 0, 0) 0%, rgba(33, 38, 63, 1) 100%), url('${
+              movie && movie.image
+            }')`,
           }}
         ></div>
       </div>
       <div>
-        <section className="movie-detail relative  flex justify-center items-center xl:pt-[150px]">
-          <div className="w-[100%] xl:w-[70%] h-[100%] xl:h-[600px] absolute xl:rounded-xl backdrop-blur-md bg-[#070C1BB2]/70 "></div>
-          {movie && (
-            <div className="flex flex-col xl:flex-row gap-10 z-10 xl:rounded-xl justify-center items-center md:w-[70%] w-100% text-white">
-              <img
-                className="w-[100%] md:w-[411px] md:h-[600px] xl:rounded-xl "
-                src={movie.image}
-                alt=""
-              />
-              <div className="flex flex-col xl:gap-[50px] xl:p-[50px] px-[15px] pb-[50px] pt-0 xl:mt-[100px]">
+        <section className="movie-detail flex justify-center items-center">
+          <div className="relative xl:w-[100%] flex justify-center items-center xl:pt-[180px]">
+            <div className="w-[100%] xl:w-[80%] h-[100%] xl:h-[600px] absolute xl:rounded-xl backdrop-blur-md bg-[#070C1BB2]/70 "></div>
+            {movie && (
+              <div className="flex flex-col xl:flex-row gap-10 z-10 xl:rounded-xl justify-start items-center xl:w-[80%] w-100% text-white">
+                <img
+                  className="w-[100%] md:w-[411px] md:h-[600px] xl:rounded-xl "
+                  src={movie.image}
+                  alt=""
+                />
                 <div>
-                  <h1 className="text-[36px] leading-[44px] font-bold ">
-                    {movie.title}
-                  </h1>
-                  <div className="flex flex-col xl:flex-row justify-start xl:items-center">
-                    <div className=" py-[10px] pr-[10px] w-fit">
-                      <p className="flex justify-start items-center gap-[10px]">
-                        {movie.genres.map((item, index) => {
-                          return (
-                            <span
-                              className="bg-[#21263F] text-[#8B93B0] rounded-[4px]  px-[6px] py-[12px] "
-                              key={index}
-                            >
-                              {item}
+                  <div className="flex flex-col gap-[20px] xl:gap-[50px] md:px-[25%] xl:px-[20px] px-[15px] pb-[50px] ">
+                    <div>
+                      <h1 className="text-[36px] leading-[44px] font-bold ">
+                        {movie.title}
+                      </h1>
+                      <div className="flex flex-col xl:flex-row justify-start xl:items-center">
+                        <div className=" py-[10px] pr-[10px] w-fit">
+                          <p className="flex justify-start items-center gap-[10px]">
+                            {movie.genres.map((item, index) => {
+                              return (
+                                <span
+                                  className="bg-[#21263F] text-[#8B93B0] rounded-[4px]  px-[6px] py-[12px] "
+                                  key={index}
+                                >
+                                  {item}
+                                </span>
+                              );
+                            })}
+                            <span className="bg-[#21263F] text-[#8B93B0] rounded-[4px]  px-[6px] py-[12px] ">
+                              {movie.language}
                             </span>
-                          );
-                        })}
-                        <span className="bg-[#21263F] text-[#8B93B0] rounded-[4px]  px-[6px] py-[12px] ">
-                          {movie.language}
-                        </span>
-                        <img
-                          className="h-[35px]"
-                          src="\public\pipe.png"
-                          alt=""
-                        />
-                      </p>
+                            <img
+                              className="h-[35px]"
+                              src="\public\pipe.png"
+                              alt=""
+                            />
+                          </p>
+                        </div>
+                        <p>
+                          <span className="text-[#C8CEDD] text-[16px] leading-[24px] px-[10px]">
+                            Release date: {movie.theatrical_release}
+                          </span>
+                        </p>
+                      </div>
                     </div>
-                    <p>
-                      <span className="text-[#C8CEDD] text-[16px] leading-[24px] px-[10px]">
-                        Release date: {movie.theatrical_release}
-                      </span>
-                    </p>
+
+                    <div>
+                      <button className="my-[10px] xs:my-[20px] xs:px-[40px] py-[12px] bg-[#4E7BEE] rounded-md w-[153px] h-[48px]">
+                        Book ticket
+                      </button>
+                      <div className="my-[10px] xl:my-[50px] w-[100%] md:w-[90%] xl:w-[80%] flex flex-col gap-5 ">
+                        <p className="text-[16px] leading-[24px]">
+                          {movie.description}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <button className="my-[20px] px-[40px] py-[12px] bg-[#4E7BEE] rounded-md w-[153px] h-[48px]">
-                  Book ticket
-                </button>
-                <div className="md:my-[20px] xl:w-[80%] flex flex-col gap-5 ">
-                  <p className="text-[16px] leading-[24px]">
-                    {movie.description}
-                  </p>
-                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </section>
         <section className="reviews text-white flex flex-col justify-center px-[10px] items-center p-[20px] ">
           <div className="flex gap-3 justify-start items-center w-[100%]  mt-0 md:w-[50%] my-[30px] mx-0 md:m-[50px]">

@@ -22,7 +22,7 @@ function RegisterPage() {
   }
   return (
     <div className="bg-gray-900">
-      <section className="w-full h-screen flex flex-col items-center justify-center max-[375px]:w-[375px] bg-gray-900">
+      <section className="w-full h-screen flex flex-col items-center justify-center max-[375px]:w-[375px] bg-gray-0">
         <div className="w-[380px] h-[512px] flex flex-col items-center justify-center gap-[40px] max-[375px]:w-[375px]">
           <h1 className="h-[44px] text-[36px] font-bold text-white">
             Register
@@ -64,10 +64,8 @@ function RegisterPage() {
               </Form>
             )}
           </Formik>
-          <div className="flex gap-1 text">
-            <p className="text-[color:[hsla(227, 19%, 62%, 1)]]">
-              Already have an account?
-            </p>
+          <div className="flex gap-1 text-body2R">
+            <p className="text-gray-300">Already have an account?</p>
             <button
               className="underline text-white"
               onClick={() => nevigate("/login")}
