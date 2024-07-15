@@ -47,7 +47,7 @@ export async function getCinemasByCity(req, res, next) {
         )
       ) as cinemas
       FROM city
-      INNER JOIN city_cinemas ON city.id = city_cinemas.city_id
+      INNER JOIN city_cinemas ON city_cinemas.city_id = city.id
       INNER JOIN cinemas ON cinemas.id = city_cinemas.cinema_id
       where city.city_name ilike $1
       GROUP BY city.id, city.city_name;
@@ -65,7 +65,6 @@ export async function getCinemasByCity(req, res, next) {
     });
   } catch (error) {
     return res.status(500).json({
-      message: "Server could not get cinemas because database connection",
       message: "Server could not get cinemas because database connection",
     });
   }
@@ -131,7 +130,7 @@ export async function getMoviesAll(req, res, next) {
           movies.theatrical_release,
           movies.out_of_theaters,
           movies.rating, 
-          COALESCE(array_agg(genres.genres_name), '{}') as genres,
+          array_agg(genres.genres_name) as genres,
           movies.language
         from 
           movies
@@ -328,7 +327,7 @@ export async function getCommentsByMoviesName(req, res, next) {
 export async function getMoviesBySearchBar(req, res, next) {
   try {
     const { movieName, moviesGenres, moviesLanguage, moviesCity } = req.query;
-    const releasedDate = "2024-10-02"; // Example hardcoded release date
+    const releasedDate = "2024-09-02";
 
     let params = [];
     let query = `
@@ -356,9 +355,8 @@ export async function getMoviesBySearchBar(req, res, next) {
       INNER JOIN city ON city.id = city_cinemas.city_id
       LEFT JOIN movies_genres ON movies.id = movies_genres.movie_id
       LEFT JOIN genres ON movies_genres.genre_id = genres.id
-      WHERE 1=1`; // Start with a WHERE clause that is always true
+      WHERE 1=1`;
 
-    // Add dynamic search conditions
     if (movieName) {
       query += ` AND movies.title ILIKE $${params.length + 1}`;
       params.push(`%${movieName}%`);
