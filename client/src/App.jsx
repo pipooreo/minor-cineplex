@@ -10,6 +10,7 @@ import Navbar from "./componants/Navbar";
 import NavbarUser from "./componants/NavbarUser";
 import Footer from "./componants/Footer";
 import { useAuth } from "./contexts/authentication";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const auth = useAuth();
@@ -21,6 +22,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/registersuccess" element={<RegisterPageSuccess />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/resetpassword" element={<ResetPassword />} />
         <Route path="/movie/:title" element={<MoviePage />} />
       </Routes>
       <Footer />

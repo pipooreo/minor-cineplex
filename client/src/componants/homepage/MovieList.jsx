@@ -42,7 +42,7 @@ function MovieList() {
                   key={data.id}
                 >
                   <img
-                    className="lg:w-[285px] lg:h-[416px] md:w-[100%] md:h-[359px] w-[161px] h-[235px]"
+                    className="lg:w-[285px] lg:h-[416px] md:w-[100%] md:h-[359px] w-[161px] h-[235px] hover:border-[#81afe7]  hover:border hover:shadow-[0px_0px_60px_-25px_#81afe7] rounded"
                     src={data.image}
                     alt=""
                     onClick={() => {
