@@ -25,8 +25,8 @@ function AuthProvider(props) {
   }
 
   async function login(data, actions) {
-    console.log(data);
     try {
+      actions.setErrors({ notice: false });
       const results = await axios.post(
         "http://localhost:4000/auth/login",
         data
@@ -37,8 +37,49 @@ function AuthProvider(props) {
       setState({ ...state, user: userDataFromToken });
       nevigate("/");
     } catch (err) {
+      err = err.response.data.message;
+      // console.log(err);
+      if (err.includes("Email")) {
+        actions.setErrors({ email: err });
+      }
+      if (err.includes("Password")) {
+        actions.setErrors({ password: err });
+      } else {
+        console.log(err);
+      }
+    }
+  }
+
+  async function requestResetPassword(data, actions) {
+    // console.log(data);
+
+    try {
+      const results = await axios.post(
+        "http://localhost:4000/auth/request-reset-password",
+        data
+      );
+    } catch (err) {
+      // console.log(err);
       actions.setErrors({ email: err.response.data.message });
       // (err.response.data.message);
+      // actions.resetForm();
+    }
+  }
+
+  async function resetPassword(data, actions) {
+    // console.log(data);
+
+    try {
+      const results = await axios.post(
+        "http://localhost:4000/auth/reset-password",
+        data
+      );
+      nevigate("/login");
+    } catch (err) {
+      // console.log(err);
+      err = err.response.data.message;
+      if (err.includes("OTP")) actions.setErrors({ otp: err });
+      // err.response.data.message;
       // actions.resetForm();
     }
   }
@@ -53,7 +94,15 @@ function AuthProvider(props) {
 
   return (
     <AuthContext.Provider
-      value={{ state, login, register, logout, isAuthenticated }}
+      value={{
+        state,
+        login,
+        register,
+        logout,
+        requestResetPassword,
+        resetPassword,
+        isAuthenticated,
+      }}
     >
       {props.children}
     </AuthContext.Provider>

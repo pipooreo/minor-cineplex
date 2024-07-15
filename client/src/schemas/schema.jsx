@@ -19,3 +19,27 @@ export const loginSchema = yup.object().shape({
   password: yup.string().required("Enter your password"),
   remember: yup.boolean(),
 });
+
+export const requestOtp = yup.object().shape({
+  email: yup.string().required("Enter your email").required("Required"),
+});
+
+export const resetPasswordWithOtp = yup.object().shape({
+  password: yup
+    .string()
+    .matches(passwordRules, {
+      message: "Please create a strong password (a-z,A-Z,0-9)",
+    })
+    .required("Required"),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Password must match")
+    .required("Required"),
+  otp: yup
+    .number()
+    .typeError("OTP must be a number")
+    .required("Required")
+    .integer("OTP is number only")
+    .positive("OTP is number only"),
+  // .max(9999, "OTP have 4 numbers"),
+});
