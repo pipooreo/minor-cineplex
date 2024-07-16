@@ -11,10 +11,14 @@ function Navbar() {
 
   return (
     <nav
-      className="absolute top-0 left-0 w-full bg-[rgba(0,0,0,0.2)] border-b-[1px] border-[#21263F] z-100"
+      className="absolute top-0 left-0 w-full bg-black/20 border-b-[1px] border-[#21263F] z-100"
       style={{ fontFamily: "Roboto Condensed" }}
     >
-      <div className="w-[100%] h-[100%] absolute backdrop-blur-sm bg-black/20 z-0"></div>
+      <div
+        className={`w-[100%] h-[100%] absolute backdrop-blur-sm ${
+          isOpen ? "bg-black/40" : "bg-black/20"
+        } z-0`}
+      ></div>
       <div className="relative z-[100] flex justify-between items-center md:px-[80px] md:py-[15px] px-[10px] py-[10px]">
         <button
           onClick={() => {
@@ -29,13 +33,13 @@ function Navbar() {
         </button>
         <div className="hidden md:flex gap-[24px]">
           <button
-            className="text-gray-400 px-[20px] py-[12px]"
+            className="text-gray-400 text-body1R px-[20px] py-[12px]"
             onClick={() => navigate("/login")}
           >
             Login
           </button>
           <button
-            className="border border-[#8B93B0] rounded px-[40px] py-[12px] text-white font-bold"
+            className="border border-gray-300 rounded px-[40px] text-body1M py-[12px] text-white font-bold"
             onClick={() => navigate("/register")}
           >
             Register
@@ -43,7 +47,17 @@ function Navbar() {
         </div>
 
         <div className="flex md:hidden cursor-pointer" onClick={toggleMenu}>
-          <i className="fas fa-bars text-white text-[24px]"></i>
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M4 6L20 6" stroke="white" stroke-linecap="round" />
+            <path d="M4 12L20 12" stroke="white" stroke-linecap="round" />
+            <path d="M4 18L20 18" stroke="white" stroke-linecap="round" />
+          </svg>
         </div>
       </div>
       {isOpen && (
@@ -51,7 +65,7 @@ function Navbar() {
           <div className="p-[30px] border-t-[1px] border-[#21263F]">
             <nav className="flex flex-col justify-center items-center m-[15px] gap-[20px]">
               <button
-                className=" text-gray-400 px-[20px] py-[12px]"
+                className=" text-gray-400 px-[20px] text-body1R py-[12px]"
                 onClick={() => {
                   navigate("/login");
                   toggleMenu();
@@ -60,7 +74,7 @@ function Navbar() {
                 Login
               </button>
               <button
-                className="border border-[#8B93B0] rounded px-[40px] py-[12px] font-bold"
+                className="border border-gray-300 text-white rounded px-[40px] py-[12px] font-bold"
                 onClick={() => {
                   navigate("/register");
                   toggleMenu();

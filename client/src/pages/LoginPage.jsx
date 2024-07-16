@@ -12,8 +12,9 @@ function LoginPage() {
   function onSubmit(values, actions) {
     login(values, actions);
   }
+
   return (
-    <section className="w-full absolute  h-screen flex flex-col items-center justify-center max-md:w-[375px] bg-gray-0">
+    <section className="w-full absolute  h-screen flex flex-col items-center justify-center bg-gray-0">
       <div className="w-[380px] h-[512px] flex flex-col items-center justify-center gap-[40px] max-md:w-[375px]">
         <h1 className="h-[44px] text-[36px] font-bold text-white">Login</h1>
 
@@ -34,7 +35,6 @@ function LoginPage() {
                   name="email"
                   type="email"
                   placeholder="Email"
-                  className="text-gray-400"
                 />
                 <CustomInput
                   label="Password"
@@ -63,9 +63,7 @@ function LoginPage() {
           )}
         </Formik>
         <div className="flex gap-1 text">
-          <p className="text-[color:[hsla(227, 19%, 62%, 1)]]">
-            Don’t have any account?
-          </p>
+          <p className="text-gray-300">Don’t have any account?</p>
           <button
             className="underline text-white"
             onClick={() => nevigate("/register")}

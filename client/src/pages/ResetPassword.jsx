@@ -21,7 +21,7 @@ function ResetPassword() {
     );
   }
   return (
-    <section className="w-full absolute h-screen flex flex-col items-center justify-center max-sm:w-sm bg-gray-0 max-sm:h-[768px]">
+    <section className="w-full absolute h-screen flex flex-col items-center justify-center  bg-gray-0 ">
       <div className="w-[380px] flex flex-col items-center justify-center gap-[40px] max-md:w-xs">
         <h1 className="h-[44px] text-[36px] font-bold text-white">
           Reset password
