@@ -29,10 +29,7 @@ function MoviePage() {
     getCommentMovie();
   }, []);
   return (
-    <div
-      className="bg-[#101525] relative"
-      style={{ fontFamily: "Roboto Condensed" }}
-    >
+    <div className="bg-BG relative" style={{ fontFamily: "Roboto Condensed" }}>
       <div className="absolute  w-full h-[500px] hidden sm:block">
         <div
           className=" bg-top bg-no-repeat w-full h-full bg-[length:110%_800px]"

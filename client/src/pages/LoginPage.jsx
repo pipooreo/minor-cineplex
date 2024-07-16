@@ -14,7 +14,7 @@ function LoginPage() {
   }
 
   return (
-    <section className="w-full absolute  h-screen flex flex-col items-center justify-center bg-gray-0">
+    <section className="w-full absolute  h-screen flex flex-col items-center justify-center bg-BG">
       <div className="w-[380px] h-[512px] flex flex-col items-center justify-center gap-[40px] max-md:w-[375px]">
         <h1 className="h-[44px] text-[36px] font-bold text-white">Login</h1>
 

@@ -19,7 +19,7 @@ function CinemaList() {
   }, []);
 
   return (
-    <section className="bg-[#21263F] px-[5px] lg:px-[120px] py-[80px] flex justify-center">
+    <section className="bg-BG px-[5px] lg:px-[120px] py-[80px] flex justify-center">
       <div className="flex flex-col gap-[40px] max-[375px]:w-[345px]">
         <div className="text-[white] text-[36px] font-[700]">All cinemas</div>
 

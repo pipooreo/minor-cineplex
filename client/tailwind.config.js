@@ -32,6 +32,7 @@ export default {
       red: "#E5364B",
       white: "#FFFFFF",
       black: "#000000",
+      BG: "#101525",
     },
     fontSize: {
       head1: [
