@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 function Header() {
   const navigate = useNavigate();
   return (
-    <section className="relative flex flex-col items-center">
+    <section className="relative flex justify-center items-center">
       <div
         className="md:w-full md:h-[400px] md:bg-bottom  md:bg-[length:100%_1100px] w-full h-[265px] bg-left-bottom  bg-[length:100%_550px]"
         style={{
