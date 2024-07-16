@@ -57,11 +57,20 @@ export async function login(req, res) {
   if (!isValidPassword) {
     return res.status(404).json({ message: "Password not valid" });
   }
-  const token = jwt.sign(
-    { id: user._id, name: user.name, email: user.email },
-    process.env.SECRET_KEY,
-    { expiresIn: "1d" }
-  );
+  let token;
+  if (!req.body.remember) {
+    token = jwt.sign(
+      { id: user._id, name: user.name, email: user.email },
+      process.env.SECRET_KEY,
+      { expiresIn: "2h" }
+    );
+  } else {
+    token = jwt.sign(
+      { id: user._id, name: user.name, email: user.email },
+      process.env.SECRET_KEY
+    );
+  }
+
   return res.status(200).json({ message: "Login successfully", token });
 }
 
