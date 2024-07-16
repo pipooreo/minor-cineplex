@@ -341,6 +341,7 @@ export async function getMoviesBySearchBar(req, res, next) {
         cinemas.name as cinema_name,
         halls.hall_number,
         movies.title,
+        movies.language,
         movies.image,
         hall_screentime.time AS start_time,
         days.day_name AS day_name,
@@ -400,7 +401,8 @@ export async function getMoviesBySearchBar(req, res, next) {
         cinemas.name,
         halls.hall_number,
         movies.image,
-        movies.title, 
+        movies.title,
+        movies.language,
         hall_screentime.time, 
         days.day_name,
         city.city_name
