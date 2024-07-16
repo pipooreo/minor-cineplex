@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 function MovieList() {
   const [Movie, setMovie] = useState([]);
-  const nevigate = useNavigate();
 
   const getDataMovie = async () => {
     try {
@@ -46,7 +45,7 @@ function MovieList() {
                     src={data.image}
                     alt=""
                     onClick={() => {
-                      nevigate(`/movie/${data.title}`);
+                      navigate(`/movie/${data.title}`);
                     }}
                   />
                   <div className=" flex flex-col lg:w-[285px] md:w-[100%] w-[161px]">
@@ -59,7 +58,7 @@ function MovieList() {
                     <div
                       className="text-[white] text-[20px] cursor-pointer hover:underline"
                       onClick={() => {
-                        nevigate(`/movie/${data.title}`);
+                        navigate(`/movie/${data.title}`);
                       }}
                     >
                       {data.title}
