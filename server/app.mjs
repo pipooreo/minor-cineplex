@@ -8,6 +8,7 @@ import cinemasRouter from "./routers/cinemas.mjs";
 import cityRouter from "./routers/city.mjs";
 import commentRouter from "./routers/comments.mjs";
 import searchBarRouter from "./routers/searchBar.mjs";
+import daysRouter from "./routers/days.mjs";
 // import getMoviesScreenTime from "./routers/ticket.mjs";
 dotenv.config();
 
@@ -23,11 +24,12 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.use("/movies", moviesRouter); //done query done
-app.use("/cinemas", cinemasRouter); //done query done
-app.use("/comments", commentRouter); //done query donne
-app.use("/city", cityRouter); //done qeury done
+app.use("/movies", moviesRouter);
+app.use("/cinemas", cinemasRouter);
+app.use("/comments", commentRouter);
+app.use("/city", cityRouter);
 app.use("/search", searchBarRouter);
+app.use("/days", daysRouter);
 // app.use("/date", getMoviesScreenTime);
 
 app.listen(port, () => {
