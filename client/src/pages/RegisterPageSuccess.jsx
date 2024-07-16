@@ -6,7 +6,7 @@ function RegisterPageSuccess() {
   const nevigate = useNavigate();
   return (
     <div className="bg-[#101525;]">
-      <section className="w-full h-screen absolute flex flex-col items-center justify-center bg-gray-0">
+      <section className="w-full h-screen absolute flex flex-col items-center justify-center bg-BG">
         <div className="w-[380px] h-[512px] flex flex-col items-center justify-center gap-[48px] align-center max-sm:w-[375px]">
           <div>
             <FaCheck className="w-[80px] h-[80px] bg-green rounded-full text-white p-3 " />

@@ -21,7 +21,7 @@ function ResetPassword() {
     );
   }
   return (
-    <section className="w-full absolute h-screen flex flex-col items-center justify-center max-sm:w-sm bg-gray-0 max-sm:h-[768px]">
+    <section className="w-full absolute h-screen flex flex-col items-center justify-center  bg-BG ">
       <div className="w-[380px] flex flex-col items-center justify-center gap-[40px] max-md:w-xs">
         <h1 className="h-[44px] text-[36px] font-bold text-white">
           Reset password
@@ -98,25 +98,6 @@ function ResetPassword() {
           )}
         </Formik>
       </div>
-      {/* <div role="alert" className="alert alert-error max-md:w-full mt-[20px]">
-        <button>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 shrink-0 stroke-current"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-        </button>
-        <span>Your password is incorrect or email doesn't exits.</span>
-        <span>Please try another password or email</span>
-      </div> */}
     </section>
   );
 }

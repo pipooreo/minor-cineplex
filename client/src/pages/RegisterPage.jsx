@@ -13,7 +13,7 @@ function RegisterPage() {
   }
   return (
     <div className="bg-gray-900">
-      <section className="w-full absolute h-screen flex flex-col items-center justify-center max-sm:w-[375px] bg-gray-0">
+      <section className="w-full absolute h-screen flex flex-col items-center justify-center  bg-BG">
         <div className="w-[380px] h-[512px] flex flex-col items-center justify-center gap-[40px] max-sm:w-[375px]">
           <h1 className="h-[44px] text-[36px] font-bold text-white">
             Register

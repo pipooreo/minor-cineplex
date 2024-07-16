@@ -334,7 +334,6 @@ export async function getMoviesBySearchBar(req, res, next) {
       // releasedDate,
     } = req.query;
     const releasedDate = "2024-09-02";
-
     let params = [];
     let query = `
       WITH subquery AS (
