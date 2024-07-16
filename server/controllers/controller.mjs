@@ -326,8 +326,14 @@ export async function getCommentsByMoviesName(req, res, next) {
 
 export async function getMoviesBySearchBar(req, res, next) {
   try {
-    const { movieName, moviesGenres, moviesLanguage, moviesCity } = req.query;
-    const releasedDate = "2024-09-02";
+    const {
+      movieName,
+      moviesGenres,
+      moviesLanguage,
+      moviesCity,
+      releasedDate,
+    } = req.query;
+    // const releasedDate = "2024-09-02";
 
     let params = [];
     let query = `
@@ -335,6 +341,8 @@ export async function getMoviesBySearchBar(req, res, next) {
         cinemas.name as cinema_name,
         halls.hall_number,
         movies.title,
+        movies.language,
+        movies.image,
         hall_screentime.time AS start_time,
         days.day_name AS day_name,
         array_agg(DISTINCT tags.tag_name) AS cinema_tags,
@@ -392,7 +400,9 @@ export async function getMoviesBySearchBar(req, res, next) {
       GROUP BY 
         cinemas.name,
         halls.hall_number,
-        movies.title, 
+        movies.image,
+        movies.title,
+        movies.language,
         hall_screentime.time, 
         days.day_name,
         city.city_name
