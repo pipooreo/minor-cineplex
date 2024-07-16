@@ -19,22 +19,9 @@ function CinemaList() {
   }, []);
 
   return (
-    <section className="bg-[#21263F] px-[5px] lg:px-[120px] py-[80px] flex justify-center">
+    <section className="bg-BG px-[5px] lg:px-[120px] py-[80px] flex justify-center">
       <div className="flex flex-col gap-[40px] max-[375px]:w-[345px]">
         <div className="text-[white] text-[36px] font-[700]">All cinemas</div>
-
-        {/* <div className="h-[48px] flex flex-row justify-between items-center max-[375px]:h-[116px] max-[375px]:flex max-[375px]:flex-col max-[375px]:items-start">
-          <div className="w-[285px] h-[48px] bg-[#0d0f1a] border-[#565F7E] border-[1px] rounded-[4px] p-[12px]">
-            <input
-              className="w-[229px] h-[24px] text-[#8B93B0] bg-[#0d0f1a] outline-none"
-              type="text"
-              placeholder="Search City"
-            />
-            <button className="w-[24px] h-[24px] text-[white]">
-              <i className="fa-solid fa-magnifying-glass"></i>
-            </button>
-          </div>
-        </div> */}
 
         {province && province.length > 0 ? (
           province.map((city) => (

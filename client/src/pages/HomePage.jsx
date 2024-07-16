@@ -6,7 +6,7 @@ function HomePage() {
   return (
     <>
       <div
-        className="box-border p-0 m-0"
+        className="box-border p-0 m-0 "
         style={{ fontFamily: "Roboto Condensed" }}
       >
         <Header />
