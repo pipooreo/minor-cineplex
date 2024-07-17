@@ -9,6 +9,13 @@ const Meow = () => {
   const [days, setDays] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
   const [movies, setMovies] = useState([]);
+  const [searchParams, setSearchParams] = useState({
+    movieName: "",
+    moviesGenres: "",
+    moviesLanguage: "",
+    moviesCity: "",
+    cinemaName: "",
+  });
   const params = useParams();
   const navigate = useNavigate();
 
@@ -63,42 +70,49 @@ const Meow = () => {
 
   const fetchMovieDetails = async (day) => {
     try {
+      const {
+        movieName,
+        moviesGenres,
+        moviesLanguage,
+        moviesCity,
+        cinemaName,
+      } = searchParams;
+
       const searchData = await axios.get(`http://localhost:4000/search`, {
         params: {
-          movieName: params.title,
-          moviesGenres: params.moviesGenres,
-          moviesLanguage: params.moviesLanguage,
-          moviesCity: params.moviesCity,
+          movieName: movieName || undefined,
+          moviesGenres: moviesGenres || undefined,
+          moviesLanguage: moviesLanguage || undefined,
+          moviesCity: moviesCity || undefined,
+          cinemaName: cinemaName || undefined,
           dayName: day.day_name,
         },
       });
 
       const moviesData = searchData.data.data;
+      console.log("Movies Data:", moviesData); // Log moviesData to identify if it's undefined or not
 
-      // Log moviesData to verify its structure
-      console.log("moviesData", moviesData);
+      // Map and structure the movies data
+      const formattedMovies = moviesData.map((cityEntry) => {
+        const cinemas = cityEntry.cinemas.map((cinema) => {
+          const dayStartTimes =
+            cinema.movie_details.day_start_times[day.day_name];
 
-      // Create a map to group cinemas by movie details
-      const movieMap = new Map();
-
-      moviesData.forEach((cityEntry) => {
-        cityEntry.cinemas.forEach((cinema) => {
-          const movieKey = cinema.movie_details.title;
-          if (!movieMap.has(movieKey)) {
-            movieMap.set(movieKey, {
-              movieDetails: cinema.movie_details,
-              cinemas: [],
-            });
-          }
-          movieMap.get(movieKey).cinemas.push(cinema);
+          return {
+            cinema_name: cinema.cinema_name,
+            cinema_tags: cinema.movie_details.cinema_tags.join(", "),
+            day_start_times: dayStartTimes ? dayStartTimes.join(", ") : "",
+          };
         });
+
+        return {
+          city_name: cityEntry.city_name,
+          cinemas: cinemas,
+        };
       });
 
-      // Convert the map to an array for rendering
-      const groupedMovies = Array.from(movieMap.values());
-
-      // Set movies state with the grouped movie data
-      setMovies(groupedMovies);
+      // Update state with formatted movies data
+      setMovies(formattedMovies);
 
       setSelectedDay(day);
     } catch (error) {
@@ -108,6 +122,14 @@ const Meow = () => {
 
   const handleDayClick = (day) => {
     fetchMovieDetails(day);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSearchParams({
+      ...searchParams,
+      [name]: value,
+    });
   };
 
   return (
@@ -140,41 +162,41 @@ const Meow = () => {
               <h2>
                 {selectedDay.day_name} {selectedDay.date}
               </h2>
+              <div className="search-form">
+                <input
+                  type="text"
+                  name="cinemaName"
+                  placeholder="Search by Cinema Name"
+                  value={searchParams.cinemaName}
+                  onChange={handleInputChange}
+                />
+                <input
+                  type="text"
+                  name="moviesCity"
+                  placeholder="Search by City"
+                  value={searchParams.moviesCity}
+                  onChange={handleInputChange}
+                />
+              </div>
               {movies.length > 0 ? (
-                movies.map((movie, index) => (
-                  <div key={index} className="movie-card mb-6">
-                    <h3 className="movie-title text-xl mb-2">
-                      {movie.movieDetails.title}
-                    </h3>
-                    <div className="movie-details flex">
-                      <div className="movie-details-left flex-1 mr-4">
-                        <img
-                          src={movie.movieDetails.image}
-                          alt={movie.movieDetails.title}
-                          className="mb-2"
-                        />
-                        <p>Title: {movie.movieDetails.title}</p>
-                        <p>
-                          Genres: {movie.movieDetails.movie_genres.join(", ")}
-                        </p>
-                        <p>Language: {movie.movieDetails.language}</p>
-                      </div>
-                      <div className="movie-details-right flex-1">
-                        {movie.cinemas.map((cinema, cinemaIndex) => (
-                          <div key={cinemaIndex} className="cinema-card mb-4">
-                            <h4 className="cinema-name text-lg mb-2">
-                              {cinema.cinema_name}
-                            </h4>
-                            <p>
-                              Hall Number: {cinema.movie_details.hall_number}
-                            </p>
-                            {/* Log cinema.movie_details to the console */}
-                            {console.log(cinema.movie_details)}
-                            <p>Start Time: {cinema.movie_details.start_time}</p>
+                movies.map((cityEntry, index) => (
+                  <div key={index}>
+                    <h3>{cityEntry.city_name}</h3>
+                    {cityEntry.cinemas.map((cinema, cinemaIndex) => (
+                      <div key={cinemaIndex}>
+                        <h4>{cinema.cinema_name}</h4>
+                        <p>{cinema.cinema_tags}</p>
+                        {cinema.day_start_times && (
+                          <div>
+                            {cinema.day_start_times
+                              .split(", ")
+                              .map((startTime, idx) => (
+                                <p key={idx}>{startTime}</p>
+                              ))}
                           </div>
-                        ))}
+                        )}
                       </div>
-                    </div>
+                    ))}
                   </div>
                 ))
               ) : (

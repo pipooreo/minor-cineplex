@@ -160,7 +160,6 @@ export async function getMoviesById(req, res, next) {
   try {
     const movieSearch = req.query.movieSearch;
     // console.log("Search term:", movieSearch);
-
     const normalizedSearchTerm = movieSearch.replace(/-/g, " ");
     const results = await connectionPool.query(
       `
@@ -326,6 +325,7 @@ export async function getCommentsByMoviesName(req, res, next) {
 
 export async function getMoviesBySearchBar(req, res, next) {
   try {
+    const noResults = [];
     const {
       movieName,
       moviesGenres,
@@ -394,8 +394,8 @@ export async function getMoviesBySearchBar(req, res, next) {
       params.push(`%${moviesGenres}%`);
     }
     if (moviesLanguage) {
-      query += ` AND LOWER(movies.language) LIKE LOWER($${params.length + 1})`;
-      params.push(`%${moviesLanguage}%`);
+      query += ` AND movies.language = $${params.length + 1}`;
+      params.push(moviesLanguage);
     }
     if (moviesCity) {
       query += ` AND LOWER(city.city_name) LIKE LOWER($${params.length + 1})`;
@@ -427,7 +427,7 @@ export async function getMoviesBySearchBar(req, res, next) {
 
     if (rows.length === 0) {
       return res.status(404).json({
-        message: "There are no movies matching the search criteria",
+        data: noResults,
       });
     }
 
