@@ -331,6 +331,7 @@ export async function getMoviesBySearchBar(req, res, next) {
       moviesGenres,
       moviesLanguage,
       moviesCity,
+      // releasedDate,
     } = req.query;
     const releasedDate = "2024-09-02";
     let params = [];
@@ -406,6 +407,10 @@ export async function getMoviesBySearchBar(req, res, next) {
       query += ` AND LOWER(city.city_name) LIKE LOWER($${params.length + 1})`;
       params.push(`%${moviesCity}%`);
     }
+    // if (releasedDate) {
+    //   query += ` AND TO_DATE($${params.length + 1}, 'YYYY-MM-DD') BETWEEN TO_DATE(movies.theatrical_release, 'YYYY-MM-DD') AND TO_DATE(movies.out_of_theaters, 'YYYY-MM-DD')`;
+    //   params.push(releasedDate);
+    // } <<   อันนี้สำหรับตอนที่อยากรับค่าวันที่มาจากปฏิทิน
 
     // Release date condition
     query += `
@@ -480,7 +485,6 @@ export async function getMoviesBySearchBar(req, res, next) {
     });
   }
 }
-
 
 export async function getDaysAll(req, res, next) {
   try {
