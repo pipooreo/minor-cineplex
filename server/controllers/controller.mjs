@@ -400,15 +400,15 @@ export async function getMoviesBySearchBar(req, res, next) {
       params.push(`%${moviesGenres}%`);
     }
     if (moviesLanguage) {
-      query += ` AND movies.language ILIKE $${params.length + 1}`;
-      params.push(`%${moviesLanguage}%`);
+      query += ` AND movies.language = $${params.length + 1}`;
+      params.push(moviesLanguage); // Use exact value from query parameter
     }
     if (moviesCity) {
       query += ` AND LOWER(city.city_name) LIKE LOWER($${params.length + 1})`;
       params.push(`%${moviesCity}%`);
     }
     // if (releasedDate) {
-    //   query += ` AND TO_DATE($${params.length + 1}, 'YYYY-MM-DD') BETWEEN TO_DATE(movies.theatrical_release, 'YYYY-MM-DD') AND TO_DATE(movies.out_of_theaters, 'YYYY-MM-DD')`;
+    //   query +=  AND TO_DATE($${params.length + 1}, 'YYYY-MM-DD') BETWEEN TO_DATE(movies.theatrical_release, 'YYYY-MM-DD') AND TO_DATE(movies.out_of_theaters, 'YYYY-MM-DD');
     //   params.push(releasedDate);
     // } <<   อันนี้สำหรับตอนที่อยากรับค่าวันที่มาจากปฏิทิน
 
