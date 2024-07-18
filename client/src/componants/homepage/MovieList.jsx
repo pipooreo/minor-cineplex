@@ -53,7 +53,10 @@ function MovieList() {
                       <div className="text-[#8B93B0]">
                         {data.theatrical_release}
                       </div>
-                      <div className="text-[#8B93B0]">{data.rating}</div>
+                      <div className="text-[#8B93B0]">
+                        <i className="fas fa-star text-[#4E7BEE]"></i>
+                        {data.rating}
+                      </div>
                     </div>
                     <div
                       className="text-[white] text-[20px] cursor-pointer hover:underline"

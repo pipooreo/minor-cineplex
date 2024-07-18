@@ -12,6 +12,8 @@ import Footer from "./componants/Footer";
 import { useAuth } from "./contexts/authentication";
 import ResetPassword from "./pages/ResetPassword";
 import BookTicketPage from "./pages/BookTicketPage";
+import SearchResultPage from "./pages/SearchResultPage";
+
 function App() {
   const auth = useAuth();
   return (
@@ -25,6 +27,7 @@ function App() {
         <Route path="/resetpassword" element={<ResetPassword />} />
         <Route path="/movie/:title" element={<MoviePage />} />
         <Route path="/bookticket/:title" element={<BookTicketPage />} />
+        <Route path="/moviesearch" element={<SearchResultPage />} />
       </Routes>
       <Footer />
     </>
