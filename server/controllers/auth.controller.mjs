@@ -112,7 +112,7 @@ export async function requestPassword(req, res) {
     };
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        // console.log(error);
+        console.log(error);
         return res
           .status(400)
           .json({ message: "Could not sending OTP reset password" });
