@@ -160,7 +160,6 @@ export async function getMoviesById(req, res, next) {
   try {
     const movieSearch = req.query.movieSearch;
     // console.log("Search term:", movieSearch);
-
     const normalizedSearchTerm = movieSearch.replace(/-/g, " ");
     const results = await connectionPool.query(
       `
@@ -326,6 +325,7 @@ export async function getCommentsByMoviesName(req, res, next) {
 
 export async function getMoviesBySearchBar(req, res, next) {
   try {
+    const noResults = [];
     const {
       movieName,
       moviesGenres,
@@ -337,47 +337,53 @@ export async function getMoviesBySearchBar(req, res, next) {
     let params = [];
     let query = `
       WITH subquery AS (
-        SELECT 
-          movies.id AS movie_id,
-          halls.id AS hall_id,
-          days.day_name,
-          jsonb_agg(DISTINCT hall_screentime.time ORDER BY hall_screentime.time) AS start_times
-        FROM 
-          schedule_test_3
-        INNER JOIN movies ON schedule_test_3.movie_id = movies.id
-        INNER JOIN halls ON schedule_test_3.hall_id = halls.id
-        INNER JOIN days ON schedule_test_3.day = days.id
-        INNER JOIN hall_screentime 
-          ON halls.id = hall_screentime."hall_id_1&2"
-          OR halls.id = hall_screentime."hall_id_3&4"
-          OR halls.id = hall_screentime."hall_id_5&6"
-        GROUP BY 
-          movies.id,
-          halls.id,
-          days.day_name
+        SELECT
+            halls.hall_number,
+            jsonb_agg(DISTINCT screentime.time ORDER BY screentime.time) AS start_times
+        FROM
+            halls
+        INNER JOIN
+            halls_screentimes ON halls.id = halls_screentimes.hall_id
+        INNER JOIN
+            screentime ON halls_screentimes.screen_time_id = screentime.id
+        GROUP BY
+            halls.hall_number
       )
-      SELECT 
-        cinemas.name AS cinema_name,
-        halls.hall_number,
-        movies.title,
-        movies.language,
-        movies.image,
-        jsonb_object_agg(subquery.day_name, subquery.start_times) AS day_start_times,
-        array_agg(DISTINCT tags.tag_name) AS cinema_tags,
-        array_agg(DISTINCT genres.genres_name) AS movie_genres,
-        city.city_name
-      FROM 
-        subquery
-      INNER JOIN movies ON subquery.movie_id = movies.id
-      INNER JOIN halls ON subquery.hall_id = halls.id
-      INNER JOIN cinemas_halls ON halls.id = cinemas_halls.hall_id
-      INNER JOIN cinemas ON cinemas_halls.cinema_id = cinemas.id
-      LEFT JOIN cinemas_tags ON cinemas.id = cinemas_tags.cinema_id
-      LEFT JOIN tags ON cinemas_tags.tag_id = tags.id
-      INNER JOIN city_cinemas ON cinemas.id = city_cinemas.cinema_id
-      INNER JOIN city ON city.id = city_cinemas.city_id
-      LEFT JOIN movies_genres ON movies.id = movies_genres.movie_id
-      LEFT JOIN genres ON movies_genres.genre_id = genres.id
+      SELECT
+          cinemas.name AS cinema_name,
+          movies.title AS movie_name,
+          city.city_name AS city_name,
+          array_agg(DISTINCT genres.genres_name) AS movie_genres,
+          movies.language AS movie_language,
+          movies.image AS movie_Image,
+          array_agg(DISTINCT tags.tag_name) AS cinema_tags,
+          movies.theatrical_release,
+          movies.out_of_theaters,
+          jsonb_object_agg(subquery.hall_number, subquery.start_times) AS schedule
+      FROM
+          movies
+      INNER JOIN
+          movies_cinemas ON movies.id = movies_cinemas.movies_id
+      INNER JOIN
+          cinemas ON movies_cinemas.cinemas_id = cinemas.id
+      LEFT JOIN 
+          cinemas_tags ON cinemas.id = cinemas_tags.cinema_id
+      LEFT JOIN
+          tags ON cinemas_tags.tag_id = tags.id
+      INNER JOIN
+          movies_cinemas_halls ON movies.id = movies_cinemas_halls.movie_id AND cinemas.id = movies_cinemas_halls.cinema_id
+      INNER JOIN
+          halls ON movies_cinemas_halls.hall_id = halls.id
+      INNER JOIN
+          subquery ON halls.hall_number = subquery.hall_number
+      INNER JOIN
+          movies_genres ON movies.id = movies_genres.movie_id
+      INNER JOIN
+          city_cinemas ON cinemas.id = city_cinemas.cinema_id
+      INNER JOIN
+          city ON city_cinemas.city_id = city.id
+      INNER JOIN
+          genres ON movies_genres.genre_id = genres.id
       WHERE 1=1`;
 
     if (movieName) {
@@ -394,13 +400,17 @@ export async function getMoviesBySearchBar(req, res, next) {
       params.push(`%${moviesGenres}%`);
     }
     if (moviesLanguage) {
-      query += ` AND LOWER(movies.language) LIKE LOWER($${params.length + 1})`;
-      params.push(`%${moviesLanguage}%`);
+      query += ` AND movies.language = $${params.length + 1}`;
+      params.push(moviesLanguage); // Use exact value from query parameter
     }
     if (moviesCity) {
       query += ` AND LOWER(city.city_name) LIKE LOWER($${params.length + 1})`;
       params.push(`%${moviesCity}%`);
     }
+    // if (releasedDate) {
+    //   query +=  AND TO_DATE($${params.length + 1}, 'YYYY-MM-DD') BETWEEN TO_DATE(movies.theatrical_release, 'YYYY-MM-DD') AND TO_DATE(movies.out_of_theaters, 'YYYY-MM-DD');
+    //   params.push(releasedDate);
+    // } <<   อันนี้สำหรับตอนที่อยากรับค่าวันที่มาจากปฏิทิน
 
     // Release date condition
     query += `
@@ -414,20 +424,20 @@ export async function getMoviesBySearchBar(req, res, next) {
     query += `
       GROUP BY 
         cinemas.name,
-        halls.hall_number,
-        movies.image,
         movies.title,
+        city.city_name,
         movies.language,
-        city.city_name
+        movies.image,
+        movies.theatrical_release,
+        movies.out_of_theaters
       ORDER BY 
-        halls.hall_number,
-        city.city_name;`;
+        cinemas.name;`;
 
     const { rows } = await connectionPool.query(query, params);
 
     if (rows.length === 0) {
       return res.status(404).json({
-        message: "There are no movies matching the search criteria",
+        data: noResults,
       });
     }
 
