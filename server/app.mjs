@@ -9,6 +9,7 @@ import cityRouter from "./routers/city.mjs";
 import commentRouter from "./routers/comments.mjs";
 import searchBarRouter from "./routers/searchBar.mjs";
 import daysRouter from "./routers/days.mjs";
+import bookedRouter from "./routers/booking.mjs";
 // import getMoviesScreenTime from "./routers/ticket.mjs";
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use("/city", cityRouter);
 app.use("/search", searchBarRouter);
 app.use("/days", daysRouter);
 // app.use("/date", getMoviesScreenTime);
+app.use("/booking", bookedRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
