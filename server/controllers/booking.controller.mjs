@@ -1,168 +1,147 @@
-// import connectionPool from "../utils/db.mjs";
-
-// export async function bookSeat(req, res, next) {
-//   const cinema = req.query.cinema;
-//   const movie = req.query.movie;
-//   const hall = req.query.hall;
-//   const time = req.query.time;
-//   const date = req.query.date;
-//   try {
-//     const results = await connectionPool.query(
-//       `WITH ordered_seats AS (
-//   SELECT DISTINCT ON (halls.hall_number, screentime.time, seat.number)
-//     halls.hall_number,
-//     screentime.time,
-//     seat.number AS seat_no,
-//     halls_seat.status
-//   FROM
-//     seat
-//   LEFT JOIN halls_seat ON halls_seat.seat_id = seat.id
-//   LEFT JOIN halls ON halls_seat.hall_id = halls.id
-//   INNER JOIN halls_screentimes ON halls.id = halls_screentimes.hall_id
-//   INNER JOIN screentime ON halls_screentimes.screen_time_id = screentime.id
-//   ORDER BY halls.hall_number, screentime.time, seat.number
-// )
-// SELECT
-//     cinemas.name,
-//     movies.title,
-//     movies.image AS movie_Image,
-//     array_agg(DISTINCT genres.genres_name) AS movie_genres,
-//     movies.theatrical_release,
-//     halls.hall_number,
-//     screentime.time,
-//     (
-//       SELECT json_agg(
-//         json_build_object(
-//           'seat_no', os.seat_no,
-//           'status', os.status
-//         )
-//         ORDER BY os.seat_no
-//       )
-//       FROM ordered_seats os
-//       WHERE os.hall_number = halls.hall_number AND os.time = screentime.time
-//     ) AS seats
-// FROM
-//     cinemas
-// INNER JOIN
-//     movies_cinemas_halls ON movies_cinemas_halls.cinema_id = cinemas.id
-// INNER JOIN
-//     movies ON movies_cinemas_halls.movie_id = movies.id
-// INNER JOIN
-//     movies_genres ON movies.id = movies_genres.movie_id
-// INNER JOIN
-//     genres ON movies_genres.genre_id = genres.id
-// INNER JOIN
-//     halls ON movies_cinemas_halls.hall_id = halls.id
-// INNER JOIN
-//     halls_screentimes ON halls.id = halls_screentimes.hall_id
-// INNER JOIN
-//     screentime ON halls_screentimes.screen_time_id = screentime.id
-// WHERE
-//     cinemas.name LIKE $1 AND movies.title LIKE $2 AND halls.hall_number LIKE $3 AND screentime.time LIKE $4 AND $5 BETWEEN movies.theatrical_release AND movies.out_of_theaters
-// GROUP BY
-//     cinemas.name,
-//     movies.title,
-//     halls.hall_number,
-//     movie_Image,
-//     movies.theatrical_release,
-//     screentime.time
-// ORDER BY
-//     halls.hall_number,
-//     screentime.time;`,
-//       [cinema, movie, hall, time, date]
-//     );
-//     return res.status(200).json({
-//       message: "data fetch succesfully",
-//       data: results.rows[0],
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       message: "Server could not get data booking because database connection",
-//     });
-//   }
-// }
 import connectionPool from "../utils/db.mjs";
 
-export async function bookSeat(req, res, next) {
-  const { cinema, movie, hall, time, date } = req.query;
-
-  // ตรวจสอบว่ามีการส่งค่าที่จำเป็นหรือไม่
-  if (!cinema || !movie || !hall || !time || !date) {
-    return res.status(400).json({
-      message: "Missing required query parameters",
+export async function bookingReserved(req, res, next) {
+  const { user, cinema, movie, select_date, time, hall, seats } = req.body;
+  let result;
+  try {
+    for (let seat of seats) {
+      // Step 1: ตรวจสอบความขัดแย้ง
+      const conflictCheckResult = await connectionPool.query(
+        `SELECT COUNT(*) AS conflict_count
+   FROM booking
+   WHERE 
+     select_date = $1
+     AND time_id = (SELECT id FROM screentime WHERE time = $2)
+     AND hall_id = (SELECT id FROM halls WHERE hall_number = $3)
+     AND seat_id = (SELECT id FROM seat_number WHERE number = $4)`,
+        [select_date, time, hall, seat]
+      );
+      console.log("data1", conflictCheckResult);
+      const conflictCount = conflictCheckResult.rows[0].conflict_count;
+      console.log("data2", conflictCount);
+      if (conflictCount > 0) {
+        return res.status(400).json({
+          message:
+            "Conflict found: Booking with the same select_date, time_id, hall_id, and seat_id already exists.",
+        });
+      }
+    }
+    for (let seat of seats) {
+      // Step 2: แทรกข้อมูลใหม่
+      result = await connectionPool.query(
+        `INSERT INTO booking (user_id, cinema_id, movie_id, select_date, time_id, hall_id, seat_id, status, created_at)
+       VALUES (
+         $1, 
+         (SELECT id FROM cinemas WHERE name = $2), 
+         (SELECT id FROM movies WHERE title = $3), 
+         $4, 
+         (SELECT id FROM screentime WHERE time = $5), 
+         (SELECT id FROM halls WHERE hall_number = $6), 
+         (SELECT id FROM seat_number WHERE number = $7), 
+         'reserved', 
+         CURRENT_TIMESTAMP
+       ) RETURNING *`,
+        [user, cinema, movie, select_date, time, hall, seat]
+      );
+    }
+    if (result.rowCount === 1) {
+      return res.status(200).json({
+        message: "Booking successfully created",
+        booking: result.rows,
+      });
+    } else {
+      return res.status(400).json({
+        message: "Booking could not be created",
+      });
+    }
+  } catch (error) {
+    console.error("Error creating booking:", error);
+    return res.status(500).json({
+      message: "Server could not create booking due to database error",
     });
   }
+}
+
+export async function dataSeat(req, res, next) {
+  const { select_date, cinema, movie, hall, time } = req.query;
 
   try {
     const results = await connectionPool.query(
-      `WITH ordered_seats AS (
-        SELECT DISTINCT ON (halls.hall_number, screentime.time, seat.number)
-          halls.hall_number,
-          screentime.time,
-          seat.number AS seat_no,
-          halls_seat.status
-        FROM 
-          seat
-        LEFT JOIN halls_seat ON halls_seat.seat_id = seat.id
-        LEFT JOIN halls ON halls_seat.hall_id = halls.id
-        INNER JOIN halls_screentimes ON halls.id = halls_screentimes.hall_id
-        INNER JOIN screentime ON halls_screentimes.screen_time_id = screentime.id 
-        ORDER BY halls.hall_number, screentime.time, seat.number
-      )
-      SELECT
-          cinemas.name,
-          movies.title,
-          movies.image AS movie_image,
-          array_agg(DISTINCT genres.genres_name) AS movie_genres,
-          movies.theatrical_release,
-          movies.out_of_theaters,
-          halls.hall_number,
-          screentime.time,
-          (
-            SELECT json_agg(
-              json_build_object(
-                'seat_no', os.seat_no,
-                'status', os.status
-              )
-              ORDER BY os.seat_no
-            )
-            FROM ordered_seats os
-            WHERE os.hall_number = halls.hall_number AND os.time = screentime.time
-          ) AS seats
-      FROM
-          cinemas
-      INNER JOIN
-          movies_cinemas_halls ON movies_cinemas_halls.cinema_id = cinemas.id
-      INNER JOIN
-          movies ON movies_cinemas_halls.movie_id = movies.id
-      INNER JOIN
-          movies_genres ON movies.id = movies_genres.movie_id
-      INNER JOIN
-          genres ON movies_genres.genre_id = genres.id
-      INNER JOIN
-          halls ON movies_cinemas_halls.hall_id = halls.id
-      INNER JOIN 
-          halls_screentimes ON halls.id = halls_screentimes.hall_id
-      INNER JOIN 
-          screentime ON halls_screentimes.screen_time_id = screentime.id
-      WHERE 
-          cinemas.name LIKE $1 AND movies.title LIKE $2 AND halls.hall_number::TEXT LIKE $3 AND screentime.time::TEXT LIKE $4  AND $5  >= movies.theatrical_release 
-    AND $5 < movies.out_of_theaters
+      `WITH movie_info AS (
+    SELECT 
+        c.name AS cinema_name,
+        m.title,
+        m.image AS movie_Image,
+        m.language,
+        array_agg(DISTINCT g.genres_name) AS movie_genres,
+        m.theatrical_release,
+        m.out_of_theaters,
+        h.hall_number,
+        st.time AS screening_time,
+        $1::date AS select_date 
+    FROM 
+        cinemas c
+        INNER JOIN movies_cinemas_halls mch ON mch.cinema_id = c.id
+        INNER JOIN movies m ON mch.movie_id = m.id
+        INNER JOIN movies_genres mg ON m.id = mg.movie_id
+        INNER JOIN genres g ON mg.genre_id = g.id
+        INNER JOIN halls h ON mch.hall_id = h.id
+        INNER JOIN halls_screentimes hs ON h.id = hs.hall_id
+        INNER JOIN screentime st ON hs.screen_time_id = st.id
+    WHERE 
+        c.name LIKE $2
+        AND m.title LIKE $3
+        AND h.hall_number LIKE $4
+        AND st.time LIKE $5
+        AND CURRENT_TIMESTAMP >= m.theatrical_release::date
+        AND CURRENT_TIMESTAMP < m.out_of_theaters::date
+        AND $1::date >= m.theatrical_release::date
+        AND $1::date < m.out_of_theaters::date
       GROUP BY
-          cinemas.name,
-          movies.title,
-          halls.hall_number,
-          movie_image,
-          movies.theatrical_release,
-          screentime.time,
-          movies.out_of_theaters
-      ORDER BY
-          halls.hall_number,
-          screentime.time;`,
-      [`%${cinema}%`, `%${movie}%`, `%${hall}%`, `%${time}%`, date]
+        c.name, m.title, m.image, m.language, m.theatrical_release, m.out_of_theaters,
+        h.hall_number, st.time
+)
+SELECT 
+    mi.cinema_name,
+    mi.title,
+    mi.movie_Image,
+    mi.language,
+    mi.movie_genres,
+    mi.theatrical_release,
+    mi.out_of_theaters,
+    mi.hall_number,
+    mi.screening_time,
+    mi.select_date,
+    json_agg(
+        json_build_object(
+            'seat', gs.seat_number,
+            'status', COALESCE(
+                (SELECT b.status 
+                 FROM booking b 
+                 JOIN seat s ON b.seat_id = s.id
+                 WHERE b.cinema_id = (SELECT id FROM cinemas WHERE name = mi.cinema_name)
+                   AND b.movie_id = (SELECT id FROM movies WHERE title = mi.title)
+                   AND b.hall_id = (SELECT id FROM halls WHERE hall_number = mi.hall_number)
+                   AND b.time_id = (SELECT id FROM screentime WHERE time = mi.screening_time)
+                   AND b.select_date = mi.select_date::date
+                   AND s.number = gs.seat_number
+                ),
+                'available'
+            )
+        )
+        ORDER BY gs.seat_number
+    ) AS seat_status_array
+FROM 
+    movie_info mi
+    CROSS JOIN generate_series(1, 50) AS gs(seat_number)
+GROUP BY
+    mi.cinema_name, mi.title, mi.movie_Image, mi.language, mi.movie_genres,
+    mi.theatrical_release, mi.out_of_theaters, mi.hall_number, mi.screening_time, mi.select_date;`,
+      [select_date, cinema, movie, hall, time]
     );
 
     if (results.rows.length === 0) {
+      console.log(results);
       return res.status(404).json({
         message: "No data found for the given criteria",
       });
@@ -177,6 +156,76 @@ export async function bookSeat(req, res, next) {
     return res.status(500).json({
       message:
         "Server could not get data booking because of database connection",
+    });
+  }
+}
+
+export async function updateBooking(req, res, next) {
+  const { user, cinema, movie, select_date, time, hall, seats } = req.body;
+  let result;
+  try {
+    for (let seat of seats) {
+      result = await connectionPool.query(
+        `UPDATE booking
+       SET status = 'booked',
+        updated_at = CURRENT_TIMESTAMP
+       WHERE user_id = $1
+         AND cinema_id = (SELECT id FROM cinemas WHERE name = $2)
+         AND movie_id = (SELECT id FROM movies WHERE title = $3)
+         AND select_date = $4::date
+         AND time_id = (SELECT id FROM screentime WHERE time = $5)
+         AND hall_id = (SELECT id FROM halls WHERE hall_number = $6)
+         AND seat_id = $7`,
+        [user, cinema, movie, select_date, time, hall, seat]
+      );
+    }
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        message: "Booking not found or no changes made",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Booking updated successfully",
+    });
+  } catch (error) {
+    console.error("Error updating booking:", error);
+    return res.status(500).json({
+      message: "Server error while updating booking",
+    });
+  }
+}
+
+export async function deleteBooking(req, res, next) {
+  const { user, cinema, movie, select_date, time, hall, seats } = req.body;
+  let result;
+  try {
+    for (let seat of seats) {
+      result = await connectionPool.query(
+        `DELETE FROM booking
+       WHERE user_id = $1
+         AND cinema_id = (SELECT id FROM cinemas WHERE name = $2)
+         AND movie_id = (SELECT id FROM movies WHERE title = $3)
+         AND select_date = $4::date
+         AND time_id = (SELECT id FROM screentime WHERE time = $5)
+         AND hall_id = (SELECT id FROM halls WHERE hall_number = $6)
+         AND seat_id = $7`,
+        [user, cinema, movie, select_date, time, hall, seat]
+      );
+    }
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        message: "Booking not found or no changes made",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Booking deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting booking:", error);
+    return res.status(500).json({
+      message: "Server error while deleting booking",
     });
   }
 }

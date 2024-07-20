@@ -1,10 +1,17 @@
 import { Router } from "express";
-import { bookSeat } from "../controllers/booking.controller.mjs";
+import {
+  bookingReserved,
+  dataSeat,
+  deleteBooking,
+  updateBooking,
+} from "../controllers/booking.controller.mjs";
 import { protect } from "../middlewares/protect.mjs";
 
 const bookRouter = Router();
 
-bookRouter.get("/", bookSeat);
-bookRouter.put("/", bookSeat);
+bookRouter.get("/", dataSeat);
+bookRouter.post("/", bookingReserved);
+bookRouter.put("/", updateBooking);
+bookRouter.delete("/", deleteBooking);
 
 export default bookRouter;
