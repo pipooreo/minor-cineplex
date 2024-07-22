@@ -11,11 +11,11 @@ function Navbar() {
 
   return (
     <nav
-      className="absolute top-0 left-0 w-full bg-black/20 border-b-[1px] border-[#21263F] z-100"
+      className="absolute top-0 left-0 w-full  border-b-[1px] border-gray-100 z-100"
       style={{ fontFamily: "Roboto Condensed" }}
     >
       <div
-        className={`w-[100%] h-[100%] absolute backdrop-blur-sm ${
+        className={`w-[100%] h-[100%] absolute backdrop-blur-md ${
           isOpen ? "bg-black/40" : "bg-black/20"
         } z-0`}
       ></div>
@@ -33,13 +33,13 @@ function Navbar() {
         </button>
         <div className="hidden md:flex gap-[24px]">
           <button
-            className="text-gray-400 text-body1R px-[20px] py-[12px]"
+            className="text-gray-400 hover:text-gray-400 active:text-gray-300 text-body1R px-[20px] py-[12px]"
             onClick={() => navigate("/login")}
           >
             Login
           </button>
           <button
-            className="border border-gray-300 rounded px-[40px] text-body1M py-[12px] text-white font-bold"
+            className="border border-gray-300 hover:bg-gray-300 active:bg-gray-200 rounded px-[40px] text-body1M py-[12px] text-white font-bold"
             onClick={() => navigate("/register")}
           >
             Register
@@ -65,7 +65,7 @@ function Navbar() {
           <div className="p-[30px] border-t-[1px] border-[#21263F]">
             <nav className="flex flex-col justify-center items-center m-[15px] gap-[20px]">
               <button
-                className=" text-gray-400 px-[20px] text-body1R py-[12px]"
+                className=" text-gray-400 hover:text-gray-400 active:text-gray-300 px-[20px] text-body1R py-[12px]"
                 onClick={() => {
                   navigate("/login");
                   toggleMenu();
@@ -74,7 +74,7 @@ function Navbar() {
                 Login
               </button>
               <button
-                className="border border-gray-300 text-white rounded px-[40px] py-[12px] font-bold"
+                className="border border-gray-300 hover:bg-gray-300 active:bg-gray-200 active:border-gray-200  text-white rounded px-[40px] py-[12px] font-bold"
                 onClick={() => {
                   navigate("/register");
                   toggleMenu();

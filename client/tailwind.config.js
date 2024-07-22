@@ -57,7 +57,7 @@ export default {
         },
       ],
       head4: [
-        "36px",
+        "20px",
         {
           lineHeight: "26px",
           fontWeight: "700",

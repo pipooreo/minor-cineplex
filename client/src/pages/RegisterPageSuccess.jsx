@@ -5,7 +5,7 @@ import { FaCheck } from "react-icons/fa6";
 function RegisterPageSuccess() {
   const nevigate = useNavigate();
   return (
-    <div className="bg-[#101525;]">
+    <div className="bg-BG">
       <section className="w-full h-screen absolute flex flex-col items-center justify-center bg-BG">
         <div className="w-[380px] h-[512px] flex flex-col items-center justify-center gap-[48px] align-center max-sm:w-[375px]">
           <div>
@@ -20,7 +20,7 @@ function RegisterPageSuccess() {
             </p>
           </div>
           <button
-            className="btn btn-primary bg-blue-100 h-[48px] w-[380px] bg-[color:hsla(223, 82%, 62%, 1)]] text-white text-[16px] font-bold max-sm:w-[343px]"
+            className="btn btn-primary hover:bg-blue-200 active:bg-blue-300 h-[48px] w-[380px] bg-[color:hsla(223, 82%, 62%, 1)]] text-white text-[16px] font-bold max-sm:w-[343px]"
             type="text"
             onClick={() => nevigate("/")}
           >

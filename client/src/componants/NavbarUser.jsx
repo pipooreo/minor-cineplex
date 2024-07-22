@@ -55,7 +55,7 @@ function NavbarUser() {
 
   return (
     <nav
-      className="absolute top-0 left-0 w-full bg-black/20 border-b-[1px] border-gray-100 z-100"
+      className="absolute top-0 left-0 w-full  border-b-[1px] border-gray-100 z-100"
       style={{ fontFamily: "Roboto Condensed" }}
     >
       <div
@@ -98,10 +98,10 @@ function NavbarUser() {
             </svg>
           </div>
           {isUserOpen && (
-            <div className="transition-transform transform absolute top-6 right-0 z-1 mt-6 ">
-              <nav className="flex flex-col justify-center w-[182px] h-[192px] items-center  bg-gray-100 text-gray-400 shadow-lg shadow-black/50 ">
+            <div className="transition-transform transform absolute top-6 right-0 z-1 mt-6">
+              <nav className="flex flex-col justify-center w-[182px] h-[192px] items-center  bg-gray-100 text-body1R  text-gray-400  shadow-lg shadow-black/50 ">
                 <ul className="w-full flex flex-col gap-4 p-[20px]">
-                  <li className="flex justify-start items-center gap-4">
+                  <li className="flex justify-start items-center gap-4 active:text-gray-300">
                     <svg
                       width="20"
                       height="20"
@@ -140,7 +140,7 @@ function NavbarUser() {
                     </svg>
                     <a href="">Booking history</a>
                   </li>
-                  <li className="flex justify-start items-center gap-4">
+                  <li className="flex justify-start items-center gap-4 active:text-gray-300">
                     <svg
                       width="24"
                       height="24"
@@ -167,7 +167,7 @@ function NavbarUser() {
                     </svg>
                     <a href="">Profile</a>
                   </li>
-                  <li className="flex justify-start items-center gap-4">
+                  <li className="flex justify-start items-center gap-4 active:text-gray-300">
                     <svg
                       width="24"
                       height="24"
@@ -188,7 +188,7 @@ function NavbarUser() {
                     <a href="">Reset password</a>
                   </li>
                   <hr className="text-gray-200" />
-                  <li className="flex justify-start items-center gap-4 ">
+                  <li className="flex justify-start items-center gap-4 active:text-gray-300">
                     <svg
                       width="24"
                       height="24"
@@ -206,13 +206,13 @@ function NavbarUser() {
                       />
                     </svg>
 
-                    <a
+                    <button
                       onClick={() => {
                         logout();
                       }}
                     >
                       Logout
-                    </a>
+                    </button>
                   </li>
                 </ul>
               </nav>
@@ -237,11 +237,11 @@ function NavbarUser() {
         </div>
       </div>
       {isOpen && (
-        <div className="transition-transform transform text-gray-400 md:hidden text-body2R">
+        <div className="transition-transform transform text-gray-400 md:hidden text-body1R">
           <div className="p-[30px] border-t-[1px]  border-gray-100">
             <nav className="flex flex-col justify-center items-center">
               <ul className="w-full flex flex-col gap-6">
-                <li className="flex justify-start items-center gap-4">
+                <li className="flex justify-start items-center gap-4 active:text-gray-300">
                   {user.image ? (
                     <Avatar alt={user.name} src={user.image} />
                   ) : (
@@ -249,7 +249,7 @@ function NavbarUser() {
                   )}
                   <div>{user.name}</div>
                 </li>
-                <li className="flex justify-start items-center gap-4">
+                <li className="flex justify-start items-center gap-4 active:text-gray-300">
                   <svg
                     width="20"
                     height="20"
@@ -288,7 +288,7 @@ function NavbarUser() {
                   </svg>
                   <a href="">Booking history</a>
                 </li>
-                <li className="flex justify-start items-center gap-4">
+                <li className="flex justify-start items-center gap-4 active:text-gray-300">
                   <svg
                     width="24"
                     height="24"
@@ -315,7 +315,7 @@ function NavbarUser() {
                   </svg>
                   <a href="">Profile</a>
                 </li>
-                <li className="flex justify-start items-center gap-4">
+                <li className="flex justify-start items-center gap-4 active:text-gray-300">
                   <svg
                     width="24"
                     height="24"
@@ -336,7 +336,7 @@ function NavbarUser() {
                   <a href="">Reset password</a>
                 </li>
                 <hr className="text-gray-200" />
-                <li className="flex justify-start items-center gap-4 ">
+                <li className="flex justify-start items-center gap-4 active:text-gray-300">
                   <svg
                     width="24"
                     height="24"
@@ -354,13 +354,13 @@ function NavbarUser() {
                     />
                   </svg>
 
-                  <a
+                  <button
                     onClick={() => {
                       logout();
                     }}
                   >
                     Logout
-                  </a>
+                  </button>
                 </li>
               </ul>
             </nav>
