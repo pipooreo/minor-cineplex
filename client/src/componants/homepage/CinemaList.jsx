@@ -37,7 +37,7 @@ function CinemaList() {
                     className="p-[16px] border-[#565F7E] border-[1px] flex items-center gap-[16px]"
                   >
                     <div>
-                      <i className="fa-solid fa-location-dot w-[52px] h-[52px] border-[#565F7E] border-[1px] rounded-[50%] bg-[#474e6e] flex justify-center items-center max-[375px]:w-[52px]"></i>
+                      <i className="fa-solid fa-location-dot w-[52px] h-[52px] border-[#565F7E] border-[1px] rounded-[50%] bg-[#474e6e] flex justify-center items-center"></i>
                     </div>
                     <div>
                       <div className="text-[24px] text-[#ffffff]">
