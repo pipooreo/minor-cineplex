@@ -29,6 +29,11 @@ function App() {
         <Route path="/bookticket/:title" element={<BookTicketPage />} />
         <Route path="/moviesearch" element={<SearchResultPage />} />
       </Routes>
+      {/* <Route
+          path="/moviesearch/:city:title:language:genre:date"
+          element={<SearchResultPage />}
+        />
+      </Routes> */}
       <Footer />
     </>
   );

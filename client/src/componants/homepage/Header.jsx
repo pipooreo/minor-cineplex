@@ -1,7 +1,52 @@
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 
 function Header() {
+  const [citySearch, setCitySearch] = useState("");
+  const [titleSearch, setTitleSearch] = useState("");
+  const [languageSearch, setLanguageSearch] = useState("");
+  const [genreSearch, setGenreSearch] = useState("");
+  const [dateSearch, setDateSearch] = useState("");
+
   const navigate = useNavigate();
+
+  const getDataSearch = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:4000/search?movieCity=${citySearch}&movieName=${titleSearch}&moviesLanguage=${languageSearch}&moviesGenres=${genreSearch}&releasedDate=${dateSearch}`
+      );
+      setSearch(response.data.data);
+
+      const initialIsOpen = response.data.data.flatMap((search) =>
+        search.cinemas.map(() => true)
+      );
+
+      setIsOpen(initialIsOpen);
+    } catch (error) {}
+
+    useEffect(() => {
+      getDataSearch();
+    }, []);
+  };
+
+  const createQueryParams = () => {
+    const queryParams = new URLSearchParams();
+
+    if (citySearch) queryParams.append("city", citySearch);
+    if (titleSearch) queryParams.append("title", titleSearch);
+    if (languageSearch) queryParams.append("language", languageSearch);
+    if (genreSearch) queryParams.append("genre", genreSearch);
+    if (dateSearch) queryParams.append("date", dateSearch);
+    return queryParams.toString();
+  };
+
+  const handleSearch = () => {
+    // const query = createQueryParams();
+
+    navigate(`/moviesearch`);
+  };
+
   return (
     <section className="relative flex justify-center items-center">
       <div
@@ -14,43 +59,64 @@ function Header() {
       <div className="absolute top-[133px] md:top-[250px] xl:top-[340px] bg-[#070C1B] rounded-[4px] w-[344px] sm:w-[60%] sm:px-[20px] p-[20px] xl:w-[1200px] h-[264px] xl:h-[128px] flex flex-col xl:flex-row justify-around items-center xs:gap-[15px] gap-[6px] max-[375px]:flex-col max-[375px]:gap-[16px]">
         <div className="grid grid-cols-2 xl:flex xl:justify-between xl:gap-[15px] gap-[12px] w-[312px] sm:w-[90%]  h-[168px] xl:h-[48px]">
           <select
+            value={titleSearch}
+            onChange={(event) => {
+              setTitleSearch(event.target.value);
+            }}
             className="col-span-2  xl:w-[267px] h-[48px] rounded-[4px] bg-[#21263F] border-[#565F7E] text-[#8B93B0] border-[1px] p-[12px] outline-none "
             name="movie"
           >
-            <option>Movie</option>
-            <option>batman</option>
-            <option>powerpopgirl</option>
-            <option>avengers</option>
-            <option>the flash</option>
+            <option value="">Movie</option>
+            <option>The Dark Knight</option>
+            <option>Django Unchained</option>
+            <option>DUNE: Part Two</option>
+            <option>Interstellar</option>
           </select>
 
           <select
+            value={languageSearch}
+            onChange={(event) => {
+              setLanguageSearch(event.target.value);
+            }}
             className="col-span-1  xl:w-[177.25px] h-[48px] rounded-[4px] bg-[#21263F] border-[#565F7E] text-[#8B93B0] border-[1px] p-[12px] outline-none "
             name="language"
           >
-            <option>Language</option>
-            <option>Thailand</option>
-            <option>English</option>
+            <option value="">Language</option>
+            <option>TH</option>
+            <option>EN</option>
+            <option>TH/EN</option>
           </select>
 
           <select
+            value={genreSearch}
+            onChange={(event) => {
+              setGenreSearch(event.target.value);
+            }}
             className="col-span-1  xl:w-[177.25px] h-[48px] rounded-[4px] bg-[#21263F] border-[#565F7E] text-[#8B93B0] border-[1px] p-[12px] outline-none "
             name="genre"
           >
-            <option>Genre</option>
+            <option value="">Genre</option>
             <option>Action</option>
             <option>Love</option>
           </select>
 
           <select
+            value={citySearch}
+            onChange={(event) => {
+              setCitySearch(event.target.value);
+            }}
             className="col-span-1  xl:w-[177.25px] h-[48px] rounded-[4px] bg-[#21263F] border-[#565F7E] text-[#8B93B0] border-[1px] p-[12px] outline-none "
             name="city"
           >
-            <option>City</option>
+            <option value="">City</option>
             <option>Bangkok</option>
           </select>
 
           <input
+            value={dateSearch}
+            onChange={(event) => {
+              setDateSearch(event.target.value);
+            }}
             className="col-span-1  xl:w-[177.25px] h-[48px] rounded-[4px] bg-[#21263F] border-[#565F7E] text-[#8B93B0] border-[1px] p-[12px] outline-none "
             type="date"
             name="releaseDate"
@@ -59,9 +125,8 @@ function Header() {
         </div>
         <button
           className="w-[72px] h-[48px] bg-[#4E7BEE] rounded-[4px] active:w-[71.5px] active:h-[47.5px]"
-          onClick={() => {
-            navigate("/moviesearch");
-          }}
+          onClick={handleSearch}
+          // () => {navigate(`/moviesearch`);}
         >
           <i className="fa-solid fa-magnifying-glass"></i>
         </button>
