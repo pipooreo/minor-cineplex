@@ -304,6 +304,11 @@ function SearchResultPage() {
 
                                         return (
                                           <button
+                                            onClick={() =>
+                                              navigate(
+                                                `/seat/${cinema.movie_details.movie_name}/${cinema.cinema_name}/${dateSearch}/${key}/${time}`
+                                              )
+                                            }
                                             disabled={status}
                                             key={index_times}
                                             className={`rounded-[4px] px-[24px] py-[12px] ${timeClass}`}

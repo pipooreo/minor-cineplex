@@ -26,7 +26,6 @@ function SeatSelectorPage() {
   async function getMovie() {
     // console.log(params);
     let movieData = await axios.get(
-      // `http://localhost:4000/movies/movie?movieSearch=${params.title}`
       `${import.meta.env.VITE_SERVER_URL}/booking?cinema=${
         params.cinema
       }&movie=${params.title}&hall=${params.hall}&time=${
@@ -145,13 +144,13 @@ function SeatSelectorPage() {
           <div className="flex flex-col gap-[30px] max-md:gap-[10px]">
             {["E", "D", "C", "B", "A"].map((rowLabel, rowIndex) => (
               <div key={rowLabel} className="flex justify-between">
-                <div className="flex gap-[24px] items-center max-md:gap-[10px] max-lg:gap-[15px] max-xl:gap-[15px]">
+                <div className="flex gap-[24px] items-center max-md:gap-[10px] max-xl:gap-[10px] max-[1400px]:gap-[10px]">
                   <p className="w-[15px]">{rowLabel}</p>
                   {Array.from({ length: 5 }).map((_, i) =>
                     SeatButton(i + rowIndex * 5)
                   )}
                 </div>
-                <div className="flex gap-[24px] items-center max-md:gap-[10px] max-lg:gap-[15px] max-xl:gap-[15px]">
+                <div className="flex gap-[24px] items-center max-md:gap-[10px] max-xl:gap-[10px] max-[1400px]:gap-[10px]">
                   {Array.from({ length: 5 }).map((_, i) =>
                     SeatButton(i + rowIndex * 5 + 25)
                   )}

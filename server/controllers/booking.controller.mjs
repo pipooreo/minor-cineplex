@@ -3,6 +3,7 @@ import connectionPool from "../utils/db.mjs";
 export async function bookingReserved(req, res, next) {
   const { user, cinema, movie, select_date, time, hall, seats } = req.body;
   let result;
+  // const updated_at = new Date();
   try {
     for (let seat of seats) {
       // Step 1: ตรวจสอบความขัดแย้ง
@@ -29,7 +30,7 @@ export async function bookingReserved(req, res, next) {
     for (let seat of seats) {
       // Step 2: แทรกข้อมูลใหม่
       result = await connectionPool.query(
-        `INSERT INTO booking (user_id, cinema_id, movie_id, select_date, time_id, hall_id, seat_id, status, created_at)
+        `INSERT INTO booking (user_id, cinema_id, movie_id, select_date, time_id, hall_id, seat_id, status, updated_at)
        VALUES (
          $1, 
          (SELECT id FROM cinemas WHERE name = $2), 
@@ -64,7 +65,7 @@ export async function bookingReserved(req, res, next) {
 
 export async function dataSeat(req, res, next) {
   const { select_date, cinema, movie, hall, time } = req.query;
-
+  console.log(req.query);
   try {
     const results = await connectionPool.query(
       `WITH movie_info AS (
@@ -78,7 +79,7 @@ export async function dataSeat(req, res, next) {
         m.out_of_theaters,
         h.hall_number,
         st.time AS screening_time,
-        $1::date AS select_date 
+        $1::text AS select_date 
     FROM 
         cinemas c
         INNER JOIN movies_cinemas_halls mch ON mch.cinema_id = c.id
@@ -100,6 +101,14 @@ export async function dataSeat(req, res, next) {
       GROUP BY
         c.name, m.title, m.image, m.language, m.theatrical_release, m.out_of_theaters,
         h.hall_number, st.time
+),
+seat_info AS (
+    SELECT 
+        sn.id,
+        sn.number AS seat_number,
+        sn.seat_num
+    FROM seat_number sn
+    WHERE sn.id BETWEEN 1 AND 50
 )
 SELECT 
     mi.cinema_name,
@@ -114,7 +123,8 @@ SELECT
     mi.select_date,
     json_agg(
         json_build_object(
-            'seat', gs.seat_number,
+            'seat', si.seat_number,
+            'number', si.seat_num,
             'status', COALESCE(
                 (SELECT b.status 
                  FROM booking b 
@@ -124,19 +134,19 @@ SELECT
                    AND b.hall_id = (SELECT id FROM halls WHERE hall_number = mi.hall_number)
                    AND b.time_id = (SELECT id FROM screentime WHERE time = mi.screening_time)
                    AND b.select_date = mi.select_date::date
-                   AND s.number = gs.seat_number
+                   AND s.number = si.seat_number
                 ),
                 'available'
             )
         )
-        ORDER BY gs.seat_number
+        ORDER BY si.seat_number
     ) AS seat_status_array
 FROM 
     movie_info mi
-    CROSS JOIN generate_series(1, 50) AS gs(seat_number)
+    CROSS JOIN seat_info si
 GROUP BY
     mi.cinema_name, mi.title, mi.movie_Image, mi.language, mi.movie_genres,
-    mi.theatrical_release, mi.out_of_theaters, mi.hall_number, mi.screening_time, mi.select_date;`,
+    mi.theatrical_release, mi.out_of_theaters, mi.hall_number, mi.screening_time, mi.select_date`,
       [select_date, cinema, movie, hall, time]
     );
 

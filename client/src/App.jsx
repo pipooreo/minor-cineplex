@@ -13,6 +13,7 @@ import { useAuth } from "./contexts/authentication";
 import ResetPassword from "./pages/ResetPassword";
 import BookTicketPage from "./pages/BookTicketPage";
 import SearchResultPage from "./pages/SearchResultPage";
+import SeatSelectorPage from "./pages/SeatSelectorPage";
 import { SearchProvider } from "./contexts/SearchContext";
 
 function App() {
@@ -30,6 +31,10 @@ function App() {
           <Route path="/movie/:title" element={<MoviePage />} />
           <Route path="/bookticket/:title" element={<BookTicketPage />} />
           <Route path="/moviesearch" element={<SearchResultPage />} />
+          <Route
+            path="/seat/:title/:cinema/:date/:hall/:time"
+            element={<SeatSelectorPage />}
+          />
         </Routes>
         <Footer />
       </SearchProvider>
