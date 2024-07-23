@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../contexts/authentication";
 import Avatar from "@mui/material/Avatar";
+import { useSearch } from "../contexts/SearchContext";
 
 function stringToColor(string) {
   let hash = 0;
@@ -53,9 +54,16 @@ function NavbarUser() {
     setIsUserOpen(!isUserOpen);
   };
 
+  const handleHomeClick = () => {
+    resetSearchValues();
+    navigate("/");
+  };
+
+  const { resetSearchValues } = useSearch();
+
   return (
     <nav
-      className="absolute top-0 left-0 w-full bg-black/20 border-b-[1px] border-gray-100 z-100"
+      className="absolute top-0 left-0 w-full  border-b-[1px] border-gray-100 z-100"
       style={{ fontFamily: "Roboto Condensed" }}
     >
       <div
@@ -64,11 +72,7 @@ function NavbarUser() {
         } z-0`}
       ></div>
       <div className="relative z-[100] flex justify-between items-center md:px-[80px] md:py-[15px] px-[10px] py-[10px]">
-        <button
-          onClick={() => {
-            navigate("/");
-          }}
-        >
+        <button onClick={handleHomeClick}>
           <img
             className="md:w-[42px] md:h-[48px] w-[28px] h-[32px]"
             src="https://res.cloudinary.com/diah9m6gw/image/upload/v1720699560/m_logo_vf5qo2.png"
@@ -98,10 +102,10 @@ function NavbarUser() {
             </svg>
           </div>
           {isUserOpen && (
-            <div className="transition-transform transform absolute top-6 right-0 z-1 mt-6 ">
-              <nav className="flex flex-col justify-center w-[182px] h-[192px] items-center  bg-gray-100 text-gray-400 shadow-lg shadow-black/50 ">
+            <div className="transition-transform transform absolute top-6 right-0 z-1 mt-6">
+              <nav className="flex flex-col justify-center w-[182px] h-[192px] items-center  bg-gray-100 text-body1R  text-gray-400  shadow-lg shadow-black/50 ">
                 <ul className="w-full flex flex-col gap-4 p-[20px]">
-                  <li className="flex justify-start items-center gap-4">
+                  <li className="flex justify-start items-center gap-4 active:text-gray-300">
                     <svg
                       width="20"
                       height="20"
@@ -120,27 +124,27 @@ function NavbarUser() {
                       <path
                         d="M12.5 8.3335V6.66683"
                         stroke="#8B93B0"
-                        stroke-linecap="round"
+                        strokeLinecap="round"
                       />
                       <path
                         d="M3.33301 7.5H6.66634"
                         stroke="#8B93B0"
-                        stroke-linecap="round"
+                        strokeLinecap="round"
                       />
                       <path
                         d="M3.33301 10.8335H6.66634"
                         stroke="#8B93B0"
-                        stroke-linecap="round"
+                        strokeLinecap="round"
                       />
                       <path
                         d="M3.33301 14.1665H6.66634"
                         stroke="#8B93B0"
-                        stroke-linecap="round"
+                        strokeLinecap="round"
                       />
                     </svg>
                     <a href="">Booking history</a>
                   </li>
-                  <li className="flex justify-start items-center gap-4">
+                  <li className="flex justify-start items-center gap-4 active:text-gray-300">
                     <svg
                       width="24"
                       height="24"
@@ -151,23 +155,23 @@ function NavbarUser() {
                       <path
                         d="M19.7274 20.4471C19.2716 19.1713 18.2672 18.0439 16.8701 17.2399C15.4729 16.4358 13.7611 16 12 16C10.2389 16 8.52706 16.4358 7.12991 17.2399C5.73276 18.0439 4.72839 19.1713 4.27259 20.4471"
                         stroke="white"
-                        stroke-width="1.2"
-                        stroke-linecap="round"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
                       />
                       <circle
                         cx="12"
                         cy="8"
                         r="4"
                         fill="#7E869E"
-                        fill-opacity="0.25"
+                        fillOpacity="0.25"
                         stroke="white"
-                        stroke-width="1.2"
-                        stroke-linecap="round"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
                       />
                     </svg>
                     <a href="">Profile</a>
                   </li>
-                  <li className="flex justify-start items-center gap-4">
+                  <li className="flex justify-start items-center gap-4 active:text-gray-300">
                     <svg
                       width="24"
                       height="24"
@@ -188,7 +192,7 @@ function NavbarUser() {
                     <a href="">Reset password</a>
                   </li>
                   <hr className="text-gray-200" />
-                  <li className="flex justify-start items-center gap-4 ">
+                  <li className="flex justify-start items-center gap-4 active:text-gray-300">
                     <svg
                       width="24"
                       height="24"
@@ -206,13 +210,13 @@ function NavbarUser() {
                       />
                     </svg>
 
-                    <a
+                    <button
                       onClick={() => {
                         logout();
                       }}
                     >
                       Logout
-                    </a>
+                    </button>
                   </li>
                 </ul>
               </nav>
@@ -230,18 +234,18 @@ function NavbarUser() {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M4 6L20 6" stroke="white" stroke-linecap="round" />
-            <path d="M4 12L20 12" stroke="white" stroke-linecap="round" />
-            <path d="M4 18L20 18" stroke="white" stroke-linecap="round" />
+            <path d="M4 6L20 6" stroke="white" strokeLinecap="round" />
+            <path d="M4 12L20 12" stroke="white" strokeLinecap="round" />
+            <path d="M4 18L20 18" stroke="white" strokeLinecap="round" />
           </svg>
         </div>
       </div>
       {isOpen && (
-        <div className="transition-transform transform text-gray-400 md:hidden text-body2R">
+        <div className="transition-transform transform text-gray-400 md:hidden text-body1R">
           <div className="p-[30px] border-t-[1px]  border-gray-100">
             <nav className="flex flex-col justify-center items-center">
               <ul className="w-full flex flex-col gap-6">
-                <li className="flex justify-start items-center gap-4">
+                <li className="flex justify-start items-center gap-4 active:text-gray-300">
                   {user.image ? (
                     <Avatar alt={user.name} src={user.image} />
                   ) : (
@@ -249,7 +253,7 @@ function NavbarUser() {
                   )}
                   <div>{user.name}</div>
                 </li>
-                <li className="flex justify-start items-center gap-4">
+                <li className="flex justify-start items-center gap-4 active:text-gray-300">
                   <svg
                     width="20"
                     height="20"
@@ -268,27 +272,27 @@ function NavbarUser() {
                     <path
                       d="M12.5 8.3335V6.66683"
                       stroke="#8B93B0"
-                      stroke-linecap="round"
+                      strokeLinecap="round"
                     />
                     <path
                       d="M3.33301 7.5H6.66634"
                       stroke="#8B93B0"
-                      stroke-linecap="round"
+                      strokeLinecap="round"
                     />
                     <path
                       d="M3.33301 10.8335H6.66634"
                       stroke="#8B93B0"
-                      stroke-linecap="round"
+                      strokeLinecap="round"
                     />
                     <path
                       d="M3.33301 14.1665H6.66634"
                       stroke="#8B93B0"
-                      stroke-linecap="round"
+                      strokeLinecap="round"
                     />
                   </svg>
                   <a href="">Booking history</a>
                 </li>
-                <li className="flex justify-start items-center gap-4">
+                <li className="flex justify-start items-center gap-4 active:text-gray-300">
                   <svg
                     width="24"
                     height="24"
@@ -299,23 +303,23 @@ function NavbarUser() {
                     <path
                       d="M19.7274 20.4471C19.2716 19.1713 18.2672 18.0439 16.8701 17.2399C15.4729 16.4358 13.7611 16 12 16C10.2389 16 8.52706 16.4358 7.12991 17.2399C5.73276 18.0439 4.72839 19.1713 4.27259 20.4471"
                       stroke="white"
-                      stroke-width="1.2"
-                      stroke-linecap="round"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
                     />
                     <circle
                       cx="12"
                       cy="8"
                       r="4"
                       fill="#7E869E"
-                      fill-opacity="0.25"
+                      fillOpacity="0.25"
                       stroke="white"
-                      stroke-width="1.2"
-                      stroke-linecap="round"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
                     />
                   </svg>
                   <a href="">Profile</a>
                 </li>
-                <li className="flex justify-start items-center gap-4">
+                <li className="flex justify-start items-center gap-4 active:text-gray-300">
                   <svg
                     width="24"
                     height="24"
@@ -336,7 +340,7 @@ function NavbarUser() {
                   <a href="">Reset password</a>
                 </li>
                 <hr className="text-gray-200" />
-                <li className="flex justify-start items-center gap-4 ">
+                <li className="flex justify-start items-center gap-4 active:text-gray-300">
                   <svg
                     width="24"
                     height="24"
@@ -354,13 +358,13 @@ function NavbarUser() {
                     />
                   </svg>
 
-                  <a
+                  <button
                     onClick={() => {
                       logout();
                     }}
                   >
                     Logout
-                  </a>
+                  </button>
                 </li>
               </ul>
             </nav>

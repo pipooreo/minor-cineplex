@@ -13,28 +13,31 @@ import { useAuth } from "./contexts/authentication";
 import ResetPassword from "./pages/ResetPassword";
 import BookTicketPage from "./pages/BookTicketPage";
 import SearchResultPage from "./pages/SearchResultPage";
+import { SearchProvider } from "./contexts/SearchContext";
 
 function App() {
   const auth = useAuth();
   return (
     <>
-      {auth.isAuthenticated ? <NavbarUser /> : <Navbar />}
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/registersuccess" element={<RegisterPageSuccess />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/resetpassword" element={<ResetPassword />} />
-        <Route path="/movie/:title" element={<MoviePage />} />
-        <Route path="/bookticket/:title" element={<BookTicketPage />} />
-        <Route path="/moviesearch" element={<SearchResultPage />} />
-      </Routes>
-      {/* <Route
+      <SearchProvider>
+        {auth.isAuthenticated ? <NavbarUser /> : <Navbar />}
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/registersuccess" element={<RegisterPageSuccess />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/resetpassword" element={<ResetPassword />} />
+          <Route path="/movie/:title" element={<MoviePage />} />
+          <Route path="/bookticket/:title" element={<BookTicketPage />} />
+          <Route path="/moviesearch" element={<SearchResultPage />} />
+        </Routes>
+        {/* <Route
           path="/moviesearch/:city:title:language:genre:date"
           element={<SearchResultPage />}
         />
       </Routes> */}
-      <Footer />
+        <Footer />
+      </SearchProvider>
     </>
   );
 }

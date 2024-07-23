@@ -21,9 +21,9 @@ function ResetPassword() {
     );
   }
   return (
-    <section className="w-full absolute h-screen flex flex-col items-center justify-center  bg-BG ">
+    <section className="w-full absolute h-screen md:py-[450px] flex flex-col items-center justify-center  bg-BG ">
       <div className="w-[380px] flex flex-col items-center justify-center gap-[40px] max-md:w-xs">
-        <h1 className="h-[44px] text-[36px] font-bold text-white">
+        <h1 className="h-[44px] text-head2 font-bold text-white">
           Reset password
         </h1>
         <Formik
@@ -33,7 +33,7 @@ function ResetPassword() {
           validationSchema={requestOtp}
           onSubmit={sendOtp}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, isValid, dirty }) => (
             <Form className="flex flex-col justify-center items-center gap-[40px]">
               <div className="flex flex-col gap-[24px]">
                 <CustomInput
@@ -42,7 +42,17 @@ function ResetPassword() {
                   type="text"
                   placeholder="Email"
                 />
-                <button className="btn btn-primary bg-blue-100 text-white text-[16px] font-bold">
+                <button
+                  disabled={isSubmitting || !(isValid && dirty)}
+                  className={`w-[380px] h-[48px]  text-body1M font-bold rounded-[4px] 
+                    transition-all duration-300 ease-in-out
+                    ${
+                      isValid && dirty
+                        ? "bg-blue-100 hover:bg-blue-200 active:bg-blue-300 text-white"
+                        : "bg-blue-100/40 text-white/40 cursor-not-allowed"
+                    }
+                    max-sm:w-[343px]`}
+                >
                   Send OTP
                 </button>
               </div>
@@ -60,7 +70,7 @@ function ResetPassword() {
           validationSchema={resetPasswordWithOtp}
           onSubmit={onSubmit}
         >
-          {({ isSubmitting }) => (
+          {({ isSubmitting, isValid, dirty }) => (
             <Form className="flex flex-col justify-center items-center gap-[40px]">
               <div className="flex">
                 <div className="flex flex-col gap-[36px]">
@@ -87,7 +97,15 @@ function ResetPassword() {
                   </div>
                   <button
                     // disabled={isSubmitting}
-                    className="btn btn-primary bg-blue-100 h-[48px] w-[383px] bg-[color:hsla(223, 82%, 62%, 1)]] text-white text-[16px] font-bold max-sm:w-[343px]"
+                    disabled={isSubmitting || !(isValid && dirty)}
+                    className={`w-[380px] h-[48px]  text-body1M font-bold rounded-[4px] 
+                                transition-all duration-300 ease-in-out
+                                ${
+                                  isValid && dirty
+                                    ? "bg-blue-100 hover:bg-blue-200 active:bg-blue-300 text-white"
+                                    : "bg-blue-100/40 text-white/40 cursor-not-allowed"
+                                }
+                                max-sm:w-[343px]`}
                     type="submit"
                   >
                     Reset password

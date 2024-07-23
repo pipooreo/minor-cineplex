@@ -34,7 +34,7 @@ function MoviePage() {
         <div
           className=" bg-top bg-no-repeat w-full h-full bg-[length:110%_800px]"
           style={{
-            backgroundImage: `linear-gradient(360deg, rgba(0, 0, 0, 0) 0%, rgba(33, 38, 63, 1) 100%), url('${
+            backgroundImage: `linear-gradient(360deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 100%), url('${
               movie && movie.image
             }')`,
           }}
@@ -43,9 +43,9 @@ function MoviePage() {
       <div>
         <section className="movie-detail">
           <div className="relative flex justify-center items-center xl:pt-[180px]">
-            <div className="w-[100%] xl:w-[80%] h-[100%] xl:h-[600px] absolute xl:rounded-xl backdrop-blur-md bg-[#070C1BB2]/70 "></div>
+            <div className="w-[100%] xl:w-[80%] h-[100%] xl:h-[600px] absolute xl:rounded-xl backdrop-blur-md bg-[#070C1B]/70 "></div>
             {movie && (
-              <div className="flex flex-col xl:flex-row gap-10 z-10 xl:rounded-xl justify-start items-center xl:w-[80%] w-100% text-white">
+              <div className="flex flex-col xl:flex-row gap-10 z-10 xl:rounded-xl justify-start items-center xl:w-[80%] w-100%">
                 <img
                   className="w-[100%] md:w-[411px] md:h-[600px] xl:rounded-xl "
                   src={movie.image}
@@ -54,7 +54,7 @@ function MoviePage() {
                 <div>
                   <div className="flex flex-col gap-[20px] xl:gap-[50px] md:px-[25%] xl:px-[20px] px-[15px] pb-[50px] ">
                     <div>
-                      <h1 className="text-[36px] leading-[44px] font-bold ">
+                      <h1 className="text-head2 text-white font-bold ">
                         {movie.title}
                       </h1>
                       <div className="flex flex-col xl:flex-row justify-start xl:items-center">
@@ -63,14 +63,14 @@ function MoviePage() {
                             {movie.genres.map((item, index) => {
                               return (
                                 <span
-                                  className="bg-[#21263F] text-[#8B93B0] rounded-[4px]  px-[6px] py-[12px] "
+                                  className="bg-gray-100 text-gray-300 text-body2R rounded-[4px]  px-[6px] py-[12px] "
                                   key={index}
                                 >
                                   {item}
                                 </span>
                               );
                             })}
-                            <span className="bg-[#21263F] text-[#8B93B0] rounded-[4px]  px-[6px] py-[12px] ">
+                            <span className="bg-gray-100 text-gray-400 text-body2M rounded-[4px]  px-[6px] py-[12px] ">
                               {movie.language}
                             </span>
                             <img
@@ -81,7 +81,7 @@ function MoviePage() {
                           </p>
                         </div>
                         <p>
-                          <span className="text-[#C8CEDD] text-[16px] leading-[24px] px-[10px]">
+                          <span className="text-gray-400  text-body2M px-[10px]">
                             Release date: {movie.theatrical_release}
                           </span>
                         </p>
@@ -90,7 +90,7 @@ function MoviePage() {
 
                     <div>
                       <button
-                        className="my-[10px] xs:my-[20px] xs:px-[40px] py-[12px] bg-[#4E7BEE] rounded-md w-[153px] h-[48px]"
+                        className="my-[10px] xs:my-[20px] text-white text-body1M px-[40px] py-[12px] bg-blue-100 hover:bg-blue-200 active:bg-blue-300 rounded-md w-[153px] h-[48px]"
                         onClick={() => {
                           navigate(`/bookticket/${movie.title}`);
                         }}
@@ -98,7 +98,7 @@ function MoviePage() {
                         Book ticket
                       </button>
                       <div className="my-[10px] xl:my-[50px] w-[100%] md:w-[90%] xl:w-[80%] flex flex-col gap-5 ">
-                        <p className="text-[16px] leading-[24px]">
+                        <p className="text-gray-400  text-body2R">
                           {movie.description}
                         </p>
                       </div>
@@ -109,18 +109,18 @@ function MoviePage() {
             )}
           </div>
         </section>
-        <section className="reviews text-white flex flex-col justify-center px-[10px] items-center p-[20px] ">
+        <section className="reviews flex flex-col justify-center px-[10px] items-center p-[20px] ">
           <div className="flex gap-3 justify-start items-center w-[100%]  mt-0 md:w-[50%] my-[30px] mx-0 md:m-[50px]">
-            <p className="bg-[#21263F] px-[16px] py-[12px]">
-              <i className="fas fa-star text-[#4E7BEE] px-2"></i>
+            <p className="bg-gray-100 text-white text-head4 px-[16px] py-[12px]">
+              <i className="fas fa-star text-blue-100 px-2"></i>
               {movie && movie.rating}
             </p>
-            <h2>Rating & Reviews</h2>
+            <h2 className="text-head3 text-white">Rating & Reviews</h2>
           </div>
           {comments.map((comment) => {
             return (
               <div
-                className=" border-b-2 border-[#21263F] m-5 w-[100%]  md:w-[50%]"
+                className=" border-b-2 border-gray-100 m-5 w-[100%]  md:w-[50%]"
                 key={comment.comment_id}
               >
                 <div className="flex justify-between  md:gap-2">
@@ -131,8 +131,10 @@ function MoviePage() {
                       alt=""
                     />
                     <div>
-                      <h3>{comment.name}</h3>
-                      <p>24 Jun 2024</p>
+                      <h3 className="text-body1M text-gray-400">
+                        {comment.name}
+                      </h3>
+                      <p className="text-body2R text-gray-300">24 Jun 2024</p>
                     </div>
                   </div>
                   <div className="flex gap-1 md:gap-3">
@@ -141,7 +143,9 @@ function MoviePage() {
                     ))}
                   </div>
                 </div>
-                <p className="py-[20px]">{comment.comment}</p>
+                <p className="py-[20px] text-body2R text-gray-300">
+                  {comment.comment}
+                </p>
               </div>
             );
           })}
