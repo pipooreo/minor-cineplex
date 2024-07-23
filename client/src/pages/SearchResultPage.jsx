@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSearch } from "../contexts/SearchContext";
+import { formatDate } from "../contexts/SearchContext";
 
 function SearchResultPage() {
   const {
@@ -33,7 +34,7 @@ function SearchResultPage() {
 
   useEffect(() => {
     getDataSearch();
-  }, [citySearch, titleSearch, languageSearch, genreSearch, dateSearch]);
+  }, []);
 
   useEffect(() => {
     if (search.length > 0) {
@@ -43,13 +44,6 @@ function SearchResultPage() {
       setIsOpen(initialIsOpen);
     }
   }, [search]);
-
-  function formatDate(date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  }
 
   const handleClear = () => {
     setCitySearch("");
