@@ -57,12 +57,8 @@ function SearchResultPage() {
     setLanguageSearch("");
     setGenreSearch("");
     setDateSearch("");
-    navigate("/moviesearch");
+    // navigate("/moviesearch");
   };
-
-  useEffect(() => {
-    getDataSearch();
-  }, [citySearch, titleSearch, languageSearch, genreSearch, dateSearch]);
 
   const toggleMenu = (index) => {
     setIsOpen((prevIsOpen) => {
@@ -263,6 +259,7 @@ function SearchResultPage() {
                                     {cinema.movie_details.schedule[key].map(
                                       (time, index_times, array) => {
                                         let timeClass = "";
+                                        let status = false;
                                         const now = new Date();
                                         const showDate = new Date(dateSearch);
                                         const [hours, minutes] = time
@@ -292,6 +289,7 @@ function SearchResultPage() {
                                           if (now > showTime) {
                                             timeClass =
                                               "bg-gray-0 border-[1px] text-gray-200";
+                                            status = true;
                                           } else if (
                                             now < showTime &&
                                             closestUpcomingIndex === index_times
@@ -305,17 +303,19 @@ function SearchResultPage() {
                                         } else if (showDate < now) {
                                           timeClass =
                                             "bg-gray-0 border-[1px] text-gray-200";
+                                          status = true;
                                         } else {
                                           timeClass = "bg-blue-200 text-white";
                                         }
 
                                         return (
-                                          <div
+                                          <button
+                                            disabled={status}
                                             key={index_times}
                                             className={`rounded-[4px] px-[24px] py-[12px] ${timeClass}`}
                                           >
                                             {time}
-                                          </div>
+                                          </button>
                                         );
                                       }
                                     )}

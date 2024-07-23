@@ -7,6 +7,13 @@ export function useSearch() {
   return useContext(SearchContext);
 }
 
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
 export function SearchProvider({ children }) {
   const [search, setSearch] = useState([]);
   const [citySearch, setCitySearch] = useState("");
@@ -23,10 +30,16 @@ export function SearchProvider({ children }) {
     setDateSearch("");
   };
 
+  const currentDate = new Date();
+  const toDay = formatDate(currentDate);
+
   const getDataSearch = async () => {
+    if (!dateSearch) {
+      setDateSearch(toDay);
+    }
     try {
       const response = await axios.get(
-        `http://localhost:4000/search?movieCity=${citySearch}&movieName=${titleSearch}&moviesLanguage=${languageSearch}&moviesGenres=${genreSearch}&releasedDate=${dateSearch}`
+        `http://localhost:4000/search?moviesCity=${citySearch}&movieName=${titleSearch}&moviesLanguage=${languageSearch}&moviesGenres=${genreSearch}&releasedDate=${dateSearch}`
       );
       setSearch(response.data.data);
     } catch (error) {
