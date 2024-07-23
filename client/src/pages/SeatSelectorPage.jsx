@@ -136,7 +136,7 @@ function SeatSelectorPage() {
           <hr className="w-[287px] absolute mb-[20px] border-gray-100 max-md:w-[176px]" />
         </header>
       </div>
-      <div className=" bg-BG h-full flex justify-center p-[80px_120px] gap-[102px] max-lg:items-center max-md:flex-col max-lg:p-[1px_30px] max-lg:flex-col  max-lg:h-[1200px] max-lg:gap-[40px] max-md:justify-start max-md:items-center max-md:pt-[100px]">
+      <div className=" bg-BG h-full flex justify-center p-[80px_120px] gap-[102px] max-lg:items-center max-md:flex-col max-lg:p-[1px_30px] max-lg:flex-col  max-lg:h-[1200px] max-lg:gap-[40px] max-md:justify-start max-md:items-center max-md:pt-[100px] custom:p-[80px_20px] custom:gap-[20px]">
         <div className=" flex flex-col w-[793px]  gap-[60px] max-md:w-[343px] max-lg:w-[710px] max-lg:mt-[-100px] max-md:mt-[0px]">
           <div className="rounded-[80px_80px_0px_0px] bg-gradient-to-r from-[#2C344E] to-[#516199] text-center h-[44px] pt-[8px] font-bold text-gray-400">
             screen
@@ -159,7 +159,7 @@ function SeatSelectorPage() {
               </div>
             ))}
           </div>
-          <div className="flex gap-[40px] p-[16px_0px] border-t border-gray-100 max-md:flex-col">
+          <div className="flex gap-[40px] p-[16px_0px] border-t border-gray-100 max-md:flex-col ">
             <div className="bg-gray-100 text-gray-400 rounded-[4px] p-[12px_16px] font-bold text-[24px] max-md:w-[100px]">
               {movie && movie.hall_number}
             </div>
@@ -182,7 +182,7 @@ function SeatSelectorPage() {
           </div>
         </div>
         <div className="max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
-          <div className="flex flex-col w-[320px] text-white p-[16px_16px_24px_16px] gap-[24px] bg-gray-0 h-[304px] rounded-[8px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
+          <div className="flex flex-col w-[320px] text-white pr-[16px] pb-[24px] pt-[16px] gap-[24px] bg-gray-0 h-[304px] rounded-[8px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
             {movie && (
               <div className=" flex items-center gap-[12px]">
                 <img
