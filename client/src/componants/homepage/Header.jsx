@@ -1,34 +1,21 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useSearch } from "../../contexts/SearchContext";
 
 function Header() {
-  const [citySearch, setCitySearch] = useState("");
-  const [titleSearch, setTitleSearch] = useState("");
-  const [languageSearch, setLanguageSearch] = useState("");
-  const [genreSearch, setGenreSearch] = useState("");
-  const [dateSearch, setDateSearch] = useState("");
+  const {
+    citySearch,
+    setCitySearch,
+    titleSearch,
+    setTitleSearch,
+    languageSearch,
+    setLanguageSearch,
+    genreSearch,
+    setGenreSearch,
+    dateSearch,
+    setDateSearch,
+  } = useSearch();
 
   const navigate = useNavigate();
-
-  const getDataSearch = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:4000/search?movieCity=${citySearch}&movieName=${titleSearch}&moviesLanguage=${languageSearch}&moviesGenres=${genreSearch}&releasedDate=${dateSearch}`
-      );
-      setSearch(response.data.data);
-
-      const initialIsOpen = response.data.data.flatMap((search) =>
-        search.cinemas.map(() => true)
-      );
-
-      setIsOpen(initialIsOpen);
-    } catch (error) {}
-
-    useEffect(() => {
-      getDataSearch();
-    }, []);
-  };
 
   const createQueryParams = () => {
     const queryParams = new URLSearchParams();
@@ -42,9 +29,8 @@ function Header() {
   };
 
   const handleSearch = () => {
-    // const query = createQueryParams();
-
-    navigate(`/moviesearch`);
+    const query = createQueryParams();
+    navigate(`/moviesearch?${query}`);
   };
 
   return (
@@ -82,8 +68,8 @@ function Header() {
             name="language"
           >
             <option value="">Language</option>
-            <option>TH</option>
             <option>EN</option>
+            <option>TH</option>
             <option>TH/EN</option>
           </select>
 
@@ -97,7 +83,10 @@ function Header() {
           >
             <option value="">Genre</option>
             <option>Action</option>
-            <option>Love</option>
+            <option>Crime</option>
+            <option>Comedy</option>
+            <option>Drama</option>
+            <option>Sci-fi</option>
           </select>
 
           <select
@@ -110,6 +99,8 @@ function Header() {
           >
             <option value="">City</option>
             <option>Bangkok</option>
+            <option>Nonthaburi</option>
+            <option>Pathumthani</option>
           </select>
 
           <input
@@ -126,7 +117,6 @@ function Header() {
         <button
           className="w-[72px] h-[48px] bg-[#4E7BEE] rounded-[4px] active:w-[71.5px] active:h-[47.5px]"
           onClick={handleSearch}
-          // () => {navigate(`/moviesearch`);}
         >
           <i className="fa-solid fa-magnifying-glass"></i>
         </button>

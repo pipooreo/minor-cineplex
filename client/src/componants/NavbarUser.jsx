@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../contexts/authentication";
 import Avatar from "@mui/material/Avatar";
+import { useSearch } from "../contexts/SearchContext";
 
 function stringToColor(string) {
   let hash = 0;
@@ -53,6 +54,13 @@ function NavbarUser() {
     setIsUserOpen(!isUserOpen);
   };
 
+  const handleHomeClick = () => {
+    resetSearchValues();
+    navigate("/");
+  };
+
+  const { resetSearchValues } = useSearch();
+
   return (
     <nav
       className="absolute top-0 left-0 w-full  border-b-[1px] border-gray-100 z-100"
@@ -64,11 +72,7 @@ function NavbarUser() {
         } z-0`}
       ></div>
       <div className="relative z-[100] flex justify-between items-center md:px-[80px] md:py-[15px] px-[10px] py-[10px]">
-        <button
-          onClick={() => {
-            navigate("/");
-          }}
-        >
+        <button onClick={handleHomeClick}>
           <img
             className="md:w-[42px] md:h-[48px] w-[28px] h-[32px]"
             src="https://res.cloudinary.com/diah9m6gw/image/upload/v1720699560/m_logo_vf5qo2.png"
