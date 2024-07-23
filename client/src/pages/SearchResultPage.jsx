@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSearch } from "../contexts/SearchContext";
 import { formatDate } from "../contexts/SearchContext";
+import * as React from "react";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 
 function SearchResultPage() {
   const {
@@ -51,7 +54,7 @@ function SearchResultPage() {
     setLanguageSearch("");
     setGenreSearch("");
     setDateSearch("");
-    // navigate("/moviesearch");
+    navigate("/moviesearch");
   };
 
   const toggleMenu = (index) => {
@@ -61,16 +64,17 @@ function SearchResultPage() {
       return newIsOpen;
     });
   };
-
   return (
-    <div>
+    <div style={{ fontFamily: "Roboto Condensed" }}>
       <section className="bg-gray-0 pt-[120px] pb-[40px] flex flex-col items-center gap-[24px]">
         <div className="bg-gray-0 rounded-[4px] sm:w-[60%] flex flex-col justify-between items-center xl:w-[80%] xl:flex xl:flex-row xs:gap-[24px] xs:flex-col">
           <div className="bg-gray-0 w-[100%] grid grid-cols-2 gap-[12px] xl:flex xl:justify-between xl:gap-[12px]">
             <select
               value={titleSearch}
               onChange={(event) => setTitleSearch(event.target.value)}
-              className="col-span-2 xl:w-[30%] h-[48px] rounded-[4px] bg-[#21263F] border-[#565F7E] text-[#8B93B0] border-[1px] p-[12px] outline-none"
+              className={`col-span-2 xl:w-[30%] h-[48px] rounded-[4px] bg-[#21263F] border-[1px] p-[12px] text-body1R outline-none ${
+                titleSearch ? "text-white" : "text-gray-300 border-[#565F7E]"
+              }`}
               name="movie"
             >
               <option value="">Movie</option>
@@ -83,7 +87,9 @@ function SearchResultPage() {
             <select
               value={languageSearch}
               onChange={(event) => setLanguageSearch(event.target.value)}
-              className="col-span-1 xl:w-[20%] h-[48px] rounded-[4px] bg-[#21263F] border-[#565F7E] text-[#8B93B0] border-[1px] p-[12px] outline-none"
+              className={`col-span-1 xl:w-[20%] h-[48px] rounded-[4px] bg-[#21263F] border-[1px] p-[12px] text-body1R outline-none ${
+                languageSearch ? "text-white" : "text-gray-300 border-[#565F7E]"
+              }`}
               name="language"
             >
               <option value="">Language</option>
@@ -95,7 +101,9 @@ function SearchResultPage() {
             <select
               value={genreSearch}
               onChange={(event) => setGenreSearch(event.target.value)}
-              className="col-span-1 xl:w-[20%] h-[48px] rounded-[4px] bg-[#21263F] border-[#565F7E] text-[#8B93B0] border-[1px] p-[12px] outline-none"
+              className={`col-span-1 xl:w-[20%] h-[48px] rounded-[4px] bg-[#21263F] border-[1px] p-[12px] text-body1R outline-none ${
+                genreSearch ? "text-white" : "text-gray-300 border-[#565F7E]"
+              }`}
               name="genre"
             >
               <option value="">Genre</option>
@@ -109,7 +117,9 @@ function SearchResultPage() {
             <select
               value={citySearch}
               onChange={(event) => setCitySearch(event.target.value)}
-              className="col-span-1 xl:w-[20%] h-[48px] rounded-[4px] bg-[#21263F] border-[#565F7E] text-[#8B93B0] border-[1px] p-[12px] outline-none"
+              className={`col-span-1 xl:w-[20%] h-[48px] rounded-[4px] bg-[#21263F] border-[1px] p-[12px] text-body1R outline-none ${
+                citySearch ? "text-white" : "text-gray-300 border-[#565F7E]"
+              }`}
               name="city"
             >
               <option value="">City</option>
@@ -121,7 +131,9 @@ function SearchResultPage() {
             <input
               value={dateSearch}
               onChange={(event) => setDateSearch(event.target.value)}
-              className="col-span-1 xl:w-[20%] h-[48px] rounded-[4px] bg-[#21263F] border-[#565F7E] text-[#8B93B0] border-[1px] p-[12px] outline-none"
+              className={`col-span-1 xl:w-[20%] h-[48px] rounded-[4px] bg-[#21263F] border-[1px] p-[12px] text-body1R outline-none ${
+                dateSearch ? "text-white" : "text-gray-300 border-[#565F7E]"
+              }`}
               type="date"
               name="releaseDate"
               placeholder="Release date"
@@ -145,16 +157,31 @@ function SearchResultPage() {
         </div>
 
         <div className="flex xs:flex-col xs:justify-between xs:items-center xl:w-[80%] xl:flex-row xl:justify-between">
-          <div className="xs:flex xs:flex-row xs:gap-[24px]">
-            <div className="text-gray-400">
-              <input className="mr-[5px]" type="checkbox" />
-              Wheelchair access
-            </div>
-            <div className="text-gray-400">
-              <input className="mr-[5px]" type="checkbox" />
-              Hearing assistance
-            </div>
+          <div className="flex">
+            <FormControlLabel
+              label="Wheelchair access"
+              className="text-gray-400 text-body2R"
+              control={
+                <Checkbox
+                  sx={{
+                    color: "#8B93B0",
+                  }}
+                />
+              }
+            />
+            <FormControlLabel
+              label="Hearing assistance"
+              className="text-gray-400 text-body2R"
+              control={
+                <Checkbox
+                  sx={{
+                    color: "#8B93B0",
+                  }}
+                />
+              }
+            />
           </div>
+
           <div
             onClick={handleClear}
             className="text-white underline underline-offset-2 max-md:hidden"
