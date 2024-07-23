@@ -164,32 +164,37 @@ function BookTicketPage() {
     >
       {/*  */}
       <div>
-        <div
-          className=" bg-no-repeat bg-center bg-cover flex justify-center items-center w-[100%] h-[600px]"
-          // some how the sm in tailwind have to be set to 641 for the bg to be none
-          style={{
-            backgroundImage: `linear-gradient(360deg, rgba(0, 0, 0, 0) 0%, rgba(33, 38, 63, 1) 100%), url('${
-              movie && movie.image
-            }')`,
-          }}
-          alt="bg at back"
-        >
+        <div className="flex justify-center max-sm:h-[450px] ">
+          <div
+            className={`relative flex justify-center items-center w-full h-[600px] ${
+              movie ? "bg-no-repeat bg-center bg-cover max-sm:hidden" : ""
+            }`}
+            style={{
+              backgroundImage: movie
+                ? `linear-gradient(360deg, rgba(0, 0, 0, 0) 0%, rgba(33, 38, 63, 1) 100%), url(${movie.image})`
+                : "none",
+            }}
+            alt="bg at back"
+          >
+            {/* Your content here */}
+          </div>
+
           {movie && (
-            <section className=" backdrop-blur-md movie-detail w-[1200px] h-[400px] mt-16 flex justify-center text-white">
-              <div className=" flex justify-center items-center w-[25%]">
+            <section className=" border-[1px] border-green absolute md:top-20 md:right-50 backdrop-blur-md max-sm:backdrop-blur-none movie-detail xl:w-[1200px] h-[400px] max-sm:h-[50%]  max-xs:pt-[100px] max-xs:h-[178px] max-xl:w-[70%] w-full mt-10 flex justify-between max-md:justify-evenly text-white max-sm:items-center max-sm:m-0 ">
+              <div className="border-[1px] border-y-blue-200 w-[274px] md:h-[400px] max-[375px]:w-[121px] max-[375px]:h-[178px] ">
                 <img
-                  className="w-[274px] h-[400px]"
+                  className="w-full h-full object-cover max-sm:h-[70%] max-sm:w-[100%]"
                   src={movie.image}
                   alt="bg in detail"
                 />
               </div>
-              <div className=" w-[75%] flex  justify-center items-center">
-                <div className=" flex-col w-[85%] h-[50%] xl:mb-20 flex justify-evenly gap-8  ">
-                  <div className="flex flex-col w-[60%] gap-4">
-                    <h1 className=" leading-[44px] font-bold text-[36px] ">
+              <div className="border-[1px] border-red w-[75%] max-md:w-[75%] max-xl:flex max-xl:justify-center">
+                <div className="flex flex-col w-[85%] h-[100%] max-md:h-[100%] xl:mb-20 justify-evenly max-xl:justify-center gap-8 max-sm:justify-center">
+                  <div className="flex flex-col w-[100%] gap-4">
+                    <h1 className="leading-[44px] font-bold text-[36px] max-sm:text-[24px] max-sm:leading-[30px]">
                       {movie.title}
                     </h1>
-                    <p className="flex justify-start items-center gap-[10px] text-[14px]">
+                    <p className="flex flex-wrap justify-start items-center gap-[10px] text-[14px] max-sm:text-[14px] max-sm:leading-[20px]">
                       {movie.genres.map((item) => (
                         <span
                           className="bg-[#21263F] text-[#8B93B0] rounded-[4px] px-3 py-1.5"
@@ -201,15 +206,19 @@ function BookTicketPage() {
                       <span className="bg-[#21263F] text-[#8B93B0] rounded-[4px] px-3 py-1.5">
                         {movie.language}
                       </span>
-                      <img className="h-[35px]" src="\public\pipe.png" alt="" />
-                      <span className="text-[#C8CEDD] leading-[24px] text-[16px]">
+                      <img
+                        className="h-[35px] max-xl:hidden"
+                        src="\public\pipe.png"
+                        alt=""
+                      />
+                      <span className="text-[#C8CEDD] leading-[24px] text-[16px] w-full lg:w-auto mt-2">
                         Release date: {movie.theatrical_release}
                       </span>
                     </p>
                   </div>
-                  <div className="">
+                  <div>
                     <button
-                      className="my-[10px] xs:my-[20px] xs:px-[40px]  py-3  bg-[#4E7BEE] text-[16px] leadinng-[24px] rounded-md "
+                      className="my-[10px] xs:px-[40px] py-3 bg-[#4E7BEE] text-[16px] leading-[24px] rounded-md"
                       onClick={() => {
                         navigate(`/movie/${movie.title}`);
                       }}
