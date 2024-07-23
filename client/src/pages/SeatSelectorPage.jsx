@@ -145,7 +145,7 @@ function SeatSelectorPage() {
             {["E", "D", "C", "B", "A"].map((rowLabel, rowIndex) => (
               <div key={rowLabel} className="flex justify-between">
                 <div className="flex gap-[24px] items-center max-md:gap-[10px] max-xl:gap-[10px] max-[1400px]:gap-[10px]">
-                  <p className="w-[15px]">{rowLabel}</p>
+                  <p className="w-[15px] text-white">{rowLabel}</p>
                   {Array.from({ length: 5 }).map((_, i) =>
                     SeatButton(i + rowIndex * 5)
                   )}
@@ -154,13 +154,13 @@ function SeatSelectorPage() {
                   {Array.from({ length: 5 }).map((_, i) =>
                     SeatButton(i + rowIndex * 5 + 25)
                   )}
-                  <p className="w-[15px]">{rowLabel}</p>
+                  <p className="w-[15px] text-white">{rowLabel}</p>
                 </div>
               </div>
             ))}
           </div>
           <div className="flex gap-[40px] p-[16px_0px] border-t border-gray-100 max-md:flex-col">
-            <div className="bg-gray-100 rounded-[4px] p-[12px_16px] font-bold text-[24px] max-md:w-[100px]">
+            <div className="bg-gray-100 text-white rounded-[4px] p-[12px_16px] font-bold text-[24px] max-md:w-[100px]">
               {movie && movie.hall_number}
             </div>
             <div className="flex gap-[40px]">
@@ -169,14 +169,14 @@ function SeatSelectorPage() {
                   src="https://res.cloudinary.com/diah9m6gw/image/upload/v1721105746/Seat_icon_jfb7fn.png"
                   className="w-[40px] h-[40px]"
                 />
-                Available Seat THB150
+                <p className="text-white">Available Seat THB150</p>
               </div>
               <div className="flex gap-[16px] p-2 items-center">
                 <img
                   src="https://res.cloudinary.com/diah9m6gw/image/upload/v1721105998/Seat_icon_1_gpwdvp.png"
                   className="w-[40px] h-[40px]"
                 />
-                <p>Booked Seat</p>
+                <p className="text-white">Booked Seat</p>
               </div>
             </div>
           </div>
@@ -227,7 +227,7 @@ function SeatSelectorPage() {
             </div>
           </div>
           {seatStatuses.some((seat) => seat.status === "reserve") && (
-            <div className="flex flex-col p-[16px] mt-[-10px] bg-gray-0 h-[164px] rounded-[8px] gap-[16px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
+            <div className="flex flex-col p-[16px] mt-[-10px] bg-gray-0 max-h-full rounded-[8px] gap-[16px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
               <div className="flex justify-between">
                 <p className="text-gray-400">Selected Seat</p>
                 <div className="flex gap-[5px] flex-wrap w-[40%] justify-end">
@@ -240,9 +240,6 @@ function SeatSelectorPage() {
                     </p>
                   ))}
                 </div>
-                {/* <p className="text-white">
-                  {() => getSeatNumber(seatStatuses)}
-                </p> */}
               </div>
               <div className="flex justify-between">
                 <p className="text-gray-400">Tickets: {reservedSeatsCount}</p>
