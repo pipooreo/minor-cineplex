@@ -23,21 +23,33 @@ function SearchResultPage() {
   } = useSearch();
 
   const [isOpen, setIsOpen] = useState([]);
-  const location = useLocation();
+  // const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    setCitySearch(params.get("city") || "");
-    setTitleSearch(params.get("title") || "");
-    setLanguageSearch(params.get("language") || "");
-    setGenreSearch(params.get("genre") || "");
-    setDateSearch(params.get("date") || formatDate(new Date()));
-  }, [location.search]);
+  // useEffect(() => {
+  //   const params = new URLSearchParams(location.search);
+  //   setCitySearch(params.get("city") || "");
+  //   setTitleSearch(params.get("title") || "");
+  //   setLanguageSearch(params.get("language") || "");
+  //   setGenreSearch(params.get("genre") || "");
+  //   setDateSearch(params.get("date") || formatDate(new Date()));
+  // }, [location.search]);
 
   useEffect(() => {
     getDataSearch();
   }, []);
+
+  useEffect(() => {
+    if (
+      citySearch === "" &&
+      titleSearch === "" &&
+      languageSearch === "" &&
+      genreSearch === "" &&
+      dateSearch === formatDate(new Date())
+    ) {
+      getDataSearch();
+    }
+  }, [citySearch, titleSearch, languageSearch, genreSearch, dateSearch]);
 
   useEffect(() => {
     if (search.length > 0) {
@@ -53,7 +65,7 @@ function SearchResultPage() {
     setTitleSearch("");
     setLanguageSearch("");
     setGenreSearch("");
-    setDateSearch("");
+    setDateSearch(formatDate(new Date()));
     navigate("/moviesearch");
   };
 
@@ -267,7 +279,7 @@ function SearchResultPage() {
                             </div>
                           </div>
 
-                          <div className="w-[100%] p-[40px] flex flex-col xs:gap-[40px] md:gap-[60px]">
+                          <div className="xs:w-[100%] w-[343px] p-[10px] md:p-[40px] flex flex-col xs:gap-[40px] gap-[60px]">
                             {Object.keys(cinema.movie_details.schedule).map(
                               (key, index_time) => (
                                 <div
@@ -339,7 +351,7 @@ function SearchResultPage() {
                                             }
                                             disabled={status}
                                             key={index_times}
-                                            className={`rounded-[4px] px-[24px] py-[12px] ${timeClass}`}
+                                            className={`rounded-[4px] xs:px-[24px] xs:py-[12px] md:w-[128px] w-[102px] ${timeClass}`}
                                           >
                                             {time}
                                           </button>
