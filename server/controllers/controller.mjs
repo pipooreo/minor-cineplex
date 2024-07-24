@@ -332,8 +332,198 @@ export async function getMoviesBySearchBar(req, res, next) {
       moviesLanguage,
       moviesCity,
       releasedDate,
+      tags = [], // Expecting an array of tags
     } = req.query;
-    // const releasedDate = "2024-09-02";
+
+    let params = [];
+    let query = `
+    WITH subquery AS (
+      SELECT
+        halls.hall_number,
+        jsonb_agg(DISTINCT screentime.time ORDER BY screentime.time) AS start_times
+      FROM
+        halls
+      INNER JOIN
+        halls_screentimes ON halls.id = halls_screentimes.hall_id
+      INNER JOIN
+        screentime ON halls_screentimes.screen_time_id = screentime.id
+      GROUP BY
+        halls.hall_number
+    )
+    SELECT
+      cinemas.name AS cinema_name,
+      ARRAY_AGG(DISTINCT tag_name) AS cinema_tags,
+      movies.title AS movie_name,
+      city.city_name AS city_name,
+      array_agg(DISTINCT genres.genres_name) AS movie_genres,
+      movies.language AS movie_language,
+      movies.image AS movie_Image,
+      movies.theatrical_release,
+      movies.out_of_theaters,
+      jsonb_object_agg(subquery.hall_number, subquery.start_times) AS schedule
+    FROM
+      movies
+    INNER JOIN
+      movies_cinemas ON movies.id = movies_cinemas.movies_id
+    INNER JOIN
+      cinemas ON movies_cinemas.cinemas_id = cinemas.id
+    LEFT JOIN 
+      cinemas_tags ON cinemas.id = cinemas_tags.cinema_id
+    LEFT JOIN
+      tags ON cinemas_tags.tag_id = tags.id
+    INNER JOIN
+      movies_cinemas_halls ON movies.id = movies_cinemas_halls.movie_id AND cinemas.id = movies_cinemas_halls.cinema_id
+    INNER JOIN
+      halls ON movies_cinemas_halls.hall_id = halls.id
+    INNER JOIN
+      subquery ON halls.hall_number = subquery.hall_number
+    INNER JOIN
+      movies_genres ON movies.id = movies_genres.movie_id
+    INNER JOIN
+      city_cinemas ON cinemas.id = city_cinemas.cinema_id
+    INNER JOIN
+      city ON city_cinemas.city_id = city.id
+    INNER JOIN
+      genres ON movies_genres.genre_id = genres.id
+    WHERE 1=1
+  `;
+
+    if (movieName) {
+      query += ` AND LOWER(movies.title) LIKE LOWER($${params.length + 1})`;
+      params.push(`%${movieName}%`);
+    }
+    if (moviesGenres) {
+      query += ` AND movies.id IN (
+                SELECT movies_genres.movie_id
+                FROM movies_genres
+                INNER JOIN genres ON movies_genres.genre_id = genres.id
+                WHERE genres.genres_name ILIKE $${params.length + 1}
+              )`;
+      params.push(`%${moviesGenres}%`);
+    }
+    if (moviesLanguage) {
+      query += ` AND movies.language = $${params.length + 1}`;
+      params.push(moviesLanguage);
+    }
+    if (moviesCity) {
+      query += ` AND LOWER(city.city_name) LIKE LOWER($${params.length + 1})`;
+      params.push(`%${moviesCity}%`);
+    }
+    if (releasedDate) {
+      query += ` AND TO_DATE(${
+        params.length + 1
+      }, 'YYYY-MM-DD') BETWEEN TO_DATE(movies.theatrical_release, 'YYYY-MM-DD') AND TO_DATE(movies.out_of_theaters, 'YYYY-MM-DD')`;
+      params.push(releasedDate);
+    }
+
+    // Dynamically add tag conditions
+    if (tags.length > 0) {
+      query += ` AND (
+      SELECT COUNT(DISTINCT tag_name)
+      FROM cinemas_tags
+      INNER JOIN tags ON cinemas_tags.tag_id = tags.id
+      WHERE tags.tag_name ILIKE ANY($${params.length + 1})
+      AND cinemas_tags.cinema_id = cinemas.id
+    ) = ${tags.length}`;
+      params.push(tags);
+    }
+
+    query += `
+    GROUP BY 
+      cinemas.name,
+      movies.title,
+      city.city_name,
+      movies.language,
+      movies.image,
+      movies.theatrical_release,
+      movies.out_of_theaters
+    ORDER BY 
+      cinemas.name;
+  `;
+
+    const { rows } = await connectionPool.query(query, params);
+
+    if (rows.length === 0) {
+      return res.status(200).json({
+        data: noResults,
+      });
+    }
+
+    let moviesData = {};
+    rows.forEach((row) => {
+      const {
+        city_name,
+        cinema_name,
+        cinema_tags,
+        movie_genres,
+        ...movieDetails
+      } = row;
+
+      const cinemaInfo = {
+        cinema_name,
+        movie_details: {
+          ...movieDetails,
+          cinema_tags: Array.isArray(cinema_tags)
+            ? cinema_tags.map((tag) => tag.trim())
+            : [],
+          movie_genres: Array.isArray(movie_genres)
+            ? movie_genres.map((genre) => genre.trim())
+            : [],
+        },
+      };
+
+      if (!moviesData[city_name]) {
+        moviesData[city_name] = [];
+      }
+      moviesData[city_name].push(cinemaInfo);
+    });
+
+    const formattedResult = Object.keys(moviesData).map((city) => ({
+      city_name: city,
+      cinemas: moviesData[city],
+    }));
+
+    return res.status(200).json({
+      data: formattedResult,
+    });
+  } catch (error) {
+    console.error("Error fetching movies:", error);
+    return res.status(500).json({
+      message: "Server could not retrieve movies due to an internal error",
+    });
+  }
+}
+
+export async function getDaysAll(req, res, next) {
+  try {
+    const results = await connectionPool.query(
+      `
+       SELECT
+      days.day_name from days
+      `
+    );
+    return res.status(200).json({
+      message: "data fetch succesfully",
+      data: results.rows,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Server could not get days because database connection",
+    });
+  }
+}
+
+export async function getInfoForBookTicket(req, res, next) {
+  try {
+    const noResults = [];
+    const {
+      movieName,
+      moviesGenres,
+      moviesLanguage,
+      moviesCity,
+      releasedDate,
+      cinemaName,
+    } = req.query;
     let params = [];
     let query = `
       WITH subquery AS (
@@ -413,17 +603,11 @@ export async function getMoviesBySearchBar(req, res, next) {
       }, 'YYYY-MM-DD') BETWEEN TO_DATE(movies.theatrical_release, 'YYYY-MM-DD') AND TO_DATE(movies.out_of_theaters, 'YYYY-MM-DD')`;
       params.push(releasedDate);
     }
-    // <<   อันนี้สำหรับตอนที่อยากรับค่าวันที่มาจากปฏิทิน
+    if (cinemaName) {
+      query += ` AND LOWER(cinemas.name) LIKE LOWER($${params.length + 1})`;
+      params.push(`%${cinemaName}%`);
+    }
 
-    // Release date condition
-    // query += `
-    //   AND TO_DATE($${
-    //     params.length + 1
-    //   }, 'YYYY-MM-DD') BETWEEN TO_DATE(movies.theatrical_release, 'YYYY-MM-DD') AND TO_DATE(movies.out_of_theaters, 'YYYY-MM-DD')`;
-
-    // params.push(releasedDate);
-
-    // Group by and order by clauses
     query += `
       GROUP BY 
         cinemas.name,
@@ -485,25 +669,6 @@ export async function getMoviesBySearchBar(req, res, next) {
     console.error("Error fetching movies:", error);
     return res.status(500).json({
       message: "Server could not retrieve movies due to an internal error",
-    });
-  }
-}
-
-export async function getDaysAll(req, res, next) {
-  try {
-    const results = await connectionPool.query(
-      `
-       SELECT
-      days.day_name from days
-      `
-    );
-    return res.status(200).json({
-      message: "data fetch succesfully",
-      data: results.rows,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Server could not get days because database connection",
     });
   }
 }

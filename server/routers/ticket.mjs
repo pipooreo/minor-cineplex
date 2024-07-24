@@ -1,7 +1,7 @@
 import { Router } from "express";
-// import { getMoviesScreenTime } from "../controllers/controller.mjs";
-// const getMoviesScreenTime = Router();
+import { getInfoForBookTicket } from "../controllers/controller.mjs";
+const ticketRouter = Router();
 
-// getMoviesScreenTime.get("/", getMoviesScreenTime);
+ticketRouter.get("/", getInfoForBookTicket);
 
-// export default getMoviesScreenTime;
+export default ticketRouter;
