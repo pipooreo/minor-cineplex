@@ -434,7 +434,8 @@ function BookTicketPage() {
                         <div>
                           {isOpen[cinemaIndex] && (
                             <div className=" xs:flex xs:flex-col md:flex md:flex-row">
-                              <div className="w-[100%] p-[40px] flex flex-col xs:gap-[40px] md:gap-[60px]">
+                              <div className="xs:w-[100%] w-[343px] p-[10px] md:p-[40px] flex flex-col xs:gap-[40px] gap-[60px]" >
+                              {/* <div className="w-[100%] p-[40px] flex flex-col xs:gap-[40px] md:gap-[60px]"> */}
                                 {Object.keys(cinema.movie_details.schedule).map(
                                   (key, index_time) => (
                                     <div
@@ -518,7 +519,7 @@ function BookTicketPage() {
                                                 }
                                                 disabled={status}
                                                 key={index_times}
-                                                className={`rounded-[4px] px-[24px] py-[12px] ${timeClass}`}
+                                                className={`rounded-[4px] xs:px-[24px] xs:py-[12px] md:w-[128px] w-[102px] ${timeClass}`} 
                                               >
                                                 {time}
                                               </button>

@@ -141,12 +141,7 @@ function SearchResultPage() {
               Clear
             </div>
           </div>
-          <button
-            onClick={getDataSearch}
-            className="w-[72px] h-[48px] bg-[#4E7BEE] rounded-[4px] active:w-[71.5px] active:h-[47.5px]"
-          >
-            <i className="fa-solid fa-magnifying-glass"></i>
-          </button>
+          
         </div>
 
         <div className="flex xs:flex-col xs:justify-between xs:items-center xl:w-[80%] xl:flex-row xl:justify-between">
