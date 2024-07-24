@@ -165,7 +165,6 @@ function SearchResultPage() {
               Clear
             </div>
           </div>
-          
         </div>
 
         <div className="flex xs:flex-col xs:justify-between xs:items-center xl:w-[80%] xl:flex-row xl:justify-between">
