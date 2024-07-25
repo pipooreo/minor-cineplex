@@ -43,3 +43,8 @@ export const resetPasswordWithOtp = yup.object().shape({
     .positive("OTP is number only"),
   // .max(9999, "OTP have 4 numbers"),
 });
+
+export const profile = yup.object().shape({
+  name: yup.string().min(8, "Name is least 8 length").required("Required"),
+  email: yup.string().required("Enter your email").required("Required"),
+});

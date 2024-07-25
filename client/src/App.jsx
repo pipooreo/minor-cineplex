@@ -15,6 +15,7 @@ import BookTicketPage from "./pages/BookTicketPage";
 import SearchResultPage from "./pages/SearchResultPage";
 import SeatSelectorPage from "./pages/SeatSelectorPage";
 import { SearchProvider } from "./contexts/SearchContext";
+import UserProfilePage from "./pages/UserProfilePage";
 
 function App() {
   const auth = useAuth();
@@ -35,6 +36,7 @@ function App() {
             path="/seat/:title/:cinema/:date/:hall/:time"
             element={<SeatSelectorPage />}
           />
+          <Route path="/profile" element={<UserProfilePage />} />
         </Routes>
         <Footer />
       </SearchProvider>

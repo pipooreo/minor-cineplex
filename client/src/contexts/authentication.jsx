@@ -90,6 +90,18 @@ function AuthProvider(props) {
     nevigate("/");
   }
 
+  async function updateProfile(data, actions) {
+    try {
+      await axios.put("http://localhost:4000/auth/update-profile", data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      // nevigate("/registersuccess");
+    } catch (err) {
+      console.log(err);
+      actions.setErrors({ email: err.response.data.message });
+    }
+  }
+
   const isAuthenticated = Boolean(localStorage.getItem("token"));
 
   return (
@@ -101,6 +113,7 @@ function AuthProvider(props) {
         logout,
         requestResetPassword,
         resetPassword,
+        updateProfile,
         isAuthenticated,
       }}
     >

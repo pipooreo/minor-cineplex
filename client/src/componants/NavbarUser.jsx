@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useAuth } from "../contexts/authentication";
@@ -45,8 +45,23 @@ function NavbarUser() {
   const { logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isUserOpen, setIsUserOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState();
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
+
+  async function getUser() {
+    try {
+      const results = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/auth/users/${user.id}`
+      );
+      setUserProfile(results.data.data);
+    } catch (error) {}
+  }
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -57,6 +72,10 @@ function NavbarUser() {
   const handleHomeClick = () => {
     resetSearchValues();
     navigate("/");
+  };
+
+  const handleNavigation = (type) => {
+    navigate("/profile", { state: { viewType: type } });
   };
 
   const { resetSearchValues } = useSearch();
@@ -85,12 +104,14 @@ function NavbarUser() {
             className=" flex cursor-pointer justify-center items-center gap-2"
             onClick={toggleUserMenu}
           >
-            {user.image ? (
-              <Avatar alt={user.name} src={user.image} />
-            ) : (
-              <Avatar {...stringAvatar(user.name)} />
-            )}
-            <div className="text-white">{user.name}</div>
+            {userProfile ? (
+              <Avatar
+                alt={userProfile && userProfile.name}
+                src={userProfile && userProfile.image}
+              />
+            ) : // <Avatar {...stringAvatar(userProfile.name)} />
+            null}
+            <div className="text-white">{userProfile && userProfile.name}</div>
             <svg
               width="14"
               height="8"
@@ -105,7 +126,10 @@ function NavbarUser() {
             <div className="transition-transform transform absolute top-6 right-0 z-1 mt-6">
               <nav className="flex flex-col justify-center w-[182px] h-[192px] items-center  bg-gray-100 text-body1R  text-gray-400  shadow-lg shadow-black/50 ">
                 <ul className="w-full flex flex-col gap-4 p-[20px]">
-                  <li className="flex justify-start items-center gap-4 active:text-gray-300">
+                  <li
+                    className="flex justify-start items-center gap-4 active:text-gray-300"
+                    onClick={() => handleNavigation("history")}
+                  >
                     <svg
                       width="20"
                       height="20"
@@ -144,7 +168,10 @@ function NavbarUser() {
                     </svg>
                     <a href="">Booking history</a>
                   </li>
-                  <li className="flex justify-start items-center gap-4 active:text-gray-300">
+                  <li
+                    className="flex justify-start items-center gap-4 active:text-gray-300"
+                    onClick={() => handleNavigation("profile")}
+                  >
                     <svg
                       width="24"
                       height="24"
@@ -171,7 +198,10 @@ function NavbarUser() {
                     </svg>
                     <a href="">Profile</a>
                   </li>
-                  <li className="flex justify-start items-center gap-4 active:text-gray-300">
+                  <li
+                    className="flex justify-start items-center gap-4 active:text-gray-300"
+                    onClick={() => handleNavigation("resetPassword")}
+                  >
                     <svg
                       width="24"
                       height="24"
