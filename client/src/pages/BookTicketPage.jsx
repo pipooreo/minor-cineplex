@@ -236,75 +236,66 @@ function BookTicketPage() {
       className="bg-[#101525] w-full h-full "
       style={{ fontFamily: "Roboto Condensed" }}
     >
-      <div>
-        <div className="flex justify-center max-sm:h-[450px] ">
-          <div
-            className={`relative flex justify-center items-center w-full h-[600px] ${
-              movie ? "bg-no-repeat bg-center bg-cover max-sm:hidden" : ""
-            }`}
-            style={{
-              backgroundImage: movie
-                ? `linear-gradient(360deg, rgba(0, 0, 0, 0) 0%, rgba(33, 38, 63, 1) 100%), url(${movie.image})`
-                : "none",
-            }}
-            alt="bg at back"
-          >
-            {/* Your content here */}
-          </div>
+      <div className="flex justify-center h-[258px] md:h-[600px]">
+        <div
+          className={`relative flex justify-center items-center w-full  ${
+            movie ? "bg-no-repeat bg-center bg-cover max-sm:hidden" : ""
+          }`}
+          style={{
+            backgroundImage: movie
+              ? `linear-gradient(360deg, rgba(0, 0, 0, 0) 0%, rgba(33, 38, 63, 1) 100%), url(${movie.image})`
+              : "none",
+          }}
+          alt="bg at back"
+        >
+          {/* Your content here */}
+        </div>
 
-          {movie && (
-            <section className=" border-[1px] border-green gap-[2%] absolute md:top-20 md:right-50 backdrop-blur-md max-sm:backdrop-blur-none movie-detail xl:w-[68%] h-[400px] max-sm:h-[50%]  max-xs:pt-[100px] max-xs:h-[178px] max-xl:w-[70%] w-full mt-10 flex justify-between max-md:justify-evenly text-white max-sm:items-center max-sm:m-0 ">
-              <div className="border-[1px] border-y-blue-200 w-[274px] md:h-[400px] max-[375px]:w-[121px] max-[375px]:h-[178px] ">
-                <img
-                  className="w-full h-full object-cover max-sm:h-[70%] max-sm:w-[100%]"
-                  src={movie.image}
-                  alt="bg in detail"
-                />
-              </div>
-              <div className="border-[1px] border-red w-[75%] max-md:w-[75%] max-xl:flex max-xl:justify-center">
-                <div className="flex flex-col w-[85%] h-[100%] max-md:h-[100%] xl:mb-20 justify-evenly max-xl:justify-center gap-8 max-sm:justify-center">
-                  <div className="flex flex-col w-[100%] gap-4">
-                    <h1 className="leading-[44px] font-bold text-[36px] max-sm:text-[24px] max-sm:leading-[30px]">
-                      {movie.title}
-                    </h1>
-                    <p className="flex flex-wrap justify-start items-center gap-[10px] text-[14px] max-sm:text-[14px] max-sm:leading-[20px]">
-                      {movie.genres.map((item) => (
-                        <span
-                          className="bg-[#21263F] text-[#8B93B0] rounded-[4px] px-3 py-1.5"
-                          key={item}
-                        >
-                          {item}
-                        </span>
-                      ))}
-                      <span className="bg-[#21263F] text-[#8B93B0] rounded-[4px] px-3 py-1.5">
-                        {movie.language}
+        {movie && (
+          <section className="absolute  top-7 md:top-20 md:w-[80%] backdrop-blur-md max-sm:backdrop-blur-none movie-detail my-8 md:m-10 text-white">
+            <div className="flex justify-center items-center gap-2 pl-5 md:p-0">
+              <img
+                className="md:w-[274px] md:h-[400px] w-[121px] h-[176px] rounded-lg"
+                src={movie.image}
+                alt="bg in detail"
+              />
+              <div className=" xl:mb-20 md:p-[20px] w-[100%] flex flex-col justify-center md:gap-20">
+                <div className="flex flex-col  gap-1 xs:gap-4">
+                  <h1 className="text-head3 md:text-head2">{movie.title}</h1>
+                  <p className="flex flex-wrap justify-start items-center gap-[10px] text-body2R">
+                    {movie.genres.map((item) => (
+                      <span
+                        className="bg-[#21263F] text-gray-300 rounded-[4px] px-3 py-1.5"
+                        key={item}
+                      >
+                        {item}
                       </span>
-                      <img
-                        className="h-[35px] max-xl:hidden"
-                        src="/pipe.png"
-                        alt=""
-                      />
-                      <span className="text-[#C8CEDD] leading-[24px] text-[16px] w-full lg:w-auto mt-2">
-                        Release date: {movie.theatrical_release}
-                      </span>
-                    </p>
-                  </div>
-                  <div>
-                    <button
-                      className="my-[10px] xs:px-[40px] py-3 bg-[#4E7BEE] text-[16px] leading-[24px] rounded-md"
-                      onClick={() => {
-                        navigate(`/movie/${movie.title}`);
-                      }}
-                    >
-                      Movie detail
-                    </button>
-                  </div>
+                    ))}
+                    <span className="bg-[#21263F] text-gray-400 rounded-[4px] px-3 py-1.5">
+                      {movie.language}
+                    </span>
+                    <img className="h-[35px]" src="/pipe.png" alt="" />
+                    <span className="text-[#C8CEDD] leading-[24px] flex  w-full lg:w-auto">
+                      Release date: {movie.theatrical_release}
+                    </span>
+                  </p>
+                </div>
+                <div>
+                  <button
+                    className="my-[10px] xs:my-[20px] text-white text-body1M bg-blue-100 hover:bg-blue-200 active:bg-blue-300 rounded-md w-[153px] h-[48px]"
+                    onClick={() => {
+                      navigate(`/movie/${movie.title}`);
+                    }}
+                  >
+                    Movie detail
+                  </button>
                 </div>
               </div>
-            </section>
-          )}
-        </div>
+            </div>
+          </section>
+        )}
       </div>
+
       {/* above this line is background and movie details */}
       <div className="text-[18px]">
         <div className="bg-[#070C1B] px-[16%] py-6 z-100">
@@ -344,7 +335,7 @@ function BookTicketPage() {
       {/* above is the slider part */}
       <section className="bg-BG xs:pt-[24px] md:pt-[40px] xl:pt-[20px] md:pb-[80px] flex flex-col items-center">
         <div className="container mx-auto pt-[2%]">
-          <div className="flex justify-between pb-[3%] gap-5">
+          <div className="flex flex-col md:flex-row p-2 md:justify-between pb-[3%] gap-5">
             <div className="flex items-center w-[100%] ">
               <div className="relative w-[100%]">
                 <input
@@ -354,14 +345,14 @@ function BookTicketPage() {
                     setCitySearch("");
                     setCinemaSearch(event.target.value);
                   }}
-                  className="w-full h-12 rounded-md bg-[#21263F] border-[#565F7E] text-[#8B93B0] border px-3 pr-12 outline-none"
+                  className="w-full h-12 rounded-md text-body2R bg-[#21263F] border-[#565F7E] text-gray-300 border px-3 pr-12 outline-none"
                   placeholder="Search cinema"
                 />
                 <span
                   onClick={() => {
                     getDataSearch();
                   }}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-[#8B93B0] hover:text-[#4E7BEE]"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-body2R text-[#8B93B0]  hover:text-[#4E7BEE]"
                 >
                   <i class="fa-solid fa-magnifying-glass"></i>
                 </span>
@@ -373,7 +364,7 @@ function BookTicketPage() {
               onChange={(event) => {
                 setCitySearch(event.target.value);
               }}
-              className="col-span-1 xl:w-[20%] h-[48px] rounded-[4px] bg-[#21263F] border-[#565F7E] text-[#8B93B0] border-[1px] p-[12px] outline-none"
+              className="col-span-1 xl:w-[20%] h-[48px] rounded-[4px] text-body2R bg-[#21263F] border-[#565F7E] text-gray-300  border-[1px] p-[12px] outline-none"
               name="city"
             >
               <option value="">Select city</option>
@@ -434,8 +425,8 @@ function BookTicketPage() {
                         <div>
                           {isOpen[cinemaIndex] && (
                             <div className=" xs:flex xs:flex-col md:flex md:flex-row">
-                              <div className="xs:w-[100%] w-[343px] p-[10px] md:p-[40px] flex flex-col xs:gap-[40px] gap-[60px]" >
-                              {/* <div className="w-[100%] p-[40px] flex flex-col xs:gap-[40px] md:gap-[60px]"> */}
+                              <div className="xs:w-[100%] w-[343px] p-[10px] md:p-[40px] flex flex-col xs:gap-[40px] gap-[60px]">
+                                {/* <div className="w-[100%] p-[40px] flex flex-col xs:gap-[40px] md:gap-[60px]"> */}
                                 {Object.keys(cinema.movie_details.schedule).map(
                                   (key, index_time) => (
                                     <div
@@ -519,7 +510,7 @@ function BookTicketPage() {
                                                 }
                                                 disabled={status}
                                                 key={index_times}
-                                                className={`rounded-[4px] xs:px-[24px] xs:py-[12px] md:w-[128px] w-[102px] ${timeClass}`} 
+                                                className={`rounded-[4px] xs:px-[24px] xs:py-[12px] md:w-[128px] w-[102px] ${timeClass}`}
                                               >
                                                 {time}
                                               </button>
