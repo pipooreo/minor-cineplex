@@ -26,6 +26,15 @@ function SearchResultPage() {
   // const location = useLocation();
   const navigate = useNavigate();
 
+  function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+  const currentDate = new Date();
+  const toDay = formatDate(currentDate);
+
   // useEffect(() => {
   //   const params = new URLSearchParams(location.search);
   //   setCitySearch(params.get("city") || "");
