@@ -62,13 +62,13 @@ export async function login(req, res) {
   let token;
   if (!req.body.remember) {
     token = jwt.sign(
-      { id: user.id, name: user.name, email: user.email, image: user.image },
+      { id: user.id, name: user.name, email: user.email },
       process.env.SECRET_KEY,
       { expiresIn: "2h" }
     );
   } else {
     token = jwt.sign(
-      { id: user.id, name: user.name, email: user.email, image: user.image },
+      { id: user.id, name: user.name, email: user.email },
       process.env.SECRET_KEY
     );
   }
