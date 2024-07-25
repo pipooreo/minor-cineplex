@@ -97,7 +97,7 @@ function SeatSelectorPage() {
       >
         <img
           src={imgSrc}
-          className="w-[40px] h-[40px] max-md:w-[18.67px] max-md:h-[18.67px]"
+          className="md:w-[40px] md:h-[40px] min-[479px]:w-[22px] min-[479px]:h-[22px] w-[18.67px] h-[18.67px]"
         />
       </button>
     );
@@ -109,7 +109,7 @@ function SeatSelectorPage() {
   const totalPrice = reservedSeatsCount * seatPrice;
 
   return (
-    <section className=" w-full h-screen absolute ">
+    <section className=" w-full h-screen absolute">
       <div className="bg-BG">
         <div className="h-[80px] bg-BG max-md:h-[48px]"></div>
         <header className="bg-gray-0 h-[106px] flex justify-center items-center gap-[190px]   max-md:gap-[80px]">
@@ -135,124 +135,129 @@ function SeatSelectorPage() {
           </div>
           <hr className="w-[287px] absolute mb-[20px] border-gray-100 max-md:w-[176px]" />
         </header>
-      </div>
-      <div className=" bg-BG h-full flex justify-center p-[80px_120px] gap-[102px] max-lg:items-center max-md:flex-col max-lg:p-[1px_30px] max-lg:flex-col  max-lg:h-[1200px] max-lg:gap-[40px] max-md:justify-start max-md:items-center max-md:pt-[100px] custom:p-[80px_20px] custom:gap-[20px]">
-        <div className=" flex flex-col w-[793px]  gap-[60px] max-md:w-[343px] max-lg:w-[710px] max-lg:mt-[-100px] max-md:mt-[0px]">
-          <div className="rounded-[80px_80px_0px_0px] bg-gradient-to-r from-[#2C344E] to-[#516199] text-center h-[44px] pt-[8px] font-bold text-gray-400">
-            screen
-          </div>
-          <div className="flex flex-col gap-[30px] max-md:gap-[10px]">
-            {["E", "D", "C", "B", "A"].map((rowLabel, rowIndex) => (
-              <div key={rowLabel} className="flex justify-between">
-                <div className="flex gap-[24px] items-center max-md:gap-[10px] max-xl:gap-[10px] max-[1400px]:gap-[10px]">
-                  <p className="w-[15px] text-gray-300">{rowLabel}</p>
-                  {Array.from({ length: 5 }).map((_, i) =>
-                    SeatButton(i + rowIndex * 5)
-                  )}
-                </div>
-                <div className="flex gap-[24px] items-center max-md:gap-[10px] max-xl:gap-[10px] max-[1400px]:gap-[10px]">
-                  {Array.from({ length: 5 }).map((_, i) =>
-                    SeatButton(i + rowIndex * 5 + 25)
-                  )}
-                  <p className="w-[15px] text-gray-300">{rowLabel}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="flex gap-[40px] p-[16px_0px] border-t border-gray-100 max-md:flex-col ">
-            <div className="bg-gray-100 text-gray-400 rounded-[4px] p-[12px_16px] font-bold text-[24px] max-md:w-[100px]">
-              {movie && movie.hall_number}
+
+        <div className=" bg-BG h-full flex justify-center xl:p-[80px_120px] p-[80px_40px] xl:gap-[102px] gap-[28px] max-lg:items-center max-md:flex-col max-lg:p-[40px_1rem] max-lg:flex-col max-lg:gap-[40px] max-md:justify-start max-md:items-center">
+          <div className=" flex flex-col lg:w-[793px]  gap-[60px] w-full md:w-[710px]">
+            <div className="rounded-[80px_80px_0px_0px] bg-gradient-to-r from-[#2C344E] to-[#516199] text-center h-[44px] pt-[8px] font-bold text-gray-400">
+              screen
             </div>
-            <div className="flex gap-[40px]">
-              <div className="flex gap-[16px] p-2 items-center max-md:grid-cols-2">
-                <img
-                  src="https://res.cloudinary.com/diah9m6gw/image/upload/v1721105746/Seat_icon_jfb7fn.png"
-                  className="w-[40px] h-[40px]"
-                />
-                <p className="text-gray-400">Available Seat THB150</p>
+            <div className="flex flex-col xl:gap-[30px] md:gap-[20px] gap-[10px]">
+              {["E", "D", "C", "B", "A"].map((rowLabel, rowIndex) => (
+                <div key={rowLabel} className="flex justify-between gap-[20%]">
+                  {/* <div className="flex xl:gap-[24px]  items-center gap-[10px] max-xl:gap-[10px] max-[1400px]:gap-[10px]"> */}
+                  <div className="flex justify-between w-full">
+                    <p className="w-[15px] text-gray-300">{rowLabel}</p>
+                    {Array.from({ length: 5 }).map((_, i) =>
+                      SeatButton(i + rowIndex * 5)
+                    )}
+                  </div>
+                  <div className="flex justify-between w-full">
+                    {/* <div className="flex xl:gap-[24px] items-center gap-[10px] max-xl:gap-[10px] max-[1400px]:gap-[10px]"> */}
+                    {Array.from({ length: 5 }).map((_, i) =>
+                      SeatButton(i + rowIndex * 5 + 25)
+                    )}
+                    <p className="w-[15px] text-gray-300">{rowLabel}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex gap-[40px] p-[16px_0px] border-t border-gray-100 max-md:flex-col ">
+              <div className="bg-gray-100 text-gray-400 rounded-[4px] p-[12px_16px] font-bold text-[24px] max-md:w-[100px]">
+                {movie && movie.hall_number}
               </div>
-              <div className="flex gap-[16px] p-2 items-center">
-                <img
-                  src="https://res.cloudinary.com/diah9m6gw/image/upload/v1721105998/Seat_icon_1_gpwdvp.png"
-                  className="w-[40px] h-[40px]"
-                />
-                <p className="text-gray-400">Booked Seat</p>
+              <div className="flex gap-[40px]">
+                <div className="flex gap-[16px] p-2 items-center max-md:grid-cols-2">
+                  <img
+                    src="https://res.cloudinary.com/diah9m6gw/image/upload/v1721105746/Seat_icon_jfb7fn.png"
+                    className="w-[40px] h-[40px]"
+                  />
+                  <p className="text-gray-400">Available Seat THB150</p>
+                </div>
+                <div className="flex gap-[16px] p-2 items-center">
+                  <img
+                    src="https://res.cloudinary.com/diah9m6gw/image/upload/v1721105998/Seat_icon_1_gpwdvp.png"
+                    className="w-[40px] h-[40px]"
+                  />
+                  <p className="text-gray-400">Booked Seat</p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
-          <div className="flex flex-col w-[320px] text-white pr-[16px] pb-[24px] pt-[16px] gap-[24px] bg-gray-0 h-[304px] rounded-[8px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
-            {movie && (
-              <div className=" flex items-center gap-[12px]">
-                <img
-                  className="w-[82.21px] h-[120px] rounded-[4px]"
-                  src={movie.movie_image}
-                />
-                <div className="flex flex-col gap-[8px]">
-                  <div className="font-bold text-[20px] ">{movie.title}</div>
-                  <div className="flex  gap-[8px] flex-wrap">
-                    {movie.movie_genres.map((item, index) => (
-                      <div
-                        className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-300"
-                        key={index}
-                      >
-                        {item}
+          <div className="max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
+            <div className="flex flex-col w-[320px] text-white px-[16px] pb-[24px] pt-[16px] gap-[24px] bg-gray-0 rounded-[8px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
+              {movie && (
+                <div className=" flex items-center gap-[12px]">
+                  <img
+                    className="w-[82.21px] h-[120px] rounded-[4px]"
+                    src={movie.movie_image}
+                  />
+                  <div className="flex flex-col gap-[8px]">
+                    <div className="font-bold text-[20px] ">{movie.title}</div>
+                    <div className="flex  gap-[8px] flex-wrap">
+                      {movie.movie_genres.map((item, index) => (
+                        <div
+                          className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-300"
+                          key={index}
+                        >
+                          {item}
+                        </div>
+                      ))}
+                      <div className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-400 font-medium">
+                        {movie.language}
                       </div>
-                    ))}
-                    <div className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-400 font-medium">
-                      {movie.language}
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-            <div className="flex flex-col gap-[8px]">
-              <div className="flex gap-[12px] items-center">
-                <i className="fa-solid fa-location-dot w-[16px] h-[16px] text-gray-200"></i>
-                <p className="text-gray-400">{movie && movie.cinema_name}</p>
-              </div>
-              <div className="flex gap-[12px] items-center">
-                <i className="fa-solid fa-calendar-days w-[16px] h-[16px] text-gray-200"></i>
-                <p className="text-gray-400">{movie && movie.select_date}</p>
-              </div>
-              <div className="flex gap-[12px] items-center">
-                <i className="fa-solid fa-clock w-[16px] h-[16px] text-gray-200"></i>
-                <p className="text-gray-400">{movie && movie.screening_time}</p>
-              </div>
-              <div className="flex gap-[12px] items-center">
-                <i className="fa-solid fa-shop w-[16px] h-[16px] text-gray-200"></i>
-                <p className="text-gray-400">{movie && movie.hall_number}</p>
-              </div>
-            </div>
-          </div>
-          {seatStatuses.some((seat) => seat.status === "reserve") && (
-            <div className="flex flex-col p-[16px] mt-[-10px] bg-gray-0 max-h-full rounded-[8px] gap-[16px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
-              <div className="flex justify-between">
-                <p className="text-gray-400">Selected Seat</p>
-                <div className="flex gap-[5px] flex-wrap w-[40%] justify-end">
-                  {getSeatNumber(seatStatuses).map((seatNumber, index) => (
-                    <p
-                      key={index}
-                      className="p-[1px_2px] bg-blue-100 text-white rounded-[4px]"
-                    >
-                      {seatNumber}
-                    </p>
-                  ))}
+              )}
+              <div className="flex flex-col gap-[8px]">
+                <div className="flex gap-[12px] items-center">
+                  <i className="fa-solid fa-location-dot w-[16px] h-[16px] text-gray-200"></i>
+                  <p className="text-gray-400">{movie && movie.cinema_name}</p>
+                </div>
+                <div className="flex gap-[12px] items-center">
+                  <i className="fa-solid fa-calendar-days w-[16px] h-[16px] text-gray-200"></i>
+                  <p className="text-gray-400">{movie && movie.select_date}</p>
+                </div>
+                <div className="flex gap-[12px] items-center">
+                  <i className="fa-solid fa-clock w-[16px] h-[16px] text-gray-200"></i>
+                  <p className="text-gray-400">
+                    {movie && movie.screening_time}
+                  </p>
+                </div>
+                <div className="flex gap-[12px] items-center">
+                  <i className="fa-solid fa-shop w-[16px] h-[16px] text-gray-200"></i>
+                  <p className="text-gray-400">{movie && movie.hall_number}</p>
                 </div>
               </div>
-              <div className="flex justify-between">
-                <p className="text-gray-400">Tickets: {reservedSeatsCount}</p>
-                <p className=" text-white">THB{totalPrice}</p>
-              </div>
-              <button
-                className="btn btn-primary bg-blue-100 h-[48px] rounded-[8px] text-white"
-                onClick={handleReserveSeat}
-              >
-                Pay THB{totalPrice}
-              </button>
             </div>
-          )}
+            {seatStatuses.some((seat) => seat.status === "reserve") && (
+              <div className="flex flex-col p-[16px] mt-[-10px] bg-gray-0 max-h-full rounded-[8px] gap-[16px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
+                <div className="flex justify-between">
+                  <p className="text-gray-400">Selected Seat</p>
+                  <div className="flex gap-[5px] flex-wrap w-[40%] justify-end">
+                    {getSeatNumber(seatStatuses).map((seatNumber, index) => (
+                      <p
+                        key={index}
+                        className="p-[1px_2px] bg-blue-100 text-white rounded-[4px]"
+                      >
+                        {seatNumber}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex justify-between">
+                  <p className="text-gray-400">Tickets: {reservedSeatsCount}</p>
+                  <p className=" text-white">THB{totalPrice}</p>
+                </div>
+                <button
+                  className="btn btn-primary bg-blue-100 h-[48px] rounded-[8px] text-white"
+                  onClick={handleReserveSeat}
+                >
+                  Pay THB{totalPrice}
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>
