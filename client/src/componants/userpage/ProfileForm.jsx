@@ -58,7 +58,7 @@ function ProfileForm(props) {
                       alt="profile-picture"
                       className="object-cover w-full h-full rounded-full"
                     />
-                  ) : typeof values.avatar === "object" ? (
+                  ) : values.avatar && typeof values.avatar === "object" ? (
                     <img
                       src={URL.createObjectURL(values.avatar)}
                       alt="profile-picture"
