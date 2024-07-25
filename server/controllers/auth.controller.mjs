@@ -156,14 +156,34 @@ export async function resetPassword(req, res) {
   return res.status(200).json({ message: "Password has reseted successfully" });
 }
 
+export async function updatePassword(req, res) {
+  let { password, id } = req.body;
+  const updated_at = new Date();
+  // console.log(password, id);
+  const salt = await bcrypt.genSalt(10);
+  password = await bcrypt.hash(password, salt);
+  try {
+    let result = await connectionPool.query(
+      `update users set password = $1, updated_at = $2 where id = $3`,
+      [password, updated_at, id]
+    );
+    // console.log(result);
+  } catch {
+    return res
+      .status(500)
+      .json({ message: "Server could not connect Database" });
+  }
+  return res.status(200).json({ message: "Password has updated successfully" });
+}
+
 export async function updateProfile(req, res) {
   const user = req.body;
   // console.log(user);
-  console.log(req.files);
+  // console.log(req.files);
 
   try {
     if (req.files.image) {
-      console.log(req.files.image);
+      // console.log(req.files.image);
       const avatarUrl = await cloudinaryUpload(req.files);
       user["image"] = avatarUrl.url;
       // console.log(user);
@@ -173,7 +193,7 @@ export async function updateProfile(req, res) {
         [user.image, user.name, updated_at, user.email]
       );
     } else {
-      console.log(user);
+      // console.log(user);
       const updated_at = new Date();
       await connectionPool.query(
         `update users set name = $1, updated_at = $2 where email = $3`,

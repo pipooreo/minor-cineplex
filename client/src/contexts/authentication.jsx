@@ -16,7 +16,10 @@ function AuthProvider(props) {
 
   async function register(data, actions) {
     try {
-      await axios.post("http://localhost:4000/auth/register", data);
+      await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/auth/register`,
+        data
+      );
       nevigate("/registersuccess");
     } catch (err) {
       console.log(err);
@@ -28,7 +31,7 @@ function AuthProvider(props) {
     try {
       actions.setErrors({ notice: false });
       const results = await axios.post(
-        "http://localhost:4000/auth/login",
+        `${import.meta.env.VITE_SERVER_URL}/auth/login`,
         data
       );
       const token = results.data.token;
@@ -55,7 +58,7 @@ function AuthProvider(props) {
 
     try {
       const results = await axios.post(
-        "http://localhost:4000/auth/request-reset-password",
+        `${import.meta.env.VITE_SERVER_URL}/auth/request-reset-password`,
         data
       );
     } catch (err) {
@@ -71,7 +74,7 @@ function AuthProvider(props) {
 
     try {
       const results = await axios.post(
-        "http://localhost:4000/auth/reset-password",
+        `${import.meta.env.VITE_SERVER_URL}/auth/reset-password`,
         data
       );
       nevigate("/login");
@@ -92,13 +95,31 @@ function AuthProvider(props) {
 
   async function updateProfile(data, actions) {
     try {
-      await axios.put("http://localhost:4000/auth/update-profile", data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await axios.put(
+        `${import.meta.env.VITE_SERVER_URL}/auth/update-profile`,
+        data,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
       // nevigate("/registersuccess");
     } catch (err) {
       console.log(err);
       actions.setErrors({ email: err.response.data.message });
+    }
+  }
+
+  async function updatePassword(data, actions) {
+    console.log(data);
+    try {
+      await axios.put(
+        `${import.meta.env.VITE_SERVER_URL}/auth/update-password`,
+        data
+      );
+      // nevigate("/registersuccess");
+    } catch (err) {
+      console.log(err);
+      // actions.setErrors({ email: err.response.data.message });
     }
   }
 
@@ -114,6 +135,7 @@ function AuthProvider(props) {
         requestResetPassword,
         resetPassword,
         updateProfile,
+        updatePassword,
         isAuthenticated,
       }}
     >

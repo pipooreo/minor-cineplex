@@ -5,9 +5,11 @@ import {
   register,
   requestPassword,
   resetPassword,
+  updatePassword,
   updateProfile,
 } from "../controllers/auth.controller.mjs";
 import multer from "multer";
+import { protect } from "../middlewares/protect.mjs";
 
 const authRouter = Router();
 const multerUpload = multer({ dest: "public\\files" });
@@ -21,8 +23,10 @@ authRouter.post("/request-reset-password", requestPassword);
 
 authRouter.post("/reset-password", resetPassword);
 
+authRouter.put("/update-password", [protect], updatePassword);
+
 authRouter.put("/update-profile", [avatarUpload], updateProfile);
 
-authRouter.get("/users/:userId", getUserById);
+authRouter.get("/users/:userId", [protect], getUserById);
 
 export default authRouter;

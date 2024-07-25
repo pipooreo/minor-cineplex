@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaRegUser } from "react-icons/fa6";
 import ProfileForm from "../componants/userpage/ProfileForm";
+import UpdatePassword from "../componants/userpage/UpdatePassword";
 import { jwtDecode } from "jwt-decode";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
@@ -115,7 +116,9 @@ function UserProfilePage() {
         </div>
         {isProfile === "profile" && userProfile ? (
           <ProfileForm user={userProfile} />
-        ) : isResetPassword === "resetPassword" ? null : null}
+        ) : isResetPassword === "resetPassword" ? (
+          <UpdatePassword user={userProfile} />
+        ) : null}
       </div>
     </section>
   );
