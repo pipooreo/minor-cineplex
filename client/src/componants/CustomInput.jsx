@@ -13,6 +13,8 @@ export function CustomInput({ label, ...props }) {
         className={
           meta.touched && meta.error
             ? "text-body2R outline-none border border-red rounded-[4px] w-[380px] h-[48px] p-[12px] placeholder-gray-300 max-sm:w-[343px] bg-gray-100 text-white"
+            : props.disabled
+            ? "text-body2R border rounded-[4px] w-[380px] h-[48px] p-[12px] placeholder-gray-300 max-sm:w-[343px]  bg-gray-100 border-gray-200 text-gray-300"
             : "text-body2R border rounded-[4px] w-[380px] h-[48px] p-[12px] placeholder-gray-300 max-sm:w-[343px]  bg-gray-100 border-gray-200 text-white"
         }
       />

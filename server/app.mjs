@@ -10,9 +10,17 @@ import commentRouter from "./routers/comments.mjs";
 import searchBarRouter from "./routers/searchBar.mjs";
 import daysRouter from "./routers/days.mjs";
 import bookedRouter from "./routers/booking.mjs";
+import { v2 as cloudinary } from "cloudinary";
 // import getMoviesScreenTime from "./routers/ticket.mjs";
 import ticketRouter from "./routers/ticket.mjs";
 dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+  secure: true,
+});
 
 const app = express();
 const port = 4000;
