@@ -236,14 +236,14 @@ function BookTicketPage() {
       className="bg-[#101525] w-full h-full "
       style={{ fontFamily: "Roboto Condensed" }}
     >
-      <div className="flex justify-center h-[258px] md:h-[600px]">
+      <div className="flex justify-center h-[258px] xs:h-[300px] md:h-[600px]">
         <div
           className={`relative flex justify-center items-center w-full  ${
             movie ? "bg-no-repeat bg-center bg-cover max-sm:hidden" : ""
           }`}
           style={{
             backgroundImage: movie
-              ? `linear-gradient(360deg, rgba(0, 0, 0, 0) 0%, rgba(33, 38, 63, 1) 100%), url(${movie.image})`
+              ? `linear-gradient(360deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 100%), url(${movie.image})`
               : "none",
           }}
           alt="bg at back"
@@ -252,15 +252,15 @@ function BookTicketPage() {
         </div>
 
         {movie && (
-          <section className="absolute  top-7 md:top-20 md:w-[80%] backdrop-blur-md max-sm:backdrop-blur-none movie-detail my-8 md:m-10 text-white">
+          <section className="absolute  top-10 md:top-20 md:w-[80%] backdrop-blur-md bg-[#070C1B]/70 max-sm:backdrop-blur-none movie-detail my-8 md:m-10 text-white">
             <div className="flex justify-center items-center gap-2 pl-5 md:p-0">
               <img
-                className="md:w-[274px] md:h-[400px] w-[121px] h-[176px] rounded-lg"
+                className="md:w-[274px] md:h-[400px]  w-[121px] h-[176px] rounded-lg"
                 src={movie.image}
                 alt="bg in detail"
               />
               <div className=" xl:mb-20 md:p-[20px] w-[100%] flex flex-col justify-center md:gap-20">
-                <div className="flex flex-col  gap-1 xs:gap-4">
+                <div className="flex flex-col  gap-2 md:gap-4">
                   <h1 className="text-head3 md:text-head2">{movie.title}</h1>
                   <p className="flex flex-wrap justify-start items-center gap-[10px] text-body2R">
                     {movie.genres.map((item) => (
@@ -282,7 +282,7 @@ function BookTicketPage() {
                 </div>
                 <div>
                   <button
-                    className="my-[10px] xs:my-[20px] text-white text-body1M bg-blue-100 hover:bg-blue-200 active:bg-blue-300 rounded-md w-[153px] h-[48px]"
+                    className=" md:my-[20px] text-white text-body1M bg-blue-100 hover:bg-blue-200 active:bg-blue-300 rounded-md w-[153px] h-[48px]"
                     onClick={() => {
                       navigate(`/movie/${movie.title}`);
                     }}
