@@ -18,6 +18,9 @@ import SeatSelectorPage from "./pages/SeatSelectorPage";
 import { SearchProvider } from "./contexts/SearchContext";
 import UserProfilePage from "./pages/UserProfilePage";
 import { ScrollToTop } from "./componants/ScrollToTop";
+import PaymentTest from "./pages/PaymentTestPage";
+// import TestPaymentPage from "./pages/TestPaymentPage";
+import PaymentPageSuccess from "./pages/PaymentPageSuccess";
 
 function App() {
   const auth = useAuth();
@@ -41,6 +44,8 @@ function App() {
               element={<SeatSelectorPage />}
             />
             <Route path="/profile" element={<UserProfilePage />} />
+            <Route path="/payment" element={<PaymentTest />} />
+            <Route path="/payment/seccess" element={<PaymentPageSuccess />} />
           </Routes>
           <Footer />
         </ScrollToTop>
