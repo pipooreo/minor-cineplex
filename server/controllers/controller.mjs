@@ -332,7 +332,7 @@ export async function getMoviesBySearchBar(req, res, next) {
       moviesLanguage,
       moviesCity,
       releasedDate,
-      tags = []
+      tags = [],
     } = req.query;
     // const releasedDate = "2024-09-02";
     let params = [];

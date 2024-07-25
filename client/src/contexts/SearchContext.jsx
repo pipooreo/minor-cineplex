@@ -15,23 +15,22 @@ export function formatDate(date) {
 }
 
 export function SearchProvider({ children }) {
+  const currentDate = new Date();
+  const toDay = formatDate(currentDate);
   const [search, setSearch] = useState([]);
   const [citySearch, setCitySearch] = useState("");
   const [titleSearch, setTitleSearch] = useState("");
   const [languageSearch, setLanguageSearch] = useState("");
   const [genreSearch, setGenreSearch] = useState("");
-  const [dateSearch, setDateSearch] = useState("");
+  const [dateSearch, setDateSearch] = useState(toDay);
 
   const resetSearchValues = () => {
     setCitySearch("");
     setTitleSearch("");
     setLanguageSearch("");
     setGenreSearch("");
-    setDateSearch("");
+    setDateSearch(formatDate(new Date()));
   };
-
-  const currentDate = new Date();
-  const toDay = formatDate(currentDate);
 
   const getDataSearch = async () => {
     if (!dateSearch) {
@@ -50,6 +49,7 @@ export function SearchProvider({ children }) {
   return (
     <SearchContext.Provider
       value={{
+        toDay,
         search,
         citySearch,
         setCitySearch,

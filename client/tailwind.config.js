@@ -14,6 +14,7 @@ export default {
       md: "768px",
       lg: "1024px",
       xl: "1280px",
+      custom: "1023px",
     },
     colors: {
       gray: {
