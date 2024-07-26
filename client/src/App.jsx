@@ -16,7 +16,7 @@ import SearchResultPage from "./pages/SearchResultPage";
 import SeatSelectorPage from "./pages/SeatSelectorPage";
 import { SearchProvider } from "./contexts/SearchContext";
 import UserProfilePage from "./pages/UserProfilePage";
-import PaymentTest from "./pages/PaymentTestPage";
+import StripeTest from "./pages/StripeTestPage";
 // import TestPaymentPage from "./pages/TestPaymentPage";
 import PaymentPageSuccess from "./pages/PaymentPageSuccess";
 
@@ -40,7 +40,7 @@ function App() {
             element={<SeatSelectorPage />}
           />
           <Route path="/profile" element={<UserProfilePage />} />
-          <Route path="/payment" element={<PaymentTest />} />
+          <Route path="/payment" element={<StripeTest />} />
           <Route path="/payment/seccess" element={<PaymentPageSuccess />} />
         </Routes>
         <Footer />
