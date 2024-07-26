@@ -40,12 +40,13 @@ function CinemaList() {
                 {city.cinema.map((cinema, index) => (
                   <div
                     key={index}
-                    className="p-[16px] border-[#565F7E] border-[1px] flex items-center gap-[16px]"
+                    className="p-[16px] border-[#565F7E] border-[1px] flex items-center  gap-[16px]"
                   >
                     <div>
                       <i className="fa-solid fa-location-dot w-[52px] h-[52px] border-[#565F7E] border-[1px] rounded-[50%] bg-[#474e6e] flex justify-center items-center"></i>
                     </div>
                     <button
+                      className="flex flex-col items-start"
                       onClick={() => {
                         navigate(`/cinema/${cinema.cinema_id}`);
                       }}
