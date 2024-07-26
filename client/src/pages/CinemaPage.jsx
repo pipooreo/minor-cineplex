@@ -4,7 +4,6 @@ import axios from "axios";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "./CustomStyle.css";
 function CinemaPage() {
   const navigate = useNavigate();
   const [cinema, setCinema] = useState("");
