@@ -32,7 +32,7 @@ function App() {
           <Route path="/resetpassword" element={<ResetPassword />} />
           <Route path="/movie/:title" element={<MoviePage />} />
           <Route path="/bookticket/:title" element={<BookTicketPage />} />
-          <Route path="/cinema/:title" element={<CinemaPage />} /> 
+          <Route path="/cinema/:title" element={<CinemaPage />} />
           <Route path="/moviesearch" element={<SearchResultPage />} />
           <Route
             path="/seat/:title/:cinema/:date/:hall/:time"

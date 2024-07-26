@@ -306,7 +306,7 @@ function BookTicketPage() {
                     }
 
                     return (
-                      <div key={cinemaIndex} className=" pb-5">
+                      <div key={cinemaIndex} className="">
                         {" "}
                         <div className=" px-[16px] py-[24px] flex justify-between items-center gap-[20px]">
                           <div className="xs:grid xs:grid-cols-6 gap-2 xl:flex xl:items-center xl:gap-[20px]">
