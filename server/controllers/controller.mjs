@@ -10,8 +10,10 @@ export async function getCityAll(req, res, next) {
        SELECT
       city.id,
       city.city_name,
+      
       json_agg(
       json_build_object(
+      'cinema_id', cinemas.id,
       'name', cinemas.name,
       'address', cinemas.address
       )) AS cinema
@@ -76,6 +78,7 @@ export async function getCinemasAll(req, res, next) {
     const results = await connectionPool.query(
       `
       select
+      cinemas.id,
         city.city_name,
         cinemas.name,
         cinemas.address
@@ -334,8 +337,9 @@ export async function getMoviesBySearchBar(req, res, next) {
       releasedDate,
       tags = [],
     } = req.query;
-    // const releasedDate = "2024-09-02";
+
     let params = [];
+    let tagParams = [];
     let query = `
       WITH subquery AS (
         SELECT
@@ -352,12 +356,11 @@ export async function getMoviesBySearchBar(req, res, next) {
       )
       SELECT
           cinemas.name AS cinema_name,
-          
           movies.title AS movie_name,
           city.city_name AS city_name,
           array_agg(DISTINCT genres.genres_name) AS movie_genres,
           movies.language AS movie_language,
-          movies.image AS movie_Image,
+          movies.image AS movie_image,
           array_agg(DISTINCT tags.tag_name) AS cinema_tags,
           movies.theatrical_release,
           movies.out_of_theaters,
@@ -403,29 +406,35 @@ export async function getMoviesBySearchBar(req, res, next) {
     }
     if (moviesLanguage) {
       query += ` AND movies.language = $${params.length + 1}`;
-      params.push(moviesLanguage); // Use exact value from query parameter
+      params.push(moviesLanguage);
     }
     if (moviesCity) {
       query += ` AND LOWER(city.city_name) LIKE LOWER($${params.length + 1})`;
       params.push(`%${moviesCity}%`);
     }
     if (releasedDate) {
-      query += ` AND TO_DATE($${
+      query += ` AND TO_DATE(${
         params.length + 1
       }, 'YYYY-MM-DD') BETWEEN TO_DATE(movies.theatrical_release, 'YYYY-MM-DD') AND TO_DATE(movies.out_of_theaters, 'YYYY-MM-DD')`;
       params.push(releasedDate);
     }
 
-    if (tags.length > 0) {
-      query += ` AND (
-        SELECT COUNT(DISTINCT tag_name)
-        FROM cinemas_tags
-        INNER JOIN tags ON cinemas_tags.tag_id = tags.id
-        WHERE tags.tag_name ILIKE ANY($${params.length + 1})
-        AND cinemas_tags.cinema_id = cinemas.id
-      ) = ${tags.length}`;
-      params.push(tags);
-    }
+    // if (tags.length > 0) {
+    //   // Create placeholders for each tag
+    //   tagParams = tags.map((_, index) => `$${params.length + index + 1}`);
+    //   query += `
+    //     AND cinemas.id IN (
+    //       SELECT cinema_id
+    //       FROM cinemas_tags
+    //       INNER JOIN tags ON cinemas_tags.tag_id = tags.id
+    //       WHERE tags.tag_name IN (${tagParams.join(",")})
+    //       GROUP BY cinema_id
+    //       HAVING COUNT(DISTINCT tags.tag_name) = $${
+    //         params.length + tags.length + 1
+    //       }
+    //     )`;
+    //   params.push(...tags, tags.length);
+    // }
 
     query += `
       GROUP BY 
@@ -434,6 +443,7 @@ export async function getMoviesBySearchBar(req, res, next) {
         city.city_name,
         movies.language,
         movies.image,
+        
         movies.theatrical_release,
         movies.out_of_theaters
       ORDER BY 
@@ -520,7 +530,7 @@ export async function getInfoForBookTicket(req, res, next) {
       moviesLanguage,
       moviesCity,
       releasedDate,
-      cinemaName,
+      cinemaId,
     } = req.query;
     let params = [];
     let query = `
@@ -539,14 +549,16 @@ export async function getInfoForBookTicket(req, res, next) {
       )
       SELECT
           cinemas.name AS cinema_name,
+          cinemas.image AS cinema_image,
           movies.title AS movie_name,
           city.city_name AS city_name,
           array_agg(DISTINCT genres.genres_name) AS movie_genres,
           movies.language AS movie_language,
-          movies.image AS movie_Image,
+          movies.image AS movie_image,
           array_agg(DISTINCT tags.tag_name) AS cinema_tags,
           movies.theatrical_release,
           movies.out_of_theaters,
+          cinemas.description,
           jsonb_object_agg(subquery.hall_number, subquery.start_times) AS schedule
       FROM
           movies
@@ -596,25 +608,27 @@ export async function getInfoForBookTicket(req, res, next) {
       params.push(`%${moviesCity}%`);
     }
     if (releasedDate) {
-      query += ` AND TO_DATE($${
-        params.length + 1
-      }, 'YYYY-MM-DD') BETWEEN TO_DATE(movies.theatrical_release, 'YYYY-MM-DD') AND TO_DATE(movies.out_of_theaters, 'YYYY-MM-DD')`;
+      query += ` AND TO_DATE($${params.length + 1}, 'YYYY-MM-DD') 
+                 BETWEEN TO_DATE(movies.theatrical_release, 'YYYY-MM-DD') 
+                 AND TO_DATE(movies.out_of_theaters, 'YYYY-MM-DD')`;
       params.push(releasedDate);
     }
-    if (cinemaName) {
-      query += ` AND LOWER(cinemas.name) LIKE LOWER($${params.length + 1})`;
-      params.push(`%${cinemaName}%`);
+    if (cinemaId) {
+      query += ` AND cinemas.id = $${params.length + 1}`;
+      params.push(cinemaId);
     }
 
     query += `
       GROUP BY 
         cinemas.name,
+        cinemas.image,
         movies.title,
         city.city_name,
         movies.language,
         movies.image,
         movies.theatrical_release,
-        movies.out_of_theaters
+        movies.out_of_theaters,
+        cinemas.description
       ORDER BY 
         cinemas.name;`;
 
@@ -631,13 +645,20 @@ export async function getInfoForBookTicket(req, res, next) {
       const {
         city_name,
         cinema_name,
+        cinema_image, // Make sure cinema_image is used here
         cinema_tags,
+        description,
         movie_genres,
         ...movieDetails
       } = row;
 
       const cinemaInfo = {
         cinema_name,
+        cinema_image,
+        description,
+        cinema_tags: Array.isArray(cinema_tags)
+          ? cinema_tags.map((tag) => tag.trim())
+          : [],
         movie_details: {
           ...movieDetails,
           cinema_tags: Array.isArray(cinema_tags)

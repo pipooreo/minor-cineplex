@@ -4,39 +4,17 @@ import axios from "axios";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-// import { useSearch } from "../contexts/SearchContext";
 function BookTicketPage() {
   const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
   const [isOpen, setIsOpen] = useState([]);
-  // const [days, setDays] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
 
   const [citySearch, setCitySearch] = useState("");
   const [cinemaSearch, setCinemaSearch] = useState("");
-  // const [movieTitle, setMovieTitle] = useState("");
   const [dateSearch, setDateSearch] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const params = useParams();
-
-  // const getDays = async () => {
-  // try {
-  // const daysData = await axios.get("http://localhost:4000/days");
-  // const daysList = daysData.data.data;
-  // const currentDate = new Date();
-  // const currentDayOfWeek = currentDate.getDay();
-  // const offset = (1 - currentDayOfWeek + 3) % 7;
-
-  // const daysWithDates = daysList.map((day, index) => {
-  //   const date = new Date(currentDate);
-  //   date.setDate(currentDate.getDate() + ((index + offset) % 7));
-  //   return { ...day, date: date.toDateString() };
-  // });
-  // setDays(daysWithDates);
-  // } catch (error) {
-  // console.error("Error fetching days:", error);
-  // }
-  // };
 
   const toggleMenu = (index) => {
     setIsOpen((prevIsOpen) => {
@@ -52,12 +30,9 @@ function BookTicketPage() {
       const response = await axios.get(
         `http://localhost:4000/ticket?movieName=${params.title}&moviesCity=${citySearch}&releasedDate=${dateSearch}&cinemaName=${cinemaSearch}`
       );
-      // const response = await axios.get(
-      //  `http://localhost:4000/ticket?movieName=${params.title}&moviesCity=${citySearch}&releasedDate=${dateSearch}&cinemaName=${cinemaSearch}`
-      //);
+
       console.log(response.data.data);
       setSearchResult(response.data.data);
-      // console.log("search result after getDatasearch:, ", searchResult)
     } catch (error) {
       console.error("Error fetching search data:", error);
     }
@@ -70,20 +45,6 @@ function BookTicketPage() {
     return `${year}-${month}-${day}`;
   };
 
-  // const generateFormattedDates = (formatDate) => {
-  //   const dates = [];
-  //   const today = new Date();
-  //   for (let i = 0; i < 7; i++) {
-  //     const date = new Date(today);
-  //     date.setDate(today.getDate() + i);
-  //     dates.push(date);
-  //   }
-  //   return dates.map((date) => ({
-  //     date,
-  //     formattedDate: formatDate(date),
-  //   }));
-  // };
-
   const handleDayClick = (day) => {
     console.log("Day clicked:", day);
     const formattedDate = formatDate(day);
@@ -95,7 +56,6 @@ function BookTicketPage() {
   const isSelected = (date) => {
     const result =
       selectedDate && date.toDateString() === selectedDate.toDateString();
-    // console.log("isSelected:", date, selectedDate, result);
     return result;
   };
   const settings = {
@@ -130,59 +90,6 @@ function BookTicketPage() {
     return dates;
   };
 
-  const DateSlider = ({
-    settings,
-    getDates,
-    handleDayClick,
-    isSelected,
-    isToday,
-    formatDay,
-    formatDate,
-  }) => (
-    <div className="p-5 text-[18px]">
-      <div className="bg-[#351e21] px-12 py-4">
-        <Slider {...settings}>
-          {getDates().map((date, index) => (
-            <div key={index} className="px-1">
-              <button
-                onClick={() => {
-                  const formattedDate = handleDayClick(date);
-                  console.log(
-                    "Formatted Date outside function:",
-                    formattedDate
-                  );
-                }}
-                className={`w-full text-center p-2 ${
-                  isSelected(date) ? "bg-[#e9cd3e]" : ""
-                } hover:bg-[#2d3046] transition-colors duration-200 rounded-md`}
-              >
-                {/* Button content */}
-                {isToday(date) ? (
-                  <div className="text-[#ff2d2d] text-sm mb-1">Today</div>
-                ) : (
-                  <div
-                    className={`text-sm mb-1 ${
-                      isSelected(date) ? "text-white" : "text-gray-400"
-                    }`}
-                  >
-                    {formatDay(date)}
-                  </div>
-                )}
-                <div
-                  className={`text-lg font-semibold ${
-                    isSelected(date) ? "text-white" : "text-gray-300"
-                  }`}
-                >
-                  {formatDate(date)}
-                </div>
-              </button>
-            </div>
-          ))}
-        </Slider>
-      </div>
-    </div>
-  );
-
   const formatDateForCarousel = (date) => {
     return (
       date.getDate().toString().padStart(2, "0") +
@@ -214,6 +121,7 @@ function BookTicketPage() {
       const movieInfo = movieData.data.data[0];
       if (movieInfo) {
         setMovie(movieInfo);
+        console.log("movie info", movieInfo);
         // setMovieTitle(movieInfo.title);
       }
     } catch (error) {
@@ -247,9 +155,7 @@ function BookTicketPage() {
               : "none",
           }}
           alt="bg at back"
-        >
-          {/* Your content here */}
-        </div>
+        ></div>
 
         {movie && (
           <section className="absolute  top-10 md:top-20 md:w-[80%] backdrop-blur-md bg-[#070C1B]/70 max-sm:backdrop-blur-none movie-detail my-8 md:m-10 text-white">
@@ -297,31 +203,37 @@ function BookTicketPage() {
       </div>
 
       {/* above this line is background and movie details */}
-      <div className="text-[18px]">
-        <div className="bg-[#070C1B] px-[16%] py-6 z-100">
+      <div className="bg-[#070C1B] px-[10%] py-[2%] lg:py-[1%] text-[18px] max-xs:pt-[10%]">
+        <div className="  mt-10 sm:mt-0 z-100">
           <Slider {...settings}>
             {getDates().map((date, index) => (
-              <div key={index} className="px-1">
+              <div key={index} className="">
                 <button
                   onClick={() => handleDayClick(date)}
-                  className={`w-full text-center p-2 ${
+                  className={`sm:w-[100%] md:w-[80%] text-center p-2 ${
                     isSelected(date) ? "bg-gray-100" : ""
                   } hover:bg-[#2d3046] transition-colors duration-200 rounded-md`}
                 >
                   {isToday(date) ? (
-                    <div className="text-[#b4b4b4] text-sm mb-1">Today</div>
+                    <div
+                      className={`text-[24px] mb-1  leading-[30px] ${
+                        isSelected(date) ? "text-white" : "text-gray-400"
+                      }`}
+                    >
+                      Today
+                    </div>
                   ) : (
                     <div
-                      className={`text-sm mb-1 ${
-                        isSelected(date) ? "text-white" : "text-gray-400"
+                      className={` mb-1 leading-[30px] text-[24px] ${
+                        isSelected(date) ? "text-white" : "text-gray-300"
                       }`}
                     >
                       {formatDay(date)}
                     </div>
                   )}
                   <div
-                    className={`text-lg font-semibold ${
-                      isSelected(date) ? "text-white" : "text-gray-300"
+                    className={`xs:text-[16px] flex flex-col items-center font-semibold ${
+                      isSelected(date) ? "text-gray-400" : "text-gray-200"
                     }`}
                   >
                     {formatDateForCarousel(date)}
