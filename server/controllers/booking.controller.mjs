@@ -239,3 +239,39 @@ export async function deleteBooking(req, res, next) {
     });
   }
 }
+
+export async function BookingHistory(req, res) {
+  const { userId } = req.params;
+  // console.log(userId);
+  let result;
+  try {
+    result = await connectionPool.query(
+      `select select_date::text,cinemas.name as cinema_name, movies.title as title, movies.image, halls.hall_number, screentime.time, payment_status, array_agg(seat_number.seat_num) as seats, users.name from booking
+        inner join movies on movies.id = booking.movie_id
+        inner join cinemas on cinemas.id = booking.cinema_id
+        inner join halls on halls.id = booking.hall_id
+        inner join seat_number on seat_number.id = booking.seat_id
+        inner join screentime on screentime.id = booking.time_id
+        inner join users on users.id = booking.user_id
+        where users.id = $1
+        group by select_date,cinemas.name, movies.title, halls.hall_number, screentime.time, payment_status, users.name, movies.image`,
+      [userId]
+      // [user, cinema, movie, select_date, time, hall, seat]
+    );
+    // console.log(result);
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        message: "Booking not found or no changes made",
+      });
+    }
+
+    return res.status(200).json({
+      data: result.rows,
+    });
+  } catch (error) {
+    console.error("Error deleting booking:", error);
+    return res.status(500).json({
+      message: "Server error while deleting booking",
+    });
+  }
+}

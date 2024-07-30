@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  BookingHistory,
   bookingReserved,
   dataSeat,
   deleteBooking,
@@ -13,5 +14,6 @@ bookRouter.get("/", dataSeat);
 bookRouter.post("/", bookingReserved);
 bookRouter.put("/", updateBooking);
 bookRouter.delete("/", deleteBooking);
+bookRouter.get("/:userId", BookingHistory);
 
 export default bookRouter;
