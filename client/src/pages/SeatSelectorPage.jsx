@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 function SeatSelectorPage() {
   const [movie, setMovie] = useState();
@@ -12,6 +13,8 @@ function SeatSelectorPage() {
   const seatPrice = 150;
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
+
+  const navigate = useNavigate();
 
   function getSeat(seatArray) {
     let seatNumber = [];
@@ -56,6 +59,9 @@ function SeatSelectorPage() {
     try {
       await axios.post(`${import.meta.env.VITE_SERVER_URL}/booking`, data);
     } catch (err) {}
+    navigate(
+      `/payment/${movie.title}/${movie.cinema_name}/${movie.select_date}/${movie.hall_number}/${movie.screening_time}`
+    );
   }
 
   useEffect(() => {

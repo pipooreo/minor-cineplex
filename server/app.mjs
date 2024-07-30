@@ -11,6 +11,7 @@ import searchBarRouter from "./routers/searchBar.mjs";
 import daysRouter from "./routers/days.mjs";
 import bookedRouter from "./routers/booking.mjs";
 import { v2 as cloudinary } from "cloudinary";
+import paymentRouter from "./routers/payment.mjs";
 // import getMoviesScreenTime from "./routers/ticket.mjs";
 import ticketRouter from "./routers/ticket.mjs";
 dotenv.config();
@@ -43,6 +44,7 @@ app.use("/days", daysRouter);
 // app.use("/date", getMoviesScreenTime);
 app.use("/booking", bookedRouter);
 app.use("/ticket", ticketRouter);
+app.use("/payment", paymentRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
