@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import connectionPool from "../utils/db.mjs";
+import { dataSeat } from "./booking.controller.mjs";
 
 const stripe = Stripe(process.env.STRIPE_SECRET_TEST);
 
@@ -25,14 +26,13 @@ export async function createPayment(req, res) {
 
 export async function getPayment(req, res) {
   let results;
-  const { movie, hall_number, time, cinema_name, select_date, users_id } =
-    req.query;
-  // console.log(req.query);
+  const { movie, hall, time, cinema, select_date, users_id } = req.query;
+  console.log(req.query);
   try {
     results = await connectionPool.query(
       `SELECT 
           title, 
-          select_date, 
+          select_date :: text, 
           movies.image, 
           hall_number, 
           time, 
@@ -68,7 +68,7 @@ export async function getPayment(req, res) {
           time, 
           cinemas.name, 
           users.name`,
-      [movie, hall_number, time, cinema_name, select_date, users_id]
+      [movie, hall, time, cinema, select_date, users_id]
     );
     // console.log(results);
     if (results.rowCount === 0) {
@@ -77,6 +77,7 @@ export async function getPayment(req, res) {
       });
     }
     return res.status(200).json({
+      data: results.rows,
       message: "Payment successfully",
     });
   } catch (error) {

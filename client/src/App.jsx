@@ -35,6 +35,7 @@ function App() {
             <Route path="/registersuccess" element={<RegisterPageSuccess />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/resetpassword" element={<ResetPassword />} />
+
             <Route path="/movie/:title" element={<MoviePage />} />
             <Route path="/bookticket/:title" element={<BookTicketPage />} />
             <Route path="/cinema/:title" element={<CinemaPage />} />
@@ -44,8 +45,11 @@ function App() {
               element={<SeatSelectorPage />}
             />
             <Route path="/profile" element={<UserProfilePage />} />
-            <Route path="/payment" element={<StripeTest />} />
-            <Route path="/payment/seccess" element={<PaymentPageSuccess />} />
+            <Route
+              path="/payment/:title/:cinema/:date/:hall/:time"
+              element={<StripeTest />}
+            />
+            <Route path="/payment/success" element={<PaymentPageSuccess />} />
           </Routes>
           <Footer />
         </ScrollToTop>
