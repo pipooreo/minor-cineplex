@@ -152,18 +152,19 @@ function CinemaPage() {
         ></div>
 
         {cinema && (
-          <section className="absolute  top-10 md:top-20 md:w-[80%] backdrop-blur-md bg-[#070C1B]/70 max-sm:backdrop-blur-none movie-detail my-8 md:m-10 text-white">
-            <div className="gap-2 pl-5 md:p-0 ">
-              <div className="  flex flex-row items-center">
+          <section className="absolute  top-10 md:top-20 md:w-[80%] h-[400px] backdrop-blur-md rounded-lg bg-[#070C1B]/70 max-sm:backdrop-blur-none movie-detail my-8 md:m-10 text-white">
+            <div className="gap-2 pl-5 md:p-0">
+              <div className="  flex flex-row ">
                 <img
                   className="md:w-[274px] md:h-[400px]  w-[121px] h-[176px] rounded-lg"
                   src={cinema.cinema_image}
                   alt="bg in detail"
                 />
-                <div className="  xl:mb-20 md:p-[20px] p-5 w-[100%] max-md:h-[200px] flex flex-col justify-center md:gap-20">
-                  <div className="flex flex-col h-[300px] justify-evenly gap-20 md:gap-4">
-                    <div className="">
-                      <h1 className="text-head3 md:text-head2 pb-5">
+                <div className="xl:mb-20 md:p-[20px] p-5 w-[100%] max-md:h-[200px] flex flex-col justify-center md:justify-start md:gap-20">
+                  <div className="">
+                    {/* <div className="flex flex-col h-[300px] justify-evenly gap-20 md:gap-4"> */}
+                    <div className="flex flex-col h-[150px] justify-start">
+                      <h1 className="text-head3 md:text-head2 pb-5 ">
                         {cinema.cinema_name}
                       </h1>
                       <p className="flex flex-wrap justify-start items-center gap-[10px] text-body2R">
@@ -177,22 +178,22 @@ function CinemaPage() {
                         ))}
                       </p>
                     </div>
-                    <span className=" flex flex-wrap w-[80%] max-md:hidden justify-start items-center gap-[10px] text-[16px] max-sm:text-[14px] max-md:leading-[24px]">
+                    <span className=" flex flex-wrap w-[90%] max-md:hidden  justify-start items-center gap-[10px] text-[16px] max-sm:text-[14px] max-md:leading-[24px]">
                       {cinema.description}
                     </span>
                   </div>
                 </div>
               </div>
-              <span className=" flex flex-wrap justify-start md:hidden p-5 items-center gap-[10px] text-[14px] text-[16px] max-sm:leading-[24px]">
-                {cinema.description}
-              </span>
             </div>
+            <span className=" flex flex-wrap justify-start md:hidden h-[200px]  p-5 items-start gap-[10px] text-gray-400 text-[16px] max-sm:leading-[24px]">
+              {cinema.description}
+            </span>
           </section>
         )}
       </div>
       {/* above this line is background and movie details */}
 
-      <div className="bg-[#070C1B] px-[10%] py-[2%] lg:py-[1%] text-[18px] max-xs:pt-[10%]">
+      <div className="bg-[#070C1B] px-[10%] py-[5%] lg:py-[1%] text-[18px] max-xs:pt-[10%]">
         <div className="  mt-10 sm:mt-0 z-100">
           <Slider {...settings}>
             {getDates().map((date, index) => (

@@ -272,7 +272,7 @@ function SearchResultPage() {
                               <div
                                 onClick={() => {
                                   navigate(
-                                    `/movie/${cinema.movie_details.movie_name}`
+                                    `/movie/${cinema.movie_details.movie_name}#`
                                   );
                                 }}
                                 className="text-white text-[16px] font-[700] underline mt-[40px]"
@@ -349,7 +349,7 @@ function SearchResultPage() {
                                           <button
                                             onClick={() =>
                                               navigate(
-                                                `/seat/${cinema.movie_details.movie_name}/${cinema.cinema_name}/${dateSearch}/${key}/${time}`
+                                                `/seat/${cinema.movie_details.movie_name}/${cinema.cinema_name}/${dateSearch}/${key}/${time}#`
                                               )
                                             }
                                             disabled={status}

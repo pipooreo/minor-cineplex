@@ -26,7 +26,7 @@ function BookTicketPage() {
 
   const getDataSearch = async () => {
     try {
-      console.log("Data search has been performed");
+      console.log("Data search has been performed", params.title);
       const response = await axios.get(
         `http://localhost:4000/ticket?movieName=${params.title}&moviesCity=${citySearch}&releasedDate=${dateSearch}&cinemaName=${cinemaSearch}`
       );
@@ -144,7 +144,7 @@ function BookTicketPage() {
       className="bg-[#101525] w-full h-full "
       style={{ fontFamily: "Roboto Condensed" }}
     >
-      <div className="flex justify-center h-[258px] xs:h-[300px] md:h-[600px]">
+      <div className="flex bg-[#070C1B] justify-center h-[258px] xs:h-[280px] md:h-[600px]">
         <div
           className={`relative flex justify-center items-center w-full  ${
             movie ? "bg-no-repeat bg-center bg-cover max-sm:hidden" : ""
@@ -203,7 +203,7 @@ function BookTicketPage() {
       </div>
 
       {/* above this line is background and movie details */}
-      <div className="bg-[#070C1B] px-[10%] py-[2%] lg:py-[1%] text-[18px] max-xs:pt-[10%]">
+      <div className="bg-[#070C1B] px-[10%] py-[1%]  lg:py-[1%] text-[18px] max-xs:pb-5">
         <div className="  mt-10 sm:mt-0 z-100">
           <Slider {...settings}>
             {getDates().map((date, index) => (
@@ -246,7 +246,7 @@ function BookTicketPage() {
       </div>
       {/* above is the slider part */}
       <section className="bg-BG xs:pt-[24px] md:pt-[40px] xl:pt-[20px] md:pb-[80px] flex flex-col items-center">
-        <div className="container mx-auto pt-[2%]">
+        <div className="container mx-auto pt-[2%] ">
           <div className="flex flex-col md:flex-row p-2 md:justify-between pb-[3%] gap-5">
             <div className="flex items-center w-[100%] ">
               <div className="relative w-[100%]">
@@ -256,6 +256,7 @@ function BookTicketPage() {
                   onChange={(event) => {
                     setCitySearch("");
                     setCinemaSearch(event.target.value);
+                    console.log("cinema search", event.target.value);
                   }}
                   className="w-full h-12 rounded-md text-body2R bg-[#21263F] border-[#565F7E] text-gray-300 border px-3 pr-12 outline-none"
                   placeholder="Search cinema"
@@ -292,10 +293,7 @@ function BookTicketPage() {
               }
 
               return (
-                <div
-                  key={index}
-                  className="p-4 bg-gray-0 mb-4 rounded-lg shadow-md"
-                >
+                <div key={index} className=" rounded-lg shadow-md ">
                   <h3 className="text-lg font-bold">{item.movieTitle}</h3>
                   {item.cinemas.map((cinema, cinemaIndex) => {
                     if (
@@ -306,12 +304,12 @@ function BookTicketPage() {
                     }
 
                     return (
-                      <div key={cinemaIndex} className="">
+                      <div key={cinemaIndex} className=" bg-gray-0 mb-5">
                         {" "}
                         <div className=" px-[16px] py-[24px] flex justify-between items-center gap-[20px]">
                           <div className="xs:grid xs:grid-cols-6 gap-2 xl:flex xl:items-center xl:gap-[20px]">
                             <i className="fa-solid fa-location-dot w-[44px] h-[44px] text-[#4E7BEE] rounded-[50%] bg-[#474e6e] flex justify-center items-center col-span-1"></i>
-                            <div className="text-[24px] text-[white] font-[700] leading-[30px] xs:col-span-5">
+                            <div className="text-[24px] text-[white] font-[700] leading-[30px] xs:col-span-5 ">
                               {cinema.cinema_name}
                             </div>
                             {cinema.movie_details.cinema_tags.map(
@@ -336,9 +334,9 @@ function BookTicketPage() {
                         </div>
                         <div>
                           {isOpen[cinemaIndex] && (
-                            <div className=" xs:flex xs:flex-col md:flex md:flex-row">
+                            <div className=" bg-gray-0 border-t-[1px] xs:flex xs:flex-col md:flex md:flex-row">
+                              {/* <div className="w-[100%] p-[40px] flex flex-col xs:gap-[40px] md:gap-[60px]"> */}
                               <div className="xs:w-[100%] w-[343px] p-[10px] md:p-[40px] flex flex-col xs:gap-[40px] gap-[60px]">
-                                {/* <div className="w-[100%] p-[40px] flex flex-col xs:gap-[40px] md:gap-[60px]"> */}
                                 {Object.keys(cinema.movie_details.schedule).map(
                                   (key, index_time) => (
                                     <div
@@ -417,7 +415,7 @@ function BookTicketPage() {
                                               <button
                                                 onClick={() =>
                                                   navigate(
-                                                    `/seat/${cinema.movie_details.movie_name}/${cinema.cinema_name}/${dateSearch}/${key}/${time}`
+                                                    `/seat/${cinema.movie_details.movie_name}/${cinema.cinema_name}/${dateSearch}/${key}/${time}#`
                                                   )
                                                 }
                                                 disabled={status}
