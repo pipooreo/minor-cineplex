@@ -95,17 +95,22 @@ function AuthProvider(props) {
 
   async function updateProfile(data, actions) {
     try {
-      await axios.put(
+      const result = await axios.put(
         `${import.meta.env.VITE_SERVER_URL}/auth/update-profile`,
         data,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
+      // actions.setFieldValue("success", true);
+      // console.log(result);
+      // result = { status: 500 };
+      return result;
       // nevigate("/registersuccess");
     } catch (err) {
       console.log(err);
       actions.setErrors({ email: err.response.data.message });
+      return err;
     }
   }
 

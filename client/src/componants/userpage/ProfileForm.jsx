@@ -2,8 +2,9 @@ import { FaRegUser } from "react-icons/fa6";
 import { Form, Formik } from "formik";
 import { CustomInput } from "../CustomInput";
 import { profile } from "../../schemas/schema";
-import { useState } from "react";
 import { useAuth } from "../../contexts/authentication";
+import { ToastContainer, toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ProfileForm(props) {
   // const [avatarPreview, setAvatarPreview] = useState("");
@@ -12,6 +13,21 @@ function ProfileForm(props) {
     avatar: props.user.image,
     name: props.user.name,
     email: props.user.email,
+    // success: false,
+  };
+
+  const notify = () => {
+    toast.success("Your profile has been successfully updated", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      transition: Bounce,
+    });
   };
 
   const handleFileChange = (event, setFieldValue) => {
@@ -23,14 +39,19 @@ function ProfileForm(props) {
     }
   };
 
-  function onSumbit(values, actions) {
+  async function onSumbit(values, actions) {
+    // console.log(actions);
+
     const formData = new FormData();
 
     formData.append("name", values.name);
     formData.append("email", values.email);
     formData.append("image", values.avatar);
 
-    updateProfile(formData, actions);
+    const result = await updateProfile(formData, actions);
+    if ((result.status = 200)) {
+      notify();
+    }
   }
 
   return (
@@ -46,8 +67,8 @@ function ProfileForm(props) {
         validationSchema={profile}
         onSubmit={onSumbit}
       >
-        {({ values, setFieldValue, isSubmitting }) => {
-          // console.log(values.avatar);
+        {({ values, setFieldValue, isSubmitting, isValid, dirty }) => {
+          // console.log(values.success);
           return (
             <Form className="flex flex-col gap-[40px]">
               <div className="flex items-end gap-[16px]">
@@ -89,13 +110,41 @@ function ProfileForm(props) {
                 />
                 <CustomInput label="Email" name="email" type="email" disabled />
               </div>
-              <button
+              {/* <button
                 type="submit"
                 disabled={isSubmitting}
                 className="rounded border border-gray-300 text-center w-[111px] h-[48px] text-white hover:bg-gray-100"
+              > */}
+              <button
+                // disabled={isSubmitting}
+                disabled={isSubmitting || !(isValid && dirty)}
+                className={`w-[182px] h-[48px]  text-body1M font-bold rounded-[4px] 
+                                transition-all duration-300 ease-in-out
+                                ${
+                                  isValid && dirty
+                                    ? "bg-blue-100 hover:bg-blue-200 active:bg-blue-300 text-white"
+                                    : "bg-blue-100/40 text-white/40 cursor-not-allowed"
+                                }
+                                max-sm:w-[343px]`}
+                type="submit"
               >
                 Save
               </button>
+              <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                limit={2}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover={false}
+                theme="colored"
+                transition:Bounce
+                className="w-[40%]"
+              />
             </Form>
           );
         }}
