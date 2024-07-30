@@ -258,8 +258,8 @@ function CinemaPage() {
                       <div key={cinemaIndex} className="bg-gray-0 mb-10 ">
                         {" "}
                         <div>
-                          <div className=" xs:flex xs:flex-col md:flex md:flex-row">
-                            <div className="xs:flex xs:flex-row md:flex md:flex-col p-[24px] gap-[24px]">
+                          <div className=" xs:flex xs:flex-col md:flex md:flex-row ">
+                            <div className="xs:flex xs:flex-row md:flex md:flex-col p-[24px] gap-[24px]  w-full md:w-[270px]">
                               <img
                                 className="xs:w-[96px] xs:h-[140px] md:w-[174px] md:h-[254px] rounded-[4px]"
                                 src={cinema.movie_details.movie_image}
@@ -300,7 +300,6 @@ function CinemaPage() {
                               </div>
                             </div>
                             <div className="xs:w-[100%] w-[343px] p-[10px] md:p-[40px] flex flex-col xs:gap-[40px] gap-[60px]">
-                              {/* <div className="w-[100%] p-[40px] flex flex-col xs:gap-[40px] md:gap-[60px]"> */}
                               {Object.keys(cinema.movie_details.schedule).map(
                                 (key, index_time) => (
                                   <div
@@ -394,7 +393,6 @@ function CinemaPage() {
                               )}
                             </div>
                           </div>
-                          {/* )} */}
                         </div>
                       </div>
                     );

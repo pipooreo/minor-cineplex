@@ -241,7 +241,7 @@ function SearchResultPage() {
 
                       {isOpen[currentCinemaIndex] && (
                         <div className="bg-gray-0 border-t-[1px] xs:flex xs:flex-col md:flex md:flex-row">
-                          <div className="xs:flex xs:flex-row md:flex md:flex-col p-[24px] gap-[24px]">
+                          <div className="xs:flex xs:flex-row md:flex md:flex-col p-[24px] gap-[24px] w-full md:w-[270px] ">
                             <img
                               className="xs:w-[96px] xs:h-[140px] md:w-[174px] md:h-[254px] rounded-[4px]"
                               src={cinema.movie_details.movie_image}
