@@ -340,7 +340,6 @@ export async function getMoviesBySearchBar(req, res, next) {
     } = req.query;
 
     let params = [];
-    let tagParams = [];
     let query = `
       WITH subquery AS (
         SELECT
@@ -407,35 +406,29 @@ export async function getMoviesBySearchBar(req, res, next) {
     }
     if (moviesLanguage) {
       query += ` AND movies.language = $${params.length + 1}`;
-      params.push(moviesLanguage);
+      params.push(moviesLanguage); // Use exact value from query parameter
     }
     if (moviesCity) {
       query += ` AND LOWER(city.city_name) LIKE LOWER($${params.length + 1})`;
       params.push(`%${moviesCity}%`);
     }
     if (releasedDate) {
-      query += ` AND TO_DATE(${
+      query += ` AND TO_DATE($${
         params.length + 1
       }, 'YYYY-MM-DD') BETWEEN TO_DATE(movies.theatrical_release, 'YYYY-MM-DD') AND TO_DATE(movies.out_of_theaters, 'YYYY-MM-DD')`;
       params.push(releasedDate);
     }
 
-    // if (tags.length > 0) {
-    //   // Create placeholders for each tag
-    //   tagParams = tags.map((_, index) => `$${params.length + index + 1}`);
-    //   query += `
-    //     AND cinemas.id IN (
-    //       SELECT cinema_id
-    //       FROM cinemas_tags
-    //       INNER JOIN tags ON cinemas_tags.tag_id = tags.id
-    //       WHERE tags.tag_name IN (${tagParams.join(",")})
-    //       GROUP BY cinema_id
-    //       HAVING COUNT(DISTINCT tags.tag_name) = $${
-    //         params.length + tags.length + 1
-    //       }
-    //     )`;
-    //   params.push(...tags, tags.length);
-    // }
+    if (tags.length > 0) {
+      query += ` AND (
+        SELECT COUNT(DISTINCT tag_name)
+        FROM cinemas_tags
+        INNER JOIN tags ON cinemas_tags.tag_id = tags.id
+        WHERE tags.tag_name ILIKE ANY($${params.length + 1})
+        AND cinemas_tags.cinema_id = cinemas.id
+      ) = ${tags.length}`;
+      params.push(tags);
+    }
 
     query += `
       GROUP BY 
@@ -444,7 +437,6 @@ export async function getMoviesBySearchBar(req, res, next) {
         city.city_name,
         movies.language,
         movies.image,
-        
         movies.theatrical_release,
         movies.out_of_theaters
       ORDER BY 
