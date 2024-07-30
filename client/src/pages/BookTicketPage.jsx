@@ -4,39 +4,17 @@ import axios from "axios";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-// import { useSearch } from "../contexts/SearchContext";
 function BookTicketPage() {
   const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
   const [isOpen, setIsOpen] = useState([]);
-  // const [days, setDays] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
 
   const [citySearch, setCitySearch] = useState("");
   const [cinemaSearch, setCinemaSearch] = useState("");
-  // const [movieTitle, setMovieTitle] = useState("");
   const [dateSearch, setDateSearch] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const params = useParams();
-
-  // const getDays = async () => {
-  // try {
-  // const daysData = await axios.get("http://localhost:4000/days");
-  // const daysList = daysData.data.data;
-  // const currentDate = new Date();
-  // const currentDayOfWeek = currentDate.getDay();
-  // const offset = (1 - currentDayOfWeek + 3) % 7;
-
-  // const daysWithDates = daysList.map((day, index) => {
-  //   const date = new Date(currentDate);
-  //   date.setDate(currentDate.getDate() + ((index + offset) % 7));
-  //   return { ...day, date: date.toDateString() };
-  // });
-  // setDays(daysWithDates);
-  // } catch (error) {
-  // console.error("Error fetching days:", error);
-  // }
-  // };
 
   const toggleMenu = (index) => {
     setIsOpen((prevIsOpen) => {
@@ -48,16 +26,13 @@ function BookTicketPage() {
 
   const getDataSearch = async () => {
     try {
-      console.log("Data search has been performed");
+      console.log("Data search has been performed", params.title);
       const response = await axios.get(
         `http://localhost:4000/ticket?movieName=${params.title}&moviesCity=${citySearch}&releasedDate=${dateSearch}&cinemaName=${cinemaSearch}`
       );
-      // const response = await axios.get(
-      //  `http://localhost:4000/ticket?movieName=${params.title}&moviesCity=${citySearch}&releasedDate=${dateSearch}&cinemaName=${cinemaSearch}`
-      //);
+
       console.log(response.data.data);
       setSearchResult(response.data.data);
-      // console.log("search result after getDatasearch:, ", searchResult)
     } catch (error) {
       console.error("Error fetching search data:", error);
     }
@@ -70,20 +45,6 @@ function BookTicketPage() {
     return `${year}-${month}-${day}`;
   };
 
-  // const generateFormattedDates = (formatDate) => {
-  //   const dates = [];
-  //   const today = new Date();
-  //   for (let i = 0; i < 7; i++) {
-  //     const date = new Date(today);
-  //     date.setDate(today.getDate() + i);
-  //     dates.push(date);
-  //   }
-  //   return dates.map((date) => ({
-  //     date,
-  //     formattedDate: formatDate(date),
-  //   }));
-  // };
-
   const handleDayClick = (day) => {
     console.log("Day clicked:", day);
     const formattedDate = formatDate(day);
@@ -95,7 +56,6 @@ function BookTicketPage() {
   const isSelected = (date) => {
     const result =
       selectedDate && date.toDateString() === selectedDate.toDateString();
-    // console.log("isSelected:", date, selectedDate, result);
     return result;
   };
   const settings = {
@@ -130,59 +90,6 @@ function BookTicketPage() {
     return dates;
   };
 
-  const DateSlider = ({
-    settings,
-    getDates,
-    handleDayClick,
-    isSelected,
-    isToday,
-    formatDay,
-    formatDate,
-  }) => (
-    <div className="p-5 text-[18px]">
-      <div className="bg-[#351e21] px-12 py-4">
-        <Slider {...settings}>
-          {getDates().map((date, index) => (
-            <div key={index} className="px-1">
-              <button
-                onClick={() => {
-                  const formattedDate = handleDayClick(date);
-                  console.log(
-                    "Formatted Date outside function:",
-                    formattedDate
-                  );
-                }}
-                className={`w-full text-center p-2 ${
-                  isSelected(date) ? "bg-[#e9cd3e]" : ""
-                } hover:bg-[#2d3046] transition-colors duration-200 rounded-md`}
-              >
-                {/* Button content */}
-                {isToday(date) ? (
-                  <div className="text-[#ff2d2d] text-sm mb-1">Today</div>
-                ) : (
-                  <div
-                    className={`text-sm mb-1 ${
-                      isSelected(date) ? "text-white" : "text-gray-400"
-                    }`}
-                  >
-                    {formatDay(date)}
-                  </div>
-                )}
-                <div
-                  className={`text-lg font-semibold ${
-                    isSelected(date) ? "text-white" : "text-gray-300"
-                  }`}
-                >
-                  {formatDate(date)}
-                </div>
-              </button>
-            </div>
-          ))}
-        </Slider>
-      </div>
-    </div>
-  );
-
   const formatDateForCarousel = (date) => {
     return (
       date.getDate().toString().padStart(2, "0") +
@@ -214,6 +121,7 @@ function BookTicketPage() {
       const movieInfo = movieData.data.data[0];
       if (movieInfo) {
         setMovie(movieInfo);
+        console.log("movie info", movieInfo);
         // setMovieTitle(movieInfo.title);
       }
     } catch (error) {
@@ -236,7 +144,7 @@ function BookTicketPage() {
       className="bg-[#101525] w-full h-full "
       style={{ fontFamily: "Roboto Condensed" }}
     >
-      <div className="flex justify-center h-[258px] xs:h-[300px] md:h-[600px]">
+      <div className="flex bg-[#070C1B] justify-center h-[258px] xs:h-[280px] md:h-[600px]">
         <div
           className={`relative flex justify-center items-center w-full  ${
             movie ? "bg-no-repeat bg-center bg-cover max-sm:hidden" : ""
@@ -247,9 +155,7 @@ function BookTicketPage() {
               : "none",
           }}
           alt="bg at back"
-        >
-          {/* Your content here */}
-        </div>
+        ></div>
 
         {movie && (
           <section className="absolute  top-10 md:top-20 md:w-[80%] backdrop-blur-md bg-[#070C1B]/70 max-sm:backdrop-blur-none movie-detail my-8 md:m-10 text-white">
@@ -297,31 +203,37 @@ function BookTicketPage() {
       </div>
 
       {/* above this line is background and movie details */}
-      <div className="text-[18px]">
-        <div className="bg-[#070C1B] px-[16%] py-6 z-100">
+      <div className="bg-[#070C1B] px-[10%] py-[1%]  lg:py-[1%] text-[18px] max-xs:pb-5">
+        <div className="  mt-10 sm:mt-0 z-100">
           <Slider {...settings}>
             {getDates().map((date, index) => (
-              <div key={index} className="px-1">
+              <div key={index} className="">
                 <button
                   onClick={() => handleDayClick(date)}
-                  className={`w-full text-center p-2 ${
+                  className={`sm:w-[100%] md:w-[80%] text-center p-2 ${
                     isSelected(date) ? "bg-gray-100" : ""
                   } hover:bg-[#2d3046] transition-colors duration-200 rounded-md`}
                 >
                   {isToday(date) ? (
-                    <div className="text-[#b4b4b4] text-sm mb-1">Today</div>
+                    <div
+                      className={`text-[24px] mb-1  leading-[30px] ${
+                        isSelected(date) ? "text-white" : "text-gray-400"
+                      }`}
+                    >
+                      Today
+                    </div>
                   ) : (
                     <div
-                      className={`text-sm mb-1 ${
-                        isSelected(date) ? "text-white" : "text-gray-400"
+                      className={` mb-1 leading-[30px] text-[24px] ${
+                        isSelected(date) ? "text-white" : "text-gray-300"
                       }`}
                     >
                       {formatDay(date)}
                     </div>
                   )}
                   <div
-                    className={`text-lg font-semibold ${
-                      isSelected(date) ? "text-white" : "text-gray-300"
+                    className={`xs:text-[16px] flex flex-col items-center font-semibold ${
+                      isSelected(date) ? "text-gray-400" : "text-gray-200"
                     }`}
                   >
                     {formatDateForCarousel(date)}
@@ -334,7 +246,7 @@ function BookTicketPage() {
       </div>
       {/* above is the slider part */}
       <section className="bg-BG xs:pt-[24px] md:pt-[40px] xl:pt-[20px] md:pb-[80px] flex flex-col items-center">
-        <div className="container mx-auto pt-[2%]">
+        <div className="container mx-auto pt-[2%] ">
           <div className="flex flex-col md:flex-row p-2 md:justify-between pb-[3%] gap-5">
             <div className="flex items-center w-[100%] ">
               <div className="relative w-[100%]">
@@ -344,6 +256,7 @@ function BookTicketPage() {
                   onChange={(event) => {
                     setCitySearch("");
                     setCinemaSearch(event.target.value);
+                    console.log("cinema search", event.target.value);
                   }}
                   className="w-full h-12 rounded-md text-body2R bg-[#21263F] border-[#565F7E] text-gray-300 border px-3 pr-12 outline-none"
                   placeholder="Search cinema"
@@ -380,10 +293,7 @@ function BookTicketPage() {
               }
 
               return (
-                <div
-                  key={index}
-                  className="p-4 bg-gray-0 mb-4 rounded-lg shadow-md"
-                >
+                <div key={index} className=" rounded-lg shadow-md ">
                   <h3 className="text-lg font-bold">{item.movieTitle}</h3>
                   {item.cinemas.map((cinema, cinemaIndex) => {
                     if (
@@ -394,12 +304,12 @@ function BookTicketPage() {
                     }
 
                     return (
-                      <div key={cinemaIndex} className=" pb-5">
+                      <div key={cinemaIndex} className=" bg-gray-0 mb-5">
                         {" "}
                         <div className=" px-[16px] py-[24px] flex justify-between items-center gap-[20px]">
                           <div className="xs:grid xs:grid-cols-6 gap-2 xl:flex xl:items-center xl:gap-[20px]">
                             <i className="fa-solid fa-location-dot w-[44px] h-[44px] text-[#4E7BEE] rounded-[50%] bg-[#474e6e] flex justify-center items-center col-span-1"></i>
-                            <div className="text-[24px] text-[white] font-[700] leading-[30px] xs:col-span-5">
+                            <div className="text-[24px] text-[white] font-[700] leading-[30px] xs:col-span-5 ">
                               {cinema.cinema_name}
                             </div>
                             {cinema.movie_details.cinema_tags.map(
@@ -424,9 +334,9 @@ function BookTicketPage() {
                         </div>
                         <div>
                           {isOpen[cinemaIndex] && (
-                            <div className=" xs:flex xs:flex-col md:flex md:flex-row">
+                            <div className=" bg-gray-0 border-t-[1px] xs:flex xs:flex-col md:flex md:flex-row">
+                              {/* <div className="w-[100%] p-[40px] flex flex-col xs:gap-[40px] md:gap-[60px]"> */}
                               <div className="xs:w-[100%] w-[343px] p-[10px] md:p-[40px] flex flex-col xs:gap-[40px] gap-[60px]">
-                                {/* <div className="w-[100%] p-[40px] flex flex-col xs:gap-[40px] md:gap-[60px]"> */}
                                 {Object.keys(cinema.movie_details.schedule).map(
                                   (key, index_time) => (
                                     <div
@@ -505,7 +415,7 @@ function BookTicketPage() {
                                               <button
                                                 onClick={() =>
                                                   navigate(
-                                                    `/seat/${cinema.movie_details.movie_name}/${cinema.cinema_name}/${dateSearch}/${key}/${time}`
+                                                    `/seat/${cinema.movie_details.movie_name}/${cinema.cinema_name}/${dateSearch}/${key}/${time}#`
                                                   )
                                                 }
                                                 disabled={status}

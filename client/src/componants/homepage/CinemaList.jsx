@@ -1,14 +1,20 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 function CinemaList() {
   const [province, setProvince] = useState([]);
+  // const [cinemas, setCinemas] = useState([]);
   // const [searchProvince, setSearchProvince] = useState("");
-
+  const navigate = useNavigate();
   const getDataProvince = async () => {
     try {
       const response = await axios.get(`http://localhost:4000/city`);
       setProvince(response.data.data);
+      console.log("response,", response);
+      // const cinemaInfo = await axios.get(`http://localhost:4000/cinemas`);
+      // setCinemas(cinemaInfo.data.data);
+      // console.log("cinemainfo datata", cinemaInfo.data.data);
+      // console.log("cinemainfo datata", cinemaInfo.data.data[0].id);
     } catch (error) {
       console.log("Failed to fetch data", error);
     }
@@ -34,19 +40,24 @@ function CinemaList() {
                 {city.cinema.map((cinema, index) => (
                   <div
                     key={index}
-                    className="p-[16px] border-[#565F7E] border-[1px] flex items-center gap-[16px]"
+                    className="p-[16px] border-[#565F7E] border-[1px] flex items-center  gap-[16px]"
                   >
                     <div>
                       <i className="fa-solid fa-location-dot w-[52px] h-[52px] border-[#565F7E] border-[1px] rounded-[50%] bg-[#474e6e] flex justify-center items-center"></i>
                     </div>
-                    <div>
+                    <button
+                      className="flex flex-col items-start"
+                      onClick={() => {
+                        navigate(`/cinema/${cinema.cinema_id}`);
+                      }}
+                    >
                       <div className="text-[24px] text-[#ffffff]">
                         {cinema.name}
                       </div>
                       <div className="text-[16px] text-[#8B93B0]">
                         {cinema.address}
                       </div>
-                    </div>
+                    </button>
                   </div>
                 ))}
               </div>

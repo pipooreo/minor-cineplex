@@ -10,8 +10,10 @@ export async function getCityAll(req, res, next) {
        SELECT
       city.id,
       city.city_name,
+      
       json_agg(
       json_build_object(
+      'cinema_id', cinemas.id,
       'name', cinemas.name,
       'address', cinemas.address
       )) AS cinema
@@ -76,6 +78,7 @@ export async function getCinemasAll(req, res, next) {
     const results = await connectionPool.query(
       `
       select
+      cinemas.id,
         city.city_name,
         cinemas.name,
         cinemas.address
@@ -158,7 +161,7 @@ export async function getMoviesAll(req, res, next) {
 
 export async function getMoviesById(req, res, next) {
   try {
-    const movieSearch = req.query.movieSearch;
+    const { movieSearch } = req.query;
     // console.log("Search term:", movieSearch);
     const normalizedSearchTerm = movieSearch.replace(/-/g, " ");
     const results = await connectionPool.query(
@@ -193,6 +196,7 @@ export async function getMoviesById(req, res, next) {
       `,
       [`%${normalizedSearchTerm}%`]
     );
+    // console.log("results:", normalizedSearchTerm);
 
     if (results.rows.length === 0) {
       return res.status(404).json({
@@ -334,7 +338,7 @@ export async function getMoviesBySearchBar(req, res, next) {
       releasedDate,
       tags = [],
     } = req.query;
-    // const releasedDate = "2024-09-02";
+
     let params = [];
     let query = `
       WITH subquery AS (
@@ -352,12 +356,11 @@ export async function getMoviesBySearchBar(req, res, next) {
       )
       SELECT
           cinemas.name AS cinema_name,
-          
           movies.title AS movie_name,
           city.city_name AS city_name,
           array_agg(DISTINCT genres.genres_name) AS movie_genres,
           movies.language AS movie_language,
-          movies.image AS movie_Image,
+          movies.image AS movie_image,
           array_agg(DISTINCT tags.tag_name) AS cinema_tags,
           movies.theatrical_release,
           movies.out_of_theaters,
@@ -520,6 +523,7 @@ export async function getInfoForBookTicket(req, res, next) {
       moviesLanguage,
       moviesCity,
       releasedDate,
+      cinemaId,
       cinemaName,
     } = req.query;
     let params = [];
@@ -539,14 +543,16 @@ export async function getInfoForBookTicket(req, res, next) {
       )
       SELECT
           cinemas.name AS cinema_name,
+          cinemas.image AS cinema_image,
           movies.title AS movie_name,
           city.city_name AS city_name,
           array_agg(DISTINCT genres.genres_name) AS movie_genres,
           movies.language AS movie_language,
-          movies.image AS movie_Image,
+          movies.image AS movie_image,
           array_agg(DISTINCT tags.tag_name) AS cinema_tags,
           movies.theatrical_release,
           movies.out_of_theaters,
+          cinemas.description,
           jsonb_object_agg(subquery.hall_number, subquery.start_times) AS schedule
       FROM
           movies
@@ -596,10 +602,14 @@ export async function getInfoForBookTicket(req, res, next) {
       params.push(`%${moviesCity}%`);
     }
     if (releasedDate) {
-      query += ` AND TO_DATE($${
-        params.length + 1
-      }, 'YYYY-MM-DD') BETWEEN TO_DATE(movies.theatrical_release, 'YYYY-MM-DD') AND TO_DATE(movies.out_of_theaters, 'YYYY-MM-DD')`;
+      query += ` AND TO_DATE($${params.length + 1}, 'YYYY-MM-DD') 
+                 BETWEEN TO_DATE(movies.theatrical_release, 'YYYY-MM-DD') 
+                 AND TO_DATE(movies.out_of_theaters, 'YYYY-MM-DD')`;
       params.push(releasedDate);
+    }
+    if (cinemaId) {
+      query += ` AND cinemas.id = $${params.length + 1}`;
+      params.push(cinemaId);
     }
     if (cinemaName) {
       query += ` AND LOWER(cinemas.name) LIKE LOWER($${params.length + 1})`;
@@ -609,12 +619,14 @@ export async function getInfoForBookTicket(req, res, next) {
     query += `
       GROUP BY 
         cinemas.name,
+        cinemas.image,
         movies.title,
         city.city_name,
         movies.language,
         movies.image,
         movies.theatrical_release,
-        movies.out_of_theaters
+        movies.out_of_theaters,
+        cinemas.description
       ORDER BY 
         cinemas.name;`;
 
@@ -631,13 +643,20 @@ export async function getInfoForBookTicket(req, res, next) {
       const {
         city_name,
         cinema_name,
+        cinema_image, // Make sure cinema_image is used here
         cinema_tags,
+        description,
         movie_genres,
         ...movieDetails
       } = row;
 
       const cinemaInfo = {
         cinema_name,
+        cinema_image,
+        description,
+        cinema_tags: Array.isArray(cinema_tags)
+          ? cinema_tags.map((tag) => tag.trim())
+          : [],
         movie_details: {
           ...movieDetails,
           cinema_tags: Array.isArray(cinema_tags)

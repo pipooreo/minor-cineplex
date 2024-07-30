@@ -24,11 +24,12 @@ function MoviePage() {
     getTitleMovie();
     getCommentMovie();
   }, []);
+
   return (
     <div className="bg-BG relative" style={{ fontFamily: "Roboto Condensed" }}>
       <div className="absolute  w-full h-[500px] hidden sm:block">
         <div
-          className=" bg-center bg-no-repeat w-full h-full bg-cover"
+          className=" bg-no-repeat w-full h-full bg-center bg-cover"
           style={{
             backgroundImage: `linear-gradient(360deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 100%), url('${
               movie && movie.image
