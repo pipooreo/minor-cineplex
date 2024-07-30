@@ -8,22 +8,18 @@ function MoviePage() {
   const [movie, setMovie] = useState();
   const params = useParams();
   async function getTitleMovie() {
-    // console.log(params);
     let movieData = await axios.get(
       `http://localhost:4000/movies/movie?movieSearch=${params.title}`
     );
     setMovie(movieData.data.data[0]);
   }
   async function getCommentMovie() {
-    // console.log(params);
     let commentsData = await axios.get(
       `http://localhost:4000/comments/moviesComment?movieName=${params.title}`
     );
-    // console.log(comments.data.data);
     setComents(commentsData.data.data);
   }
-  // console.log(movie);
-  // console.log(comments);
+
   useEffect(() => {
     getTitleMovie();
     getCommentMovie();
@@ -32,7 +28,7 @@ function MoviePage() {
     <div className="bg-BG relative" style={{ fontFamily: "Roboto Condensed" }}>
       <div className="absolute  w-full h-[500px] hidden sm:block">
         <div
-          className=" bg-top bg-no-repeat w-full h-full bg-[length:110%_800px]"
+          className=" bg-center bg-no-repeat w-full h-full bg-cover"
           style={{
             backgroundImage: `linear-gradient(360deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 100%), url('${
               movie && movie.image

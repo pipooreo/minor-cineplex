@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSearch } from "../contexts/SearchContext";
 import { formatDate } from "../contexts/SearchContext";
 import * as React from "react";
@@ -22,18 +22,9 @@ function SearchResultPage() {
     getDataSearch,
   } = useSearch();
 
+  const dateRef = React.useRef();
   const [isOpen, setIsOpen] = useState([]);
-  // const location = useLocation();
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const params = new URLSearchParams(location.search);
-  //   setCitySearch(params.get("city") || "");
-  //   setTitleSearch(params.get("title") || "");
-  //   setLanguageSearch(params.get("language") || "");
-  //   setGenreSearch(params.get("genre") || "");
-  //   setDateSearch(params.get("date") || formatDate(new Date()));
-  // }, [location.search]);
 
   useEffect(() => {
     getDataSearch();
@@ -50,6 +41,14 @@ function SearchResultPage() {
       getDataSearch();
     }
   }, [citySearch, titleSearch, languageSearch, genreSearch, dateSearch]);
+
+  useEffect(() => {
+    if (dateRef.current) {
+      dateRef.current.value = dateSearch;
+      console.log(dateRef.current.value);
+      console.log(dateSearch);
+    }
+  }, [dateSearch]);
 
   useEffect(() => {
     if (search.length > 0) {
@@ -76,6 +75,8 @@ function SearchResultPage() {
       return newIsOpen;
     });
   };
+
+  console.log("title", titleSearch);
   return (
     <div style={{ fontFamily: "Roboto Condensed" }}>
       <section className="bg-gray-0 pt-[120px] pb-[40px] flex flex-col items-center gap-[24px]">
@@ -141,8 +142,7 @@ function SearchResultPage() {
             </select>
 
             <input
-              value={dateSearch}
-              onChange={(event) => setDateSearch(event.target.value)}
+              ref={dateRef}
               className={`col-span-1 xl:w-[20%] h-[48px] rounded-[4px] bg-[#21263F] border-[1px] p-[12px] text-body1R outline-none ${
                 dateSearch ? "text-white" : "text-gray-300 border-[#565F7E]"
               }`}
@@ -153,7 +153,11 @@ function SearchResultPage() {
           </div>
           <div className="flex items-center gap-[24px]">
             <button
-              onClick={getDataSearch}
+              onClick={() => {
+                setDateSearch(dateRef?.current?.value);
+                console.log(dateRef?.current?.value);
+                getDataSearch();
+              }}
               className="w-[72px] h-[48px] bg-[#4E7BEE] rounded-[4px] active:w-[71.5px] active:h-[47.5px]"
             >
               <i className="fa-solid fa-magnifying-glass"></i>
