@@ -138,25 +138,27 @@ function SeatSelectorPage() {
 
         <div className=" bg-BG h-full flex justify-center xl:p-[80px_120px] p-[80px_40px] xl:gap-[102px] gap-[28px] max-lg:items-center max-md:flex-col max-lg:p-[40px_1rem] max-lg:flex-col max-lg:gap-[40px] max-md:justify-start max-md:items-center">
           <div className=" flex flex-col lg:w-[793px]  gap-[60px] w-full md:w-[710px]">
-            <div className="rounded-[80px_80px_0px_0px] bg-gradient-to-r from-[#2C344E] to-[#516199] text-center h-[44px] pt-[8px] font-bold text-gray-400">
+            <div className="rounded-[80px_80px_0px_0px] bg-gradient-to-r from-[#2C344E] to-[#516199] text-center text-body1M h-[44px] pt-[8px] font-bold text-gray-400">
               screen
             </div>
             <div className="flex flex-col xl:gap-[30px] md:gap-[20px] gap-[10px]">
               {["E", "D", "C", "B", "A"].map((rowLabel, rowIndex) => (
                 <div key={rowLabel} className="flex justify-between gap-[20%]">
-                  {/* <div className="flex xl:gap-[24px]  items-center gap-[10px] max-xl:gap-[10px] max-[1400px]:gap-[10px]"> */}
                   <div className="flex justify-between w-full">
-                    <p className="w-[15px] text-gray-300">{rowLabel}</p>
+                    <p className="w-[15px] text-gray-300 text-body1M">
+                      {rowLabel}
+                    </p>
                     {Array.from({ length: 5 }).map((_, i) =>
                       SeatButton(i + rowIndex * 5)
                     )}
                   </div>
                   <div className="flex justify-between w-full">
-                    {/* <div className="flex xl:gap-[24px] items-center gap-[10px] max-xl:gap-[10px] max-[1400px]:gap-[10px]"> */}
                     {Array.from({ length: 5 }).map((_, i) =>
                       SeatButton(i + rowIndex * 5 + 25)
                     )}
-                    <p className="w-[15px] text-gray-300">{rowLabel}</p>
+                    <p className="w-[15px] text-gray-300 text-body1M">
+                      {rowLabel}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -171,29 +173,32 @@ function SeatSelectorPage() {
                     src="https://res.cloudinary.com/diah9m6gw/image/upload/v1721105746/Seat_icon_jfb7fn.png"
                     className="w-[40px] h-[40px]"
                   />
-                  <p className="text-gray-400">Available Seat THB150</p>
+                  <div>
+                    <p className="text-gray-400 text-body1R">Available Seat</p>
+                    <p className="text-gray-400 text-body1R">THB150</p>
+                  </div>
                 </div>
                 <div className="flex gap-[16px] p-2 items-center">
                   <img
                     src="https://res.cloudinary.com/diah9m6gw/image/upload/v1721105998/Seat_icon_1_gpwdvp.png"
                     className="w-[40px] h-[40px]"
                   />
-                  <p className="text-gray-400">Booked Seat</p>
+                  <p className="text-gray-400 text-body1R">Booked Seat</p>
                 </div>
               </div>
             </div>
           </div>
-          <div className="max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
+          <div className="max-md:w-[375px] max-lg:w-[100%] xl:[350px]">
             <div className="flex flex-col w-[320px] text-white px-[16px] pb-[24px] pt-[16px] gap-[24px] bg-gray-0 rounded-[8px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
               {movie && (
-                <div className=" flex items-center gap-[12px]">
+                <div className=" flex  gap-[12px] items-end">
                   <img
                     className="w-[82.21px] h-[120px] rounded-[4px]"
                     src={movie.movie_image}
                   />
                   <div className="flex flex-col gap-[8px]">
                     <div className="font-bold text-[20px] ">{movie.title}</div>
-                    <div className="flex  gap-[8px] flex-wrap">
+                    <div className="flex  gap-[8px]">
                       {movie.movie_genres.map((item, index) => (
                         <div
                           className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-300"
@@ -234,11 +239,11 @@ function SeatSelectorPage() {
               <div className="flex flex-col p-[16px] mt-[-10px] bg-gray-0 max-h-full rounded-[8px] gap-[16px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
                 <div className="flex justify-between">
                   <p className="text-gray-400">Selected Seat</p>
-                  <div className="flex gap-[5px] flex-wrap w-[40%] justify-end">
+                  <div className="gap-[5px] grid grid-cols-4">
                     {getSeatNumber(seatStatuses).map((seatNumber, index) => (
                       <p
                         key={index}
-                        className="p-[1px_2px] bg-blue-100 text-white rounded-[4px]"
+                        className="p-[1px_2px] bg-blue-100 text-white text-center  rounded-[4px]"
                       >
                         {seatNumber}
                       </p>
