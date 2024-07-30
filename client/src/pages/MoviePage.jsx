@@ -24,8 +24,6 @@ function MoviePage() {
     getTitleMovie();
     getCommentMovie();
   }, []);
-
-
   return (
     <div className="bg-BG relative" style={{ fontFamily: "Roboto Condensed" }}>
       <div className="absolute  w-full h-[500px] hidden sm:block">
