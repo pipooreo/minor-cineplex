@@ -114,6 +114,27 @@ function SeatSelectorPage() {
   ).length;
   const totalPrice = reservedSeatsCount * seatPrice;
 
+  const renderSelectedSeats = () => {
+    const seatNumbers = getSeatNumber(seatStatuses);
+    const rows = seatNumbers.reduce((rows, seatNumber, index) => {
+      if (index % 4 === 0) rows.push([]);
+      rows[rows.length - 1].push(seatNumber);
+      return rows;
+    }, []);
+
+    return (
+      <div className="flex flex-col items-end gap-1">
+        {rows.map((row, rowIndex) => (
+          <div key={rowIndex} className="flex gap-1">
+            <span className="inline-block p-[1px_6px] bg-blue-500 text-white text-center rounded-[4px] text-sm">
+              {row.join(", ")}
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <section className=" w-full h-screen absolute">
       <div className="bg-BG">
@@ -245,15 +266,8 @@ function SeatSelectorPage() {
               <div className="flex flex-col p-[16px] mt-[-10px] bg-gray-0 max-h-full rounded-[8px] gap-[16px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
                 <div className="flex justify-between">
                   <p className="text-gray-400">Selected Seat</p>
-                  <div className="gap-[5px] grid grid-cols-4">
-                    {getSeatNumber(seatStatuses).map((seatNumber, index) => (
-                      <p
-                        key={index}
-                        className="p-[1px_2px] bg-blue-100 text-white text-center  rounded-[4px]"
-                      >
-                        {seatNumber}
-                      </p>
-                    ))}
+                  <div className="flex flex-col gap-[10px]">
+                    {renderSelectedSeats()}
                   </div>
                 </div>
                 <div className="flex justify-between">

@@ -66,112 +66,109 @@ function UserProfilePage() {
   }, []);
 
   return (
-    <div className="w-full bg-BG absolute">
-      <section className="w-full bg-BG absolute">
-        <div className="h-[80px] bg-BG max-md:h-[48px]"></div>
-        <div className="flex justify-start gap-[48px] p-[60px_222px]">
-          <div className="flex flex-col bg-gray-0 w-[257px] h-[224px] p-[16px_16px_24px_16px] gap-[8px] rounded-[8px] shadow-[4px_4px_30px_0px_rgba(0,0,0,0.5)]">
-            {isHistory === "history" ? (
-              <button
-                className="p-[16px] rounded-[4px] text-gray-400 flex items-center gap-[12px] bg-gray-100 hover:bg-gray-100"
-                onClick={() => {
-                  setIsProfile(false);
-                  setIsHistory("history");
-                  setIsResetPassword(false);
-                  navigate("/profile", { state: { viewType: "history" } });
-                }}
-              >
-                <FaRegUser />
-                <p>Booking history</p>
-              </button>
-            ) : (
-              <button
-                className="p-[16px] rounded-[4px] text-gray-400 flex items-center gap-[12px] hover:bg-gray-100"
-                onClick={() => {
-                  setIsProfile(false);
-                  setIsHistory("history");
-                  setIsResetPassword(false);
-                  navigate("/profile", { state: { viewType: "history" } });
-                }}
-              >
-                <FaRegUser />
-                <p>Booking history</p>
-              </button>
-            )}
-            {isProfile === "profile" ? (
-              <button
-                className="p-[16px] rounded-[4px] text-gray-400 flex items-center gap-[12px] bg-gray-100  hover:bg-gray-100"
-                onClick={() => {
-                  setIsProfile("profile");
-                  setIsHistory(false);
-                  setIsResetPassword(false);
-                  navigate("/profile", { state: { viewType: "profile" } });
-                }}
-              >
-                <FaRegUser />
-                <p>Profile</p>
-              </button>
-            ) : (
-              <button
-                className="p-[16px] rounded-[4px] text-gray-400 flex items-center gap-[12px]  hover:bg-gray-100"
-                onClick={() => {
-                  setIsProfile("profile");
-                  setIsHistory(false);
-                  setIsResetPassword(false);
-                  navigate("/profile", { state: { viewType: "profile" } });
-                }}
-              >
-                <FaRegUser />
-                <p>Profile</p>
-              </button>
-            )}
-            {isResetPassword === "resetPassword" ? (
-              <button
-                className="p-[16px] rounded-[4px] text-gray-400 flex items-center gap-[12px] bg-gray-100 hover:bg-gray-100"
-                onClick={() => {
-                  setIsProfile(false);
-                  setIsHistory(false);
-                  setIsResetPassword("resetPassword");
-                  navigate("/profile", {
-                    state: { viewType: "resetPassword" },
-                  });
-                }}
-              >
-                <FaRegUser />
-                <p>Reset password</p>
-              </button>
-            ) : (
-              <button
-                className="p-[16px] rounded-[4px] text-gray-400 flex items-center gap-[12px]  hover:bg-gray-100"
-                onClick={() => {
-                  setIsProfile(false);
-                  setIsHistory(false);
-                  setIsResetPassword("resetPassword");
-                  navigate("/profile", {
-                    state: { viewType: "resetPassword" },
-                  });
-                }}
-              >
-                <FaRegUser />
-                <p>Reset password</p>
-              </button>
-            )}
-          </div>
-          {isProfile === "profile" && userProfile ? (
-            <ProfileForm user={userProfile} />
-          ) : isResetPassword === "resetPassword" ? (
-            <UpdatePassword user={userProfile} />
+    <section className="w-full h-screen bg-BG absolute">
+      <div className="h-[80px] bg-BG max-md:h-[48px]"></div>
+      <div className="flex justify-start gap-[48px] xl:p-[60px_222px] md:p-[60px_5%]">
+        <div className="flex flex-col bg-gray-0 w-[257px] h-[224px] p-[16px_16px_24px_16px] gap-[8px] rounded-[8px] shadow-[4px_4px_30px_0px_rgba(0,0,0,0.5)]">
+          {isHistory === "history" ? (
+            <button
+              className="p-[16px] rounded-[4px] text-gray-400 flex items-center gap-[12px] bg-gray-100 hover:bg-gray-100"
+              onClick={() => {
+                setIsProfile(false);
+                setIsHistory("history");
+                setIsResetPassword(false);
+                navigate("/profile", { state: { viewType: "history" } });
+              }}
+            >
+              <FaRegUser />
+              <p>Booking history</p>
+            </button>
           ) : (
-            <BookingHistory
-              user={history}
-              review={myReview}
-              profile={userProfile}
-            />
+            <button
+              className="p-[16px] rounded-[4px] text-gray-400 flex items-center gap-[12px] hover:bg-gray-100"
+              onClick={() => {
+                setIsProfile(false);
+                setIsHistory("history");
+                setIsResetPassword(false);
+                navigate("/profile", { state: { viewType: "history" } });
+              }}
+            >
+              <FaRegUser />
+              <p>Booking history</p>
+            </button>
+          )}
+          {isProfile === "profile" ? (
+            <button
+              className="p-[16px] rounded-[4px] text-gray-400 flex items-center gap-[12px] bg-gray-100  hover:bg-gray-100"
+              onClick={() => {
+                setIsProfile("profile");
+                setIsHistory(false);
+                setIsResetPassword(false);
+                navigate("/profile", { state: { viewType: "profile" } });
+              }}
+            >
+              <FaRegUser />
+              <p>Profile</p>
+            </button>
+          ) : (
+            <button
+              className="p-[16px] rounded-[4px] text-gray-400 flex items-center gap-[12px]  hover:bg-gray-100"
+              onClick={() => {
+                setIsProfile("profile");
+                setIsHistory(false);
+                setIsResetPassword(false);
+                navigate("/profile", { state: { viewType: "profile" } });
+              }}
+            >
+              <FaRegUser />
+              <p>Profile</p>
+            </button>
+          )}
+          {isResetPassword === "resetPassword" ? (
+            <button
+              className="p-[16px] rounded-[4px] text-gray-400 flex items-center gap-[12px] bg-gray-100 hover:bg-gray-100"
+              onClick={() => {
+                setIsProfile(false);
+                setIsHistory(false);
+                setIsResetPassword("resetPassword");
+                navigate("/profile", {
+                  state: { viewType: "resetPassword" },
+                });
+              }}
+            >
+              <FaRegUser />
+              <p>Reset password</p>
+            </button>
+          ) : (
+            <button
+              className="p-[16px] rounded-[4px] text-gray-400 flex items-center gap-[12px]  hover:bg-gray-100"
+              onClick={() => {
+                setIsProfile(false);
+                setIsHistory(false);
+                setIsResetPassword("resetPassword");
+                navigate("/profile", {
+                  state: { viewType: "resetPassword" },
+                });
+              }}
+            >
+              <FaRegUser />
+              <p>Reset password</p>
+            </button>
           )}
         </div>
-      </section>
-      <section className="bg-BG h-screen "></section>
-    </div>
+        {isProfile === "profile" && userProfile ? (
+          <ProfileForm user={userProfile} />
+        ) : isResetPassword === "resetPassword" ? (
+          <UpdatePassword user={userProfile} />
+        ) : (
+          <BookingHistory
+            user={history}
+            review={myReview}
+            profile={userProfile}
+          />
+        )}
+      </div>
+    </section>
   );
 }
 
