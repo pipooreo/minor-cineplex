@@ -246,7 +246,7 @@ export async function BookingHistory(req, res) {
   let result;
   try {
     result = await connectionPool.query(
-      `select select_date::text,cinemas.name as cinema_name, movies.title as title, movies.image, halls.hall_number, screentime.time, payment_status, array_agg(seat_number.seat_num) as seats, users.name from booking
+      `select select_date::text,cinemas.name as cinema_name, movies.title as title, movies.image, halls.hall_number, screentime.time, payment_status, payment_method,array_agg(seat_number.seat_num) as seats, users.name from booking
         inner join movies on movies.id = booking.movie_id
         inner join cinemas on cinemas.id = booking.cinema_id
         inner join halls on halls.id = booking.hall_id
@@ -254,7 +254,8 @@ export async function BookingHistory(req, res) {
         inner join screentime on screentime.id = booking.time_id
         inner join users on users.id = booking.user_id
         where users.id = $1
-        group by select_date,cinemas.name, movies.title, halls.hall_number, screentime.time, payment_status, users.name, movies.image`,
+        group by select_date,cinemas.name, movies.title, halls.hall_number, screentime.time, payment_status, users.name, payment_method,movies.image
+        order by select_date desc`,
       [userId]
       // [user, cinema, movie, select_date, time, hall, seat]
     );
