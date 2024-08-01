@@ -91,7 +91,7 @@ export default function PaymentTest() {
 
         const response = await axios.post("http://localhost:4000/payment", {
           amount,
-          id,
+          paymentMethodId: id,
           name,
           email,
         });
