@@ -1,6 +1,5 @@
 import Stripe from "stripe";
 import connectionPool from "../utils/db.mjs";
-import { dataSeat } from "./booking.controller.mjs";
 
 const stripe = Stripe(process.env.STRIPE_SECRET_TEST);
 
