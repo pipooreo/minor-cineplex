@@ -74,7 +74,7 @@ function BookingHistory(props) {
   };
 
   return (
-    <div className="flex flex-col gap-[24px]">
+    <div className="flex flex-col gap-[24px] px-[5%]">
       <h1 className="text-[36px] text-white font-bold">Booking history</h1>
       {history?.map((movie, index) => {
         const reviewExists = myReview.some(
@@ -124,15 +124,23 @@ function BookingHistory(props) {
                 </div>
               </div>
             </div>
-
-            <div className="flex justify-between p-[16px] mt-[-10px] bg-gray-0 max-h-full rounded-[8px] gap-[16px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
+            <div className="flex justify-between border-t-2 border-gray-100 p-[16px] mt-[-10px] bg-gray-0 max-h-full rounded-b-[8px] gap-[16px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
               <div className="flex gap-[24px]">
                 <div className="bg-gray-100 p-[12px_16px] rounded-[4px] text-gray-400 font-bold">
                   {movie.seats.length} Ticket
                 </div>
                 <div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between gap-2 w-[172px]">
                     <p className="text-gray-300 text-[14px]">Selected Seat</p>
+                    <div className="flex flex-col gap-[4px]">
+                      {movie.seats.map((seat, index) => (
+                        <div key={index} className="text-gray-400 text-[14px]">
+                          {seat}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* 
                     <div className="flex gap-[5px] flex-wrap justify-end">
                       {movie.seats.map((seat, index) => {
                         return (
@@ -144,7 +152,7 @@ function BookingHistory(props) {
                           </div>
                         );
                       })}
-                    </div>
+                    </div> */}
                   </div>
                   <div className="flex justify-between gap-[20px]">
                     <p className="text-gray-300 text-[14px]">Payment method</p>

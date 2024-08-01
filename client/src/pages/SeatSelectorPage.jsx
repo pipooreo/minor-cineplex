@@ -56,6 +56,7 @@ function SeatSelectorPage() {
       hall: movie.hall_number,
       seats: getSeat(seatStatuses),
     };
+
     try {
       await axios.post(`${import.meta.env.VITE_SERVER_URL}/booking`, data);
     } catch (err) {}
