@@ -178,6 +178,8 @@ export async function updateBooking(req, res, next) {
       result = await connectionPool.query(
         `UPDATE booking
        SET status = 'booked',
+        payment_method = 'credit card',
+        payment_status = 'success', 
         updated_at = CURRENT_TIMESTAMP
        WHERE user_id = $1
          AND cinema_id = (SELECT id FROM cinemas WHERE name = $2)
@@ -185,7 +187,7 @@ export async function updateBooking(req, res, next) {
          AND select_date = $4::date
          AND time_id = (SELECT id FROM screentime WHERE time = $5)
          AND hall_id = (SELECT id FROM halls WHERE hall_number = $6)
-         AND seat_id = $7`,
+          AND seat_id = (SELECT id FROM seat_number WHERE seat_num = $7)`,
         [user, cinema, movie, select_date, time, hall, seat]
       );
     }
@@ -219,7 +221,7 @@ export async function deleteBooking(req, res, next) {
          AND select_date = $4::date
          AND time_id = (SELECT id FROM screentime WHERE time = $5)
          AND hall_id = (SELECT id FROM halls WHERE hall_number = $6)
-         AND seat_id = $7`,
+          AND seat_id = (SELECT id FROM seat_number WHERE seat_num = $7)`,
         [user, cinema, movie, select_date, time, hall, seat]
       );
     }
