@@ -276,11 +276,13 @@ function NavbarUser() {
             <nav className="flex flex-col justify-center items-center">
               <ul className="w-full flex flex-col gap-6">
                 <li className="flex justify-start items-center gap-4 active:text-gray-300">
-                  {user.image ? (
-                    <Avatar alt={user.name} src={user.image} />
-                  ) : (
-                    <Avatar {...stringAvatar(user.name)} />
-                  )}
+                  {userProfile ? (
+                    <Avatar
+                      alt={userProfile && userProfile.name}
+                      src={userProfile && userProfile.image}
+                    />
+                  ) : // <Avatar {...stringAvatar(userProfile.name)} />
+                  null}
                   <div>{user.name}</div>
                 </li>
                 <li className="flex justify-start items-center gap-4 active:text-gray-300">

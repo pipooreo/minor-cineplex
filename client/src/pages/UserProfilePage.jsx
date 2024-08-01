@@ -4,18 +4,20 @@ import ProfileForm from "../componants/userpage/ProfileForm";
 import UpdatePassword from "../componants/userpage/UpdatePassword";
 import BookingHistory from "../componants/userpage/BookingHistory";
 import { jwtDecode } from "jwt-decode";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function UserProfilePage() {
   const location = useLocation();
   const { viewType } = location.state || {};
+  const navigate = useNavigate();
   // console.log(viewType);
   const [isProfile, setIsProfile] = useState(viewType);
   const [isHistory, setIsHistory] = useState(viewType);
   const [isResetPassword, setIsResetPassword] = useState(viewType);
   const [userProfile, setUserProfile] = useState();
   const [history, setHistory] = useState([]);
+  const [myReview, setMyReview] = useState([]);
 
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
@@ -41,9 +43,20 @@ function UserProfilePage() {
     } catch (error) {}
   }
 
+  async function getReview() {
+    try {
+      const result = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/comments/${user.id}`
+      );
+      setMyReview(result.data.data);
+      // console.log(myReview);
+    } catch (error) {}
+  }
+
   useEffect(() => {
     getUser();
     getHistory();
+    getReview();
   }, []);
 
   return (
@@ -59,6 +72,7 @@ function UserProfilePage() {
                   setIsProfile(false);
                   setIsHistory("history");
                   setIsResetPassword(false);
+                  navigate("/profile", { state: { viewType: "history" } });
                 }}
               >
                 <FaRegUser />
@@ -71,6 +85,7 @@ function UserProfilePage() {
                   setIsProfile(false);
                   setIsHistory("history");
                   setIsResetPassword(false);
+                  navigate("/profile", { state: { viewType: "history" } });
                 }}
               >
                 <FaRegUser />
@@ -84,6 +99,7 @@ function UserProfilePage() {
                   setIsProfile("profile");
                   setIsHistory(false);
                   setIsResetPassword(false);
+                  navigate("/profile", { state: { viewType: "profile" } });
                 }}
               >
                 <FaRegUser />
@@ -96,6 +112,7 @@ function UserProfilePage() {
                   setIsProfile("profile");
                   setIsHistory(false);
                   setIsResetPassword(false);
+                  navigate("/profile", { state: { viewType: "profile" } });
                 }}
               >
                 <FaRegUser />
@@ -109,6 +126,9 @@ function UserProfilePage() {
                   setIsProfile(false);
                   setIsHistory(false);
                   setIsResetPassword("resetPassword");
+                  navigate("/profile", {
+                    state: { viewType: "resetPassword" },
+                  });
                 }}
               >
                 <FaRegUser />
@@ -121,6 +141,9 @@ function UserProfilePage() {
                   setIsProfile(false);
                   setIsHistory(false);
                   setIsResetPassword("resetPassword");
+                  navigate("/profile", {
+                    state: { viewType: "resetPassword" },
+                  });
                 }}
               >
                 <FaRegUser />
@@ -133,7 +156,11 @@ function UserProfilePage() {
           ) : isResetPassword === "resetPassword" ? (
             <UpdatePassword user={userProfile} />
           ) : (
-            <BookingHistory user={history} />
+            <BookingHistory
+              user={history}
+              review={myReview}
+              profile={userProfile}
+            />
           )}
         </div>
       </section>

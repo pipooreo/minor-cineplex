@@ -3,18 +3,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 function CinemaList() {
   const [province, setProvince] = useState([]);
-  // const [cinemas, setCinemas] = useState([]);
-  // const [searchProvince, setSearchProvince] = useState("");
   const navigate = useNavigate();
   const getDataProvince = async () => {
     try {
       const response = await axios.get(`http://localhost:4000/city`);
       setProvince(response.data.data);
-      console.log("response,", response);
-      // const cinemaInfo = await axios.get(`http://localhost:4000/cinemas`);
-      // setCinemas(cinemaInfo.data.data);
-      // console.log("cinemainfo datata", cinemaInfo.data.data);
-      // console.log("cinemainfo datata", cinemaInfo.data.data[0].id);
     } catch (error) {
       console.log("Failed to fetch data", error);
     }

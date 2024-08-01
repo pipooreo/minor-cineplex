@@ -124,14 +124,16 @@ function MoviePage() {
                   <div className="flex gap-[10px]">
                     <img
                       className="w-[44px] h-[44px] bg-white rounded-full"
-                      src=""
-                      alt=""
+                      src={comment.image}
+                      alt={comment.name}
                     />
                     <div>
                       <h3 className="text-body1M text-gray-400">
                         {comment.name}
                       </h3>
-                      <p className="text-body2R text-gray-300">24 Jun 2024</p>
+                      <p className="text-body2R text-gray-300">
+                        {comment.post_date}
+                      </p>
                     </div>
                   </div>
                   <div className="flex gap-1 md:gap-3">
