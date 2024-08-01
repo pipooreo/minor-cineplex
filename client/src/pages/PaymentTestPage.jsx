@@ -10,19 +10,34 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function PaymentTest() {
   const [success, setSuccess] = useState(false);
   const [movie, setMovie] = useState();
+  const [cardOwner, setCardOwner] = useState("");
 
   const stripe = useStripe();
   const elements = useElements();
   const params = useParams();
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
+  const navigate = useNavigate();
+
+  const Options = {
+    style: {
+      base: {
+        color: "white",
+        backgroundColor: "#21263F",
+      },
+      invalid: {
+        color: "#fa755a",
+      },
+    },
+  };
 
   async function getMovie() {
-    console.log(params);
+    // console.log(params);
 
     let movieData = await axios.get(
       `${import.meta.env.VITE_SERVER_URL}/payment?cinema=${
@@ -31,7 +46,7 @@ export default function PaymentTest() {
         params.time
       }&select_date=${params.date}&users_id=${user.id}`
     );
-    // console.log(movieData.data.data);
+    // console.log("Datakub: ", movieData.data.data);
     setMovie(movieData.data.data);
   }
 
@@ -54,20 +69,46 @@ export default function PaymentTest() {
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: "card",
       card: cardNumberElement,
+      // billing_details: {
+      //   name,
+      //   email,
+      // },
     });
-    console.log(paymentMethod);
+    // console.log(paymentMethod);
 
     if (!error) {
       try {
         const { id } = paymentMethod;
+        const amount = movie[0].seat_number.length * 150 * 100;
+        const name = cardOwner;
+        const email = movie[0].email;
+
         const response = await axios.post("http://localhost:4000/payment", {
           amount,
           id,
+          name,
+          email,
         });
+        // console.log(response);
 
         if (response.data.success) {
+          const update_payment = await axios.put(
+            "http://localhost:4000/payment",
+            {
+              user: user.id,
+              cinema: params.cinema,
+              movie: params.title,
+              select_date: params.date,
+              time: params.time,
+              hall: params.hall,
+              seats: movie[0].seat_number,
+            }
+          );
+          console.log(update_payment);
           console.log("Success Payment");
           setSuccess(true);
+
+          navigate("/payment/success");
         }
       } catch (error) {
         console.log("Erorr", error);
@@ -106,35 +147,41 @@ export default function PaymentTest() {
               <hr className="w-[287px] absolute mb-[20px] border-gray-100 max-md:w-[176px]" />
             </header>
           </div>
-          <fieldset className="border-[3px] border-red bg-gray-100 p-10 flex">
-            <div className="flex flex-col">
+          <fieldset className="border-[3px] border-red bg-BG p-[80px_120px_80px_120px] flex justify-between gap-[102px]">
+            <div className="border-[1px] w-[75%] bg-BG text-white flex flex-col gap-[40px]">
               <div className="flex gap-[16px]">
                 <button className="text-white">Credit card</button>
                 <button className="text-white">QR Code</button>
               </div>
-              <div className="bg-gray-400 w-[793px] grid grid-cols-2 gap-[40px]">
-                <div>
+              <div className="grid grid-cols-2 gap-[40px]">
+                <div className="flex flex-col gap-[4px]">
                   <label>Card Number</label>
-                  <CardNumberElement />
+                  <CardNumberElement options={Options} />
                 </div>
                 <div className="flex flex-col">
                   <label>Card Owner</label>
-                  <input type="text" placeholder="Name on Card" />
+                  <input
+                    className="text-[black]"
+                    value={cardOwner}
+                    onChange={(e) => setCardOwner(e.target.value)}
+                    type="text"
+                    placeholder="Name on Card"
+                  />
                 </div>
                 <div>
                   <label>Expiration Date</label>
-                  <CardExpiryElement />
+                  <CardExpiryElement options={Options} />
                 </div>
                 <div>
                   <label>CVC</label>
-                  <CardCvcElement />
+                  <CardCvcElement options={Options} />
                 </div>
               </div>
             </div>
 
-            {/* ส่วนของงการโชว์ข้อมูลที่จองหนัง */}
-            <div className="max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
-              <div className="flex flex-col w-[320px] text-white pr-[16px] pb-[24px] pt-[16px] gap-[24px] bg-gray-0 h-[304px] rounded-t-[8px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
+            {/* ส่วนของการโชว์ข้อมูลที่จองหนัง */}
+            <div className="border-[pink] border-[1px] w-[25%]">
+              <div className="flex flex-col text-white p-[16px_16px_24px_16px] gap-[24px] bg-gray-0 rounded-t-[8px]">
                 {movie && (
                   <div className=" flex items-center gap-[12px]">
                     <img
@@ -145,9 +192,17 @@ export default function PaymentTest() {
                       <div className="font-bold text-[20px] ">
                         {movie[0].title}
                       </div>
-                      <div className="flex  gap-[8px] flex-wrap">
+                      <div className="flex gap-[8px] flex-wrap">
+                        {movie[0].genres.map((genres, index_genres) => (
+                          <div
+                            className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-300"
+                            key={index_genres}
+                          >
+                            {genres}
+                          </div>
+                        ))}
                         <div className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-400 font-medium">
-                          {movie.language}
+                          {movie[0].language}
                         </div>
                       </div>
                     </div>
@@ -200,44 +255,13 @@ export default function PaymentTest() {
                   </div>
                   <div className="flex justify-between">
                     <div>total</div>
-                    <div>{movie && movie[0].seat_number.length * 150}</div>
+                    <div>THB{movie && movie[0].seat_number.length * 150}</div>
                   </div>
                 </div>
                 <input type="text" placeholder="Coupon" />
-                <button className="border-[1px] text-white">Pay</button>
+                <button className="border-[1px] text-white">Next</button>
               </div>
-              {/* {seatStatuses.some((seat) => seat.status === "reserve") && (
-                <div className="flex flex-col p-[16px] mt-[-10px] bg-gray-0 max-h-full rounded-[8px] gap-[16px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
-                  <div className="flex justify-between">
-                    <p className="text-gray-400">Selected Seat</p>
-                    <div className="flex gap-[5px] flex-wrap w-[40%] justify-end">
-                      {getSeatNumber(seatStatuses).map((seatNumber, index) => (
-                        <p
-                          key={index}
-                          className="p-[1px_2px] bg-blue-100 text-white rounded-[4px]"
-                        >
-                          {seatNumber}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="flex justify-between">
-                    <p className="text-gray-400">
-                      Tickets: {reservedSeatsCount}
-                    </p>
-                    <p className=" text-white">THB{totalPrice}</p>
-                  </div>
-                  <button
-                    className="btn btn-primary bg-blue-100 h-[48px] rounded-[8px] text-white"
-                    onClick={handleReserveSeat}
-                  >
-                    Pay THB{totalPrice}
-                  </button>
-                </div>
-              )} */}
             </div>
-
-            <div></div>
           </fieldset>
         </form>
       ) : (
