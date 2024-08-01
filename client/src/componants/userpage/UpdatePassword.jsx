@@ -23,8 +23,8 @@ function UpdatePassword(props) {
   }
 
   return (
-    <div className="w-[380px] flex flex-col items-center justify-center gap-[40px] max-md:w-xs">
-      <h1 className="h-[44px] text-head2 font-bold text-white">
+    <div className="w-[380px]  flex flex-col items-center md:items-start justify-center gap-[40px] pl-[5%]">
+      <h1 className="h-[44px]  text-head2 font-bold text-white">
         Reset password
       </h1>
 

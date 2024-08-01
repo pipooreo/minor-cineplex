@@ -55,7 +55,7 @@ function ProfileForm(props) {
   }
 
   return (
-    <div className="flex flex-col gap-[40px] ">
+    <div className="flex flex-col gap-[40px] px-[5%]">
       <h1 className="text-[36px] text-white font-bold">Profile</h1>
       <p className="text-gray-300 text-[16px]">
         Keep your personal details private.
@@ -83,7 +83,7 @@ function ProfileForm(props) {
                     <img
                       src={URL.createObjectURL(values.avatar)}
                       alt="profile-picture"
-                      className="object-cover w-full h-full rounded-full"
+                      className="object-cover   h-full rounded-full"
                     />
                   ) : (
                     <FaRegUser className="w-[48px] h-[48px] text-gray-300" />
@@ -92,7 +92,7 @@ function ProfileForm(props) {
                 <input
                   name="avatar"
                   type="file"
-                  className="bg-BG text-white file:bg-BG file:border-0 file:underline file:cursor-pointer"
+                  className="bg-BG w-[50%]  text-transparent file:text-white file:bg-BG file:border-0 file:underline file:cursor-pointer"
                   // value={avatarPreview}
                   onChange={(event) => {
                     // console.log(event);
@@ -101,7 +101,7 @@ function ProfileForm(props) {
                   }}
                 />
               </div>
-              <div className="w-[380px] flex flex-col gap-[24px]">
+              <div className="md:w-[380px] w-full flex flex-col gap-[24px]">
                 <CustomInput
                   label="Name"
                   name="name"
@@ -143,7 +143,7 @@ function ProfileForm(props) {
                 pauseOnHover={false}
                 theme="colored"
                 transition:Bounce
-                className="w-[40%]"
+                className="md:w-[40%] w-[90%]"
               />
             </Form>
           );
