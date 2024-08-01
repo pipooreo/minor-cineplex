@@ -55,7 +55,7 @@ function ProfileForm(props) {
   }
 
   return (
-    <div className="flex flex-col gap-[40px] px-[5%]">
+    <div className="flex flex-col gap-[40px] px-[5%] sm:px-[20%] md:px-[25%] lg:px-[5%]">
       <h1 className="text-[36px] text-white font-bold">Profile</h1>
       <p className="text-gray-300 text-[16px]">
         Keep your personal details private.
@@ -119,11 +119,11 @@ function ProfileForm(props) {
                 // disabled={isSubmitting}
                 disabled={isSubmitting || !(isValid && dirty)}
                 className={`w-[182px] h-[48px]  text-body1M font-bold rounded-[4px] 
-                                transition-all duration-300 ease-in-out
+                                transition-all duration-300 ease-in-out border-[1px] border-gray-300
                                 ${
                                   isValid && dirty
-                                    ? "bg-blue-100 hover:bg-blue-200 active:bg-blue-300 text-white"
-                                    : "bg-blue-100/40 text-white/40 cursor-not-allowed"
+                                    ? " hover:bg-gray-300 active:bg-gray-200 text-white"
+                                    : "opacity-40 text-gray-400 cursor-not-allowed"
                                 }
                                 max-sm:w-[343px]`}
                 type="submit"

@@ -29,17 +29,18 @@ function UserProfilePage() {
     dots: false,
     infinite: false,
     speed: 500,
-    slidesToShow: 2,
+    slidesToShow: 3,
     slidesToScroll: 1,
     arrows: false,
     swipeToSlide: true,
-    variableWidth: true,
+    variableWidth: false,
     responsive: [
       {
-        breakpoint: 640,
+        breakpoint: 600,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
+          variableWidth: true,
         },
       },
     ],
@@ -81,11 +82,11 @@ function UserProfilePage() {
   }, []);
 
   return (
-    <div className="w-full bg-BG absolute ">
+    <div className="w-full bg-BG absolute">
       <section className="w-full bg-BG absolute">
-        <div className="h-[80px] bg-BG max-md:h-[48px]"></div>
-        <div className="justify-center items-center md:items-start md:justify-start flex-col md:flex-row gap-[48px] xl:p-[60px_222px] p-[60px_5%] hidden md:flex">
-          <div className="flex flex-row md:flex-col bg-gray-0 w-full md:w-[257px] h-[224px] md:p-[8px_16px] p-[16px_16px_24px_16px] gap-[8px] rounded-[8px] shadow-[4px_4px_30px_0px_rgba(0,0,0,0.5)]">
+        <div className="h-[80px] bg-BG max-lg:h-[48px]"></div>
+        <div className="justify-center items-center lg:items-start lg:justify-start flex-col lg:flex-row lg:gap-[0x] xl:gap-[48px] xl:p-[60px_10px_60px_222px] p-[60px_10px] hidden lg:flex">
+          <div className="flex flex-row md:flex-col bg-gray-0 w-[257px] md:p-[8px_16px] p-[16px_16px_24px_16px] gap-[8px] rounded-[8px] shadow-[4px_4px_30px_0px_rgba(0,0,0,0.5)]">
             {isHistory === "history" ? (
               <button
                 className="p-[16px] rounded-[4px] text-gray-400 flex items-center gap-[12px] bg-gray-100 hover:bg-gray-100"
@@ -279,7 +280,7 @@ function UserProfilePage() {
                   <path
                     d="M5.93782 15.5C5.14475 14.1264 4.84171 12.5241 5.07833 10.9557C5.31495 9.38734 6.07722 7.94581 7.24024 6.86729C8.40327 5.78877 9.8981 5.13721 11.4798 5.01935C13.0616 4.90149 14.6365 5.32432 15.9465 6.21856C17.2565 7.1128 18.224 8.42544 18.6905 9.94144C19.1569 11.4574 19.0947 13.0869 18.5139 14.5629C17.9332 16.0389 16.8684 17.2739 15.494 18.0656C14.1196 18.8573 12.517 19.1588 10.9489 18.9206"
                     stroke="white"
-                    stroke-linecap="round"
+                    strokeLinecap="round"
                   />
                 </svg>
                 <p>Reset password</p>
@@ -307,7 +308,7 @@ function UserProfilePage() {
                   <path
                     d="M5.93782 15.5C5.14475 14.1264 4.84171 12.5241 5.07833 10.9557C5.31495 9.38734 6.07722 7.94581 7.24024 6.86729C8.40327 5.78877 9.8981 5.13721 11.4798 5.01935C13.0616 4.90149 14.6365 5.32432 15.9465 6.21856C17.2565 7.1128 18.224 8.42544 18.6905 9.94144C19.1569 11.4574 19.0947 13.0869 18.5139 14.5629C17.9332 16.0389 16.8684 17.2739 15.494 18.0656C14.1196 18.8573 12.517 19.1588 10.9489 18.9206"
                     stroke="white"
-                    stroke-linecap="round"
+                    strokeLinecap="round"
                   />
                 </svg>
                 <p>Reset password</p>
@@ -326,8 +327,8 @@ function UserProfilePage() {
             />
           )}
         </div>
-        <div className="flex md:hidden flex-col gap-[48px]">
-          <div className="bg-[#070C1B] p-[8px_16px] text-[18px] w-full">
+        <div className="flex lg:hidden flex-col gap-[48px]">
+          <div className="bg-[#070C1B] md:mt-[32px] p-[16px_16px] text-[18px] w-full">
             <Slider {...settings}>
               <button
                 className="p-[16px] w-[169px] h-full rounded-[4px] text-gray-400 flex items-center gap-[12px] hover:bg-gray-100"
@@ -434,7 +435,7 @@ function UserProfilePage() {
                     <path
                       d="M5.93782 15.5C5.14475 14.1264 4.84171 12.5241 5.07833 10.9557C5.31495 9.38734 6.07722 7.94581 7.24024 6.86729C8.40327 5.78877 9.8981 5.13721 11.4798 5.01935C13.0616 4.90149 14.6365 5.32432 15.9465 6.21856C17.2565 7.1128 18.224 8.42544 18.6905 9.94144C19.1569 11.4574 19.0947 13.0869 18.5139 14.5629C17.9332 16.0389 16.8684 17.2739 15.494 18.0656C14.1196 18.8573 12.517 19.1588 10.9489 18.9206"
                       stroke="white"
-                      stroke-linecap="round"
+                      strokeLinecap="round"
                     />
                   </svg>
                   <p className="text-body1M">Reset password</p>
@@ -447,7 +448,11 @@ function UserProfilePage() {
           ) : isResetPassword === "resetPassword" ? (
             <UpdatePassword user={userProfile} />
           ) : (
-            <BookingHistory user={history} />
+            <BookingHistory
+              user={history}
+              review={myReview}
+              profile={userProfile}
+            />
           )}
         </div>
       </section>
