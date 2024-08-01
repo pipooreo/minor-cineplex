@@ -1,39 +1,56 @@
 import Stripe from "stripe";
 import connectionPool from "../utils/db.mjs";
-import { dataSeat } from "./booking.controller.mjs";
 
 const stripe = Stripe(process.env.STRIPE_SECRET_TEST);
 
 export async function createPayment(req, res) {
-  const { amount, id, name, email } = req.body;
-  // console.log("bodyname: ", req.body);
+  const { amount, paymentMethodId, name, email } = req.body;
+  console.log("bodyname: ", req.body);
+
   try {
     const userResult = await connectionPool.query(
       `SELECT id, name AS username, email FROM users WHERE email = $1 AND name = $2`,
       [email, name]
     );
     // console.log("Result: ", userResult);
+    console.log("Received payment_method.id: ", paymentMethodId);
 
     if (userResult.rowCount === 0) {
       // ถ้าไม่พบผู้ใช้ในฐานข้อมูล
       return res.status(404).json({ message: "User not found." });
     }
 
-    const customer = await stripe.customers.create({
-      name,
-      email,
+    // กำหนดผู้ใช้ด้วย stripe customer
+    const customers = await stripe.customers.list({
+      email: email, // กำหนดอีเมลสำหรับค้นหา
+      limit: 1, // จำกัดการค้นหาหนึ่งรายการ (ถ้ามีลูกค้าหลายคนที่ใช้เมลเดียวกัน)
     });
-    // console.log("customerData: ", customer);
+
+    let customer;
+
+    if (customers.data.length > 0) {
+      // ถ้าพบลูกค้า
+      customer = customers.data[0];
+      console.log("customerData", customer);
+      // res.json(customers.data[0]); // ส่งข้อมูลลูกค้าคนแรกที่พบ
+    } else {
+      // ถ้าไม่พบลูกค้า
+      customer = await stripe.customers.create({
+        name,
+        email,
+      });
+      // console.log("customerData: ", customer);
+    }
 
     const paymentIntents_create = await stripe.paymentIntents.create({
       amount, // จำนวนเงินในหน่วยสตางค์
       currency: "thb",
       payment_method_types: ["card"],
-      payment_method: id,
+      payment_method: paymentMethodId,
       customer: customer.id,
       confirm: true,
     });
-    console.log("payment", paymentIntents_create);
+    // console.log("payment", paymentIntents_create);
 
     res.send({
       success: true,
@@ -64,7 +81,8 @@ export async function getPayment(req, res) {
           array_agg(DISTINCT genres.genres_name) AS genres,
           movies.language AS language,
           users.name AS username,
-          users.email AS email
+          users.email AS email,
+          status
       FROM 
           booking
       INNER JOIN 
@@ -89,7 +107,8 @@ export async function getPayment(req, res) {
           time = $3 AND 
           cinemas.name = $4 AND 
           select_date = $5 AND 
-          users.id = $6
+          users.id = $6 AND
+          status = 'reserved'
       GROUP BY
           title, 
           select_date, 
@@ -99,7 +118,8 @@ export async function getPayment(req, res) {
           cinemas.name, 
           users.name,
           users.email,
-          movies.language`,
+          movies.language,
+          status`,
       [movie, hall, time, cinema, select_date, users_id]
     );
     // console.log(results);
@@ -122,7 +142,7 @@ export async function getPayment(req, res) {
 
 export async function updatePayment(req, res, next) {
   const { user, cinema, movie, select_date, time, hall, seats } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   let result;
   try {
     for (let seat of seats) {

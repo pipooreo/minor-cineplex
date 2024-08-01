@@ -29,8 +29,6 @@ export default function PaymentTest() {
       base: {
         color: "#fff", // Text color
         fontSize: "16px",
-        height: "24px",
-        padding: "12px 16px 12px 12px",
         "::placeholder": {
           color: "#aab7c4", // Placeholder text color
         },
@@ -91,7 +89,7 @@ export default function PaymentTest() {
 
         const response = await axios.post("http://localhost:4000/payment", {
           amount,
-          id,
+          paymentMethodId: id,
           name,
           email,
         });

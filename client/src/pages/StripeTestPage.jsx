@@ -3,7 +3,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import PaymentTest from "./PaymentTestPage";
 
-const PUBLIC_KEY = `${import.meta.env.VITE_STRIPE_PUBLIC_KEY}`
+const PUBLIC_KEY = `${import.meta.env.VITE_STRIPE_PUBLIC_KEY}`;
 
 const stripeTestPromise = loadStripe(PUBLIC_KEY);
 
