@@ -179,8 +179,10 @@ function BookingHistory(props) {
   };
 
   return (
-    <div className="flex flex-col gap-[24px] px-[5%]">
-      <h1 className="text-[36px] text-white font-bold">Booking history</h1>
+    <div className="flex flex-col gap-[24px] px-[0px] sm:px-[20%] md:px-[5%] lg:pl-[5%] lg:pr-[10px]">
+      <h1 className="text-[36px] text-white px-[20px] sm:p-[0px]  font-bold">
+        Booking history
+      </h1>
       {history?.map((movie, index) => {
         const reviewExists = myReview.some(
           (review) =>
@@ -194,8 +196,8 @@ function BookingHistory(props) {
         const bookingDate = new Date(movie.select_date);
 
         return (
-          <div className="flex flex-col w-[751px]" key={index}>
-            <div className="flex flex-col  text-white px-[16px] pb-[24px] pt-[16px] gap-[24px] bg-gray-0 rounded-[8px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
+          <div className="flex flex-col w-full xl:w-[691px]" key={index}>
+            <div className="flex flex-col  text-white px-[16px] pb-[24px] pt-[16px] gap-[24px] bg-gray-0 rounded-[8px]">
               <div className=" flex items-center gap-[12px]">
                 <img
                   className="w-[96.31px] h-[140px] rounded-[4px]"
@@ -230,21 +232,21 @@ function BookingHistory(props) {
                 </div>
               </div>
             </div>
-            <div className="flex justify-between border-t-2 border-gray-100 p-[16px] mt-[-10px] bg-gray-0 max-h-full rounded-b-[8px] gap-[16px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
-              <div className="flex gap-[24px]">
-                <div className="bg-gray-100 p-[12px_16px] rounded-[4px] text-gray-400 font-bold">
+            <div className="flex justify-between flex-col md:flex-row border-t-2 border-gray-100 p-[16px] lg:p-[16px_10px] mt-[-10px] bg-gray-0 max-h-full rounded-b-[8px] gap-[16px]">
+              <div className="flex justify-between gap-[24px]">
+                <div className="bg-gray-100 p-[12px_16px] rounded-[4px] text-gray-400 text-body1M">
                   {movie.seats.length} Ticket
                 </div>
-                <div>
-                  <div className="flex justify-between gap-2 w-[200px]">
-                    <p className="text-gray-300 text-[14px]">Selected Seat</p>
-                    <div className="flex flex-wrap gap-[4px]">
+                <div className="md:w-[185px] w-[225px]">
+                  <div className="flex justify-between">
+                    <p className="text-gray-300 text-body2R">Selected Seat</p>
+                    <div className=" text-body2M  gap-[4px]">
                       {renderSeats(movie.seats)}
                     </div>
                   </div>
-                  <div className="flex justify-between gap-[20px]">
-                    <p className="text-gray-300 text-[14px]">Payment method</p>
-                    <div className="text-gray-400 text-[14px] ">
+                  <div className="flex justify-between">
+                    <p className="text-gray-300 text-body2R">Payment method</p>
+                    <div className="text-gray-400 text-body2M ">
                       {movie.payment_method}
                     </div>
                   </div>
@@ -371,14 +373,16 @@ function BookingHistory(props) {
                   reviewExists &&
                   movie.payment_status === "success" &&
                   currentTime > movie.time) ? (
-                <div className="flex items-center gap-[8px]">
-                  {Array.from({ length: reviewRating[0].rating }).map(
-                    (_, i) => (
-                      <i className="fas fa-star text-[#4E7BEE]" key={i}></i>
-                    )
-                  )}
+                <div className="flex items-center justify-end sm:justify-between gap-[8px] ">
+                  <div className="flex items-center gap-[2px]">
+                    {Array.from({ length: reviewRating[0].rating }).map(
+                      (_, i) => (
+                        <i className="fas fa-star text-[#4E7BEE]" key={i}></i>
+                      )
+                    )}
+                  </div>
                   <button
-                    className="underline text-white font-bold"
+                    className="underline text-white font-bold text-body1M"
                     onClick={() => {
                       editReview(index);
                       setComments((prevComments) => ({
@@ -393,6 +397,7 @@ function BookingHistory(props) {
                   >
                     Edit your review
                   </button>
+
                   <dialog id={`edit_${index}`} className="modal ">
                     <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
                       <form
