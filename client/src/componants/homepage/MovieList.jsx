@@ -69,7 +69,6 @@ function MovieList() {
           {movies &&
             movies.map((data) => {
               const releaseDate = new Date(data.theatrical_release);
-              console.log("meow", releaseDate);
               const formattedDate = releaseDate.toISOString().split("T")[0];
               return (
                 <div

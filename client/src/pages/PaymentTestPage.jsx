@@ -73,7 +73,7 @@ export default function PaymentTest() {
   };
 
   async function getMovie() {
-    console.log(params);
+    // console.log(params);
 
     let movieData = await axios.get(
       `${import.meta.env.VITE_SERVER_URL}/payment?cinema=${
@@ -82,7 +82,7 @@ export default function PaymentTest() {
         params.time
       }&select_date=${params.date}&users_id=${user.id}`
     );
-    console.log("Datakub: ", movieData.data.data);
+    // console.log("Datakub: ", movieData.data.data);
     setMovie(movieData.data.data);
   }
 
@@ -94,7 +94,7 @@ export default function PaymentTest() {
     e.preventDefault();
 
     if (!stripe || !elements) {
-      console.log("Stripe or Elements is not loaded.");
+      // console.log("Stripe or Elements is not loaded.");
       return;
     }
 
@@ -126,10 +126,10 @@ export default function PaymentTest() {
           email,
         });
         // console.log(response);
-        console.log("amount", amount);
-        console.log("id", id);
-        console.log("name", name);
-        console.log("email", email);
+        // console.log("amount", amount);
+        // console.log("id", id);
+        // console.log("name", name);
+        // console.log("email", email);
         if (response.data.success) {
           const update_payment = await axios.put(
             "http://localhost:4000/payment",
@@ -143,8 +143,8 @@ export default function PaymentTest() {
               seats: movie[0].seat_number,
             }
           );
-          console.log(update_payment);
-          console.log("Success Payment");
+          // console.log(update_payment);
+          // console.log("Success Payment");
           setSuccess(true);
 
           navigate("/payment/success");
@@ -153,11 +153,11 @@ export default function PaymentTest() {
         if (cardOwner !== user.id) {
           setOwnerError("user not match");
         } else {
-          console.log("qwe", error);
+          console.log("error catch: ", error);
         }
       }
     } else {
-      console.log("ควายน", error.message);
+      console.log("error: ", error.message);
     }
   };
   return (
