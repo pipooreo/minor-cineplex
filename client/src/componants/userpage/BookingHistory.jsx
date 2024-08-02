@@ -351,9 +351,13 @@ function BookingHistory(props) {
                     Completed
                   </div>
                 </div>
-              ) : reviewExists &&
-                today > new Date(movie.select_date) &&
-                movie.payment_status === "success" ? (
+              ) : (reviewExists &&
+                  today > new Date(movie.select_date) &&
+                  movie.payment_status === "success") ||
+                (today.getTime() === bookingDate.getTime() &&
+                  reviewExists &&
+                  movie.payment_status === "success" &&
+                  currentTime > movie.time) ? (
                 <div className="flex items-center gap-[8px]">
                   {Array.from({ length: reviewRating[0].rating }).map(
                     (_, i) => (
