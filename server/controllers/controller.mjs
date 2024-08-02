@@ -423,7 +423,25 @@ export async function updateComment(req, res) {
   } catch (error) {
     return res.status(500).json({
       message:
-        "Server could not create the comment because database connection",
+        "Server could not update the comment because database connection",
+    });
+  }
+}
+
+export async function deleteComment(req, res) {
+  // console.log(req.body);
+  const { commentId } = req.params;
+  try {
+    await connectionPool.query(`delete from comments where id = $1`, [
+      commentId,
+    ]);
+    return res
+      .status(200)
+      .json({ message: "User deleted comment successfully" });
+  } catch (error) {
+    return res.status(500).json({
+      message:
+        "Server could not delete the comment because database connection",
     });
   }
 }

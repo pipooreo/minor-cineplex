@@ -285,7 +285,10 @@ function NavbarUser() {
                   null}
                   <div>{user.name}</div>
                 </li>
-                <li className="flex justify-start items-center gap-4 active:text-gray-300">
+                <li
+                  className="flex justify-start items-center gap-4 active:text-gray-300"
+                  onClick={() => handleNavigation("history")}
+                >
                   <svg
                     width="20"
                     height="20"
@@ -324,7 +327,10 @@ function NavbarUser() {
                   </svg>
                   <a href="">Booking history</a>
                 </li>
-                <li className="flex justify-start items-center gap-4 active:text-gray-300">
+                <li
+                  className="flex justify-start items-center gap-4 active:text-gray-300"
+                  onClick={() => handleNavigation("profile")}
+                >
                   <svg
                     width="24"
                     height="24"
@@ -351,7 +357,10 @@ function NavbarUser() {
                   </svg>
                   <a href="">Profile</a>
                 </li>
-                <li className="flex justify-start items-center gap-4 active:text-gray-300">
+                <li
+                  className="flex justify-start items-center gap-4 active:text-gray-300"
+                  onClick={() => handleNavigation("resetPassword")}
+                >
                   <svg
                     width="24"
                     height="24"
