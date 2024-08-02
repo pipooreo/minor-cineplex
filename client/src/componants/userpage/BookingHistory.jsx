@@ -9,6 +9,7 @@ function BookingHistory(props) {
   const history = props.user;
   const myReview = props.review;
   const profile = props.profile;
+  const screen = props.screen;
   const today = new Date(formatDate(new Date()));
   const navigate = useNavigate();
   // console.log(profile);
@@ -37,15 +38,16 @@ function BookingHistory(props) {
   const currentTime = getCurrentTime();
 
   const openReview = (index) => {
-    const dialog = document.getElementById(`review_${index}`);
+    const dialog = document.getElementById(`review_${screen}_${index}`);
     // console.log(image);
     if (dialog) {
       dialog.showModal();
     }
   };
+  console.log(screen);
 
   const editReview = (index) => {
-    const dialog = document.getElementById(`edit_${index}`);
+    const dialog = document.getElementById(`edit_${screen}_${index}`);
     // console.log(image);
     if (dialog) {
       dialog.showModal();
@@ -268,22 +270,23 @@ function BookingHistory(props) {
                   >
                     Review
                   </button>
-                  <dialog id={`review_${index}`} className="modal ">
+                  <dialog id={`review_${screen}_${index}`} className="modal ">
                     <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
+                      <form method="dialog">
+                        <h3 className="font-bold text-lg text-center text-white">
+                          Rating & review
+                        </h3>
+                        <button className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                          ✕
+                        </button>
+                      </form>
                       <form
-                        className="flex flex-col gap-[40px]"
+                        method="dialog"
+                        className="flex flex-col gap-[40px] grow "
                         onSubmit={(event) =>
                           sendingReview(event, index, movie.movie_id)
                         }
                       >
-                        <form method="dialog">
-                          <h3 className="font-bold text-lg text-center text-white">
-                            Rating & review
-                          </h3>
-                          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                            ✕
-                          </button>
-                        </form>
                         <div className="flex flex-col gap-[24px]">
                           <div className="flex gap-[24px]">
                             <img
@@ -398,22 +401,22 @@ function BookingHistory(props) {
                     Edit your review
                   </button>
 
-                  <dialog id={`edit_${index}`} className="modal ">
+                  <dialog id={`edit_${screen}_${index}`} className="modal ">
                     <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col w-full gap-[40px]">
+                      <form method="dialog">
+                        <h3 className="font-bold text-lg text-center text-white">
+                          Rating & review
+                        </h3>
+                        <button className="btn btn-sm text-gray-400 btn-circle btn-ghost absolute right-2 top-2">
+                          ✕
+                        </button>
+                      </form>
                       <form
                         className="flex flex-col gap-[40px]"
                         onSubmit={(event) =>
                           updateReview(event, index, movie.movie_id)
                         }
                       >
-                        <form method="dialog">
-                          <h3 className="font-bold text-lg text-center text-white">
-                            Rating & review
-                          </h3>
-                          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                            ✕
-                          </button>
-                        </form>
                         <div className="flex flex-col gap-[24px]">
                           <div className="flex gap-[24px]">
                             <img
@@ -504,13 +507,13 @@ function BookingHistory(props) {
                 (today.getTime() === bookingDate.getTime() &&
                   movie.payment_status === "success" &&
                   currentTime < movie.time) ? (
-                <div className="flex items-center gap-[8px]">
+                <div className="flex justify-end  items-center gap-[8px]">
                   <button className="bg-green p-[6px_16px] rounded-[100px] font-medium text-white text-[14px] ">
                     Paid
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center gap-[8px]">
+                <div className="flex justify-end items-center gap-[8px]">
                   <button
                     className="bg-gray-200 p-[6px_16px] rounded-[100px] font-medium text-white text-[14px] "
                     onClick={() => handleOngoing(index)}
