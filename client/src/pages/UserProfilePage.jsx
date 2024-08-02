@@ -85,7 +85,7 @@ function UserProfilePage() {
     <div className="w-full bg-BG absolute">
       <section className="w-full bg-BG absolute">
         <div className="h-[80px] bg-BG max-lg:h-[48px]"></div>
-        <div className="justify-center items-center lg:items-start lg:justify-start flex-col lg:flex-row lg:gap-[0x] xl:gap-[48px] xl:p-[60px_10px_60px_222px] p-[60px_10px] hidden lg:flex">
+        <div className="justify-center items-center lg:items-start lg:justify-start flex-col lg:flex-row lg:gap-[0x] xl:gap-[48px] xl:p-[60px_10px_60px_222px] p-[60px_15px] hidden lg:flex">
           <div className="flex flex-row md:flex-col bg-gray-0 w-[257px] md:p-[8px_16px] p-[16px_16px_24px_16px] gap-[8px] rounded-[8px] shadow-[4px_4px_30px_0px_rgba(0,0,0,0.5)]">
             {isHistory === "history" ? (
               <button

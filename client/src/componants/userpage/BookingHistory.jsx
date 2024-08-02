@@ -172,7 +172,7 @@ function BookingHistory(props) {
               {today > new Date(movie.select_date) &&
               !reviewExists &&
               movie.payment_status === "success" ? (
-                <div className="flex items-center gap-[8px]">
+                <div className="flex items-center justify-end gap-[8px]">
                   <button
                     className="underline text-white font-bold"
                     onClick={() => {
@@ -300,7 +300,7 @@ function BookingHistory(props) {
                   </button>
 
                   <dialog id={`edit_${index}`} className="modal ">
-                    <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
+                    <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col w-full gap-[40px]">
                       <form
                         className="flex flex-col gap-[40px]"
                         onSubmit={(event) =>

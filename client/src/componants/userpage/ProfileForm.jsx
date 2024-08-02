@@ -18,7 +18,7 @@ function ProfileForm(props) {
 
   const notify = () => {
     toast.success("Your profile has been successfully updated", {
-      position: "top-center",
+      position: "bottom-right",
       autoClose: 3000,
       hideProgressBar: true,
       closeOnClick: true,
@@ -131,7 +131,7 @@ function ProfileForm(props) {
                 Save
               </button>
               <ToastContainer
-                position="top-center"
+                position="bottom-right"
                 autoClose={3000}
                 limit={2}
                 hideProgressBar
@@ -143,7 +143,7 @@ function ProfileForm(props) {
                 pauseOnHover={false}
                 theme="colored"
                 transition:Bounce
-                className="md:w-[40%] w-[90%]"
+                // className="md:w-[40%] w-[90%]"
               />
             </Form>
           );
