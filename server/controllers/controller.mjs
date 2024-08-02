@@ -122,26 +122,30 @@ export async function getCinemasById(req, res) {
 
 //MOVIES
 
-export async function getMoviesAll(req, res, next) {
+export async function getMoviesReleased(req, res, next) {
   let results;
   try {
     results = await connectionPool.query(`
-        select 
-          movies.id, 
-          movies.title, 
-          movies.image, 
-          movies.theatrical_release,
-          movies.out_of_theaters,
-          movies.rating, 
-          array_agg(genres.genres_name) as genres,
-          movies.language
-        from 
+      SELECT 
+        movies.id, 
+        movies.title, 
+        movies.image, 
+        movies.theatrical_release::date AS theatrical_release,
+        movies.out_of_theaters::date AS out_of_theaters,
+        movies.rating, 
+        array_agg(genres.genres_name) AS genres,
+        movies.language
+      FROM 
           movies
-        inner join
+      INNER JOIN
           movies_genres ON movies.id = movies_genres.movie_id
-        inner join
+      INNER JOIN
           genres ON genres.id = movies_genres.genre_id
-        group by
+      WHERE 
+          CURRENT_TIMESTAMP BETWEEN 
+              movies.theatrical_release::date AND 
+              movies.out_of_theaters::date
+      GROUP BY
           movies.id, 
           movies.title, 
           movies.image, 
@@ -149,7 +153,48 @@ export async function getMoviesAll(req, res, next) {
           movies.out_of_theaters, 
           movies.rating,
           movies.language
-        order by movies.id
+      ORDER BY 
+          movies.id
+      `);
+    res.status(200).json({ data: results.rows });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Server could not get  the movies because database connection",
+    });
+  }
+}
+export async function getMoviesComingSoon(req, res, next) {
+  let results;
+  try {
+    results = await connectionPool.query(`
+      SELECT 
+          movies.id, 
+          movies.title, 
+          movies.image, 
+          movies.theatrical_release::date AS theatrical_release,
+          movies.out_of_theaters::date AS out_of_theaters,
+          movies.rating, 
+          array_agg(genres.genres_name) AS genres,
+          movies.language
+      FROM 
+          movies
+      INNER JOIN
+          movies_genres ON movies.id = movies_genres.movie_id
+      INNER JOIN
+          genres ON genres.id = movies_genres.genre_id
+      WHERE 
+          CURRENT_TIMESTAMP < movies.theatrical_release::date
+      GROUP BY
+          movies.id, 
+          movies.title, 
+          movies.image, 
+          movies.theatrical_release,
+          movies.out_of_theaters, 
+          movies.rating,
+          movies.language
+      ORDER BY 
+          movies.id;
+
       `);
     res.status(200).json({ data: results.rows });
   } catch (error) {

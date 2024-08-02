@@ -3,38 +3,73 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function MovieList() {
-  const [Movie, setMovie] = useState([]);
+  const [movies, setMovies] = useState([]);
+  const [activeButton, setActiveButton] = useState("nowShowing");
 
-  const getDataMovie = async () => {
+  const handleNowShowingClick = () => {
+    setActiveButton("nowShowing");
+    releasedData();
+  };
+
+  const handleComingSoonClick = () => {
+    setActiveButton("comingSoon");
+    comingSoonData();
+  };
+  const releasedData = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/movies");
-      setMovie(response.data.data);
-      // console.log(response.data.data);
+      const response = await axios.get("http://localhost:4000/movies/release");
+      setMovies(response.data.data);
+    } catch (error) {
+      console.log("Failed to fetch data", error);
+    }
+  };
+  const comingSoonData = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:4000/movies/comingSoon"
+      );
+      setMovies(response.data.data);
     } catch (error) {
       console.log("Failed to fetch data", error);
     }
   };
 
   useEffect(() => {
-    getDataMovie();
+    releasedData();
   }, []);
 
   const navigate = useNavigate();
 
   return (
-    <section className="xs:px-[10px] px-[120px] pt-[144px] pb-[80px] bg-BG flex justify-center ">
+    <section className="xs:px-[10px] px-[120px] pt-[144px] bg-BG flex justify-center ">
       <div className="flex flex-col gap-[16px]">
-        <div className="w-[294px] h-[38px] flex flex-row justify-between items-center">
-          <button className="w-[136px] h-[30px] text-[#8B93B0] text-[24px] font-[700] underline md:underline-offset-8 leading-[30px] p-[4px] max-[375px]:underline-offset-8">
+        <div className="w-[294px] h-[38px] flex flex-row justify-between items-center pb-4">
+          <button
+            onClick={handleNowShowingClick}
+            className={`w-[136px] h-[30px] text-[24px] font-[700] leading-[30px] p-[4px] ${
+              activeButton === "nowShowing"
+                ? "text-white underline md:underline-offset-8 max-[375px]:underline-offset-8"
+                : "text-gray-300 hover:text-gray-400"
+            }`}
+          >
             Now showing
           </button>
-          <button className="w-[136px] h-[30px] text-[#8B93B0] text-[24px] font-[700] leading-[30px] p-[4px]">
+          <button
+            onClick={handleComingSoonClick}
+            className={`w-[136px] h-[30px] text-[24px] font-[700] leading-[30px] p-[4px] ${
+              activeButton === "comingSoon"
+                ? "text-white underline md:underline-offset-8 max-[375px]:underline-offset-8"
+                : "text-gray-300 hover:text-gray-400"
+            }`}
+          >
             Coming soon
           </button>
         </div>
         <div className="grid grid-cols-2 gap-[20px] xl:grid-cols-4">
-          {Movie &&
-            Movie.map((data) => {
+          {movies &&
+            movies.map((data) => {
+              const releaseDate = new Date(data.theatrical_release);
+              const formattedDate = releaseDate.toISOString().split("T")[0];
               return (
                 <div
                   className="flex flex-col gap-[16px] w-[161px] xs:w-[100%]"
@@ -50,9 +85,7 @@ function MovieList() {
                   />
                   <div className=" flex flex-col lg:w-[285px] md:w-[100%] w-[161px]">
                     <div className="flex flex-row justify-between text-[14px]">
-                      <div className="text-[#8B93B0]">
-                        {data.theatrical_release}
-                      </div>
+                      <div className="text-[#8B93B0]">{formattedDate}</div>
                       <div className="text-[#8B93B0]">
                         <i className="fas fa-star text-[#4E7BEE]"></i>
                         {data.rating}
