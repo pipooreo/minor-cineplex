@@ -3,13 +3,15 @@ import connectionPool from "../utils/db.mjs";
 import { protect } from "../middlewares/protect.mjs";
 
 import {
-  getMoviesAll,
+  getMoviesReleased,
+  getMoviesComingSoon,
   getMoviesById,
   getMoviesByGenres,
 } from "../controllers/controller.mjs";
 const moviesRouter = Router();
 
-moviesRouter.get("/", getMoviesAll);
+moviesRouter.get("/release", getMoviesReleased);
+moviesRouter.get("/comingSoon", getMoviesComingSoon);
 moviesRouter.get("/genres", [protect], getMoviesByGenres);
 moviesRouter.get("/movie", [protect], getMoviesById);
 
