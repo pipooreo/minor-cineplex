@@ -23,6 +23,38 @@ export default function PaymentTest() {
   const params = useParams();
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
+  const [cardError, setCardError] = useState("");
+  const [ownerError, setOwnerError] = useState("");
+  const [expiryError, setexpiryError] = useState("");
+  const [cvcError, setcvcError] = useState("");
+
+  const handleCardChange = (event) => {
+    if (event.error) {
+      setCardError("Card number is not valid");
+    } else {
+      setCardError("");
+    }
+  };
+  const handleOwnerChange = (event) => {
+    const value = event.target.value;
+    setOwnerError(""); // Clear any previous error
+    setCardOwner(value);
+  };
+
+  const handleExpiryDateChange = (event) => {
+    if (event.error) {
+      setexpiryError("Expiry date is not valid");
+    } else {
+      setexpiryError("");
+    }
+  };
+  const handleCVCChange = (event) => {
+    if (event.error) {
+      setcvcError("CVC is not valid");
+    } else {
+      setcvcError("");
+    }
+  };
 
   const Options = {
     style: {
@@ -34,14 +66,14 @@ export default function PaymentTest() {
         },
       },
       invalid: {
-        color: "#fa755a",
-        iconColor: "#fa755a",
+        color: "#fff",
+        iconColor: "#fff",
       },
     },
   };
 
   async function getMovie() {
-    console.log(params);
+    // console.log(params);
 
     let movieData = await axios.get(
       `${import.meta.env.VITE_SERVER_URL}/payment?cinema=${
@@ -50,7 +82,7 @@ export default function PaymentTest() {
         params.time
       }&select_date=${params.date}&users_id=${user.id}`
     );
-    console.log("Datakub: ", movieData.data.data);
+    // console.log("Datakub: ", movieData.data.data);
     setMovie(movieData.data.data);
   }
 
@@ -62,7 +94,7 @@ export default function PaymentTest() {
     e.preventDefault();
 
     if (!stripe || !elements) {
-      console.log("Stripe or Elements is not loaded.");
+      // console.log("Stripe or Elements is not loaded.");
       return;
     }
 
@@ -94,10 +126,10 @@ export default function PaymentTest() {
           email,
         });
         // console.log(response);
-        console.log("amount", amount);
-        console.log("id", id);
-        console.log("name", name);
-        console.log("email", email);
+        // console.log("amount", amount);
+        // console.log("id", id);
+        // console.log("name", name);
+        // console.log("email", email);
         if (response.data.success) {
           const update_payment = await axios.put(
             "http://localhost:4000/payment",
@@ -111,17 +143,21 @@ export default function PaymentTest() {
               seats: movie[0].seat_number,
             }
           );
-          console.log(update_payment);
-          console.log("Success Payment");
+          // console.log(update_payment);
+          // console.log("Success Payment");
           setSuccess(true);
 
           navigate("/payment/success");
         }
       } catch (error) {
-        console.log("Erorr", error);
+        if (cardOwner !== user.id) {
+          setOwnerError("user not match");
+        } else {
+          console.log("error catch: ", error);
+        }
       }
     } else {
-      console.log(error.message);
+      console.log("error: ", error.message);
     }
   };
   return (
@@ -133,7 +169,7 @@ export default function PaymentTest() {
             <header className="bg-gray-0 h-[106px] flex justify-center items-center gap-[190px] max-md:gap-[80px]">
               <button
                 className="flex flex-col items-center w-[140px]"
-                onClick={() => navigate(-2)}
+                // onClick={() => navigate(-2)}
               >
                 <FaCheck className="w-[44px] h-[44px] bg-blue-300  rounded-full text-white p-3 " />
                 <p className="text-white text-[16px] max-md:text-[14px]">
@@ -160,57 +196,83 @@ export default function PaymentTest() {
               <hr className="w-[287px] absolute mb-[20px] border-gray-100 max-md:w-[176px]" />
             </header>
           </div>
-          <fieldset className="border-[3px] border-red flex max-xl:flex-col  gap-10 justify-evenly max-md:items-center bg-BG  md:p-[80px_120px_80px_120px] lg:justify-between">
-            <div className="flex flex-col w-[60%] gap-4 h-full max-xl:w-full text-2xl  leading-[30px] max-md:px-[16px] max-md:pt-[40px] max-md:pb-[40px]">
-              <div className="font-bold flex w-[100%] text-[24px] gap-5 ">
-                <button className="text-white [100%] h-[38px]">
+          <fieldset className="flex max-xl:flex-col  gap-10 justify-evenly max-md:items-center bg-BG  md:p-[80px_120px_80px_120px] lg:justify-between">
+            <form className="flex flex-col w-[60%] gap-4 h-full max-xl:w-full text-2xl leading-[30px] max-md:px-[16px] max-md:pt-[40px] max-md:pb-[40px]">
+              <div className="font-bold flex text-[24px] gap-5">
+                <button type="button" className="text-white  h-[38px] ">
                   Credit card
                 </button>
-                <button className="text-white [100%] h-[38px]">QR Code</button>
+                <button type="button" className="text-white  h-[38px]">
+                  QR Code
+                </button>
               </div>
 
-              <div className="bg-BG  grid grid-cols-2 max-lg:grid-cols-1 gap-[40px] ">
-                <div className=" flex flex-col  gap-2">
-                  <label className="text-gray-400 text-[16px] leading-[24px] ">
+              <div className="bg-BG grid grid-cols-2 max-lg:grid-cols-1 gap-[40px]">
+                <div className="flex flex-col gap-2">
+                  <label className="text-gray-400 text-[16px] leading-[24px]">
                     Card Number
                   </label>
                   <CardNumberElement
                     options={Options}
-                    className="p-[12px_12px_12px_16px] h-12 text-gray-300 bg-gray-100 border border-gray-200 w-full rounded-md " // Adjust padding and width
+                    onChange={handleCardChange}
+                    className={`text-gray-300 p-[12px_12px_12px_16px] h-12 bg-gray-100 border w-full rounded-md ${
+                      cardError ? "border-[#F34335]" : "border-gray-200"
+                    }`}
                   />
+                  {cardError && (
+                    <div className="text-[#F34335] mt-2">{cardError}</div>
+                  )}
                 </div>
-                <div className=" flex flex-col  gap-2">
+                <div className="flex flex-col gap-2">
                   <label className="text-gray-400 text-[16px] leading-[24px] h-[24px]">
                     Card Owner
                   </label>
                   <input
                     type="text"
-                    placeholder="Card owner name "
-                    onChange={(e) => setCardOwner(e.target.value)}
-                    className=" p-[12px_12px_12px_16px] placeholder-gray-300 text-[white] bg-gray-100 border border-gray-200 w-full rounded-md h-[48px]"
+                    placeholder="Card owner name"
+                    onChange={handleOwnerChange}
+                    className={`p-[12px_12px_12px_16px] placeholder-gray-300 text-[white] bg-gray-100 border w-full rounded-md h-[48px] ${
+                      ownerError ? "border-[#F34335]" : "border-gray-200"
+                    }`}
                   />
+                  {ownerError && (
+                    <div className="text-[#F34335] mt-2"> {ownerError} </div>
+                  )}
                 </div>
-                <div className="flex flex-col  gap-2 ">
-                  <label className="text-gray-400 text-[16px] leading-[24px] h-[24px] ">
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-gray-400 text-[16px] leading-[24px]">
                     Expiration Date
                   </label>
-
                   <CardExpiryElement
                     options={Options}
-                    className="text-gray-300 p-[12px_12px_12px_16px] h-12 bg-gray-100 border border-gray-200 w-full rounded-md"
+                    onChange={handleExpiryDateChange}
+                    className={`text-gray-300 p-[12px_12px_12px_16px] h-12 bg-gray-100 border w-full rounded-md ${
+                      expiryError ? "border-[#F34335]" : "border-gray-200"
+                    }`}
                   />
+                  {expiryError && (
+                    <div className="text-[#F34335] mt-2">{expiryError}</div>
+                  )}
                 </div>
-                <div className="flex flex-col  gap-2">
-                  <label className="text-gray-400 text-[16px] leading-[24px] h-[24px]  ">
+
+                <div className="flex flex-col gap-2">
+                  <label className="text-gray-400 text-[16px] leading-[24px]">
                     CVC
                   </label>
                   <CardCvcElement
                     options={Options}
-                    className="text-gray-300 p-[12px_12px_12px_16px] h-12 bg-gray-100 border border-gray-200 w-full rounded-md"
+                    onChange={handleCVCChange}
+                    className={`text-gray-300 p-[12px_12px_12px_16px] h-12 bg-gray-100 border w-full rounded-md ${
+                      cvcError ? "border-[#F34335]" : "border-gray-200"
+                    }`}
                   />
+                  {cvcError && (
+                    <div className="text-[#F34335] mt-2">{cvcError}</div>
+                  )}
                 </div>
               </div>
-            </div>
+            </form>
 
             {/* ส่วนของงการโชว์ข้อมูลที่จองหนัง */}
             <div className="flex max-md:w-[85%] max-sm:w-[100%] lg:flex-col md:flex-row xs:flex-col max-xl:justify-evenly pt-4 bg-gray-0">
@@ -297,7 +359,9 @@ export default function PaymentTest() {
                   placeholder="Coupon"
                   className="p-[12px_12px_12px_16px] placeholder-gray-300 bg-gray-100 border border-gray-200 w-full rounded-md h-[48px]"
                 />
-                <button className="border-[1px] text-white">Next</button>
+                <button className="btn btn-primary bg-blue-100 h-[48px] rounded-[8px] text-white">
+                  Next
+                </button>
               </div>
             </div>
           </fieldset>
