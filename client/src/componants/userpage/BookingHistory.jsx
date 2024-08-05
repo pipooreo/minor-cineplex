@@ -37,7 +37,7 @@ function BookingHistory(props) {
   }
   const currentTime = getCurrentTime();
 
-  const openReview = (index) => {
+  const openReview = (index, screen) => {
     const dialog = document.getElementById(`review_${screen}_${index}`);
     // console.log(image);
     if (dialog) {
@@ -45,7 +45,7 @@ function BookingHistory(props) {
     }
   };
 
-  const editReview = (index) => {
+  const editReview = (index, screen) => {
     const dialog = document.getElementById(`edit_${screen}_${index}`);
     // console.log(image);
     if (dialog) {
@@ -53,8 +53,8 @@ function BookingHistory(props) {
     }
   };
 
-  const handleOngoing = (index) => {
-    const dialog = document.getElementById(`ongoing_${screen}__${index}`);
+  const handleOngoing = (index, screen) => {
+    const dialog = document.getElementById(`ongoing_${screen}_${index}`);
     // console.log(image);
     if (dialog) {
       dialog.showModal();
@@ -264,7 +264,7 @@ function BookingHistory(props) {
                   <button
                     className="underline text-white font-bold"
                     onClick={() => {
-                      openReview(index);
+                      openReview(index, screen);
                     }}
                   >
                     Review
@@ -386,7 +386,7 @@ function BookingHistory(props) {
                   <button
                     className="underline text-white font-bold text-body1M"
                     onClick={() => {
-                      editReview(index);
+                      editReview(index, screen);
                       setComments((prevComments) => ({
                         ...prevComments,
                         [index]: reviewRating[0].comment,
@@ -476,7 +476,7 @@ function BookingHistory(props) {
                             className="grow bg-red text-white rounded-[4px] text-body1M font-bold  
                                 transition-all duration-300 ease-in-out p-[12px_40px] hover:bg-gray-300 active:bg-gray-400"
                             onClick={() =>
-                              deleteReview(reviewRating[0].id, index)
+                              deleteReview(reviewRating[0].id, index, screen)
                             }
                           >
                             Delete
@@ -515,11 +515,11 @@ function BookingHistory(props) {
                 <div className="flex justify-end items-center gap-[8px]">
                   <button
                     className="bg-gray-200 p-[6px_16px] rounded-[100px] font-medium text-white text-[14px] "
-                    onClick={() => handleOngoing(index)}
+                    onClick={() => handleOngoing(index, screen)}
                   >
                     Ongoing
                   </button>
-                  <dialog id={`ongoing_${screen}__${index}`} className="modal ">
+                  <dialog id={`ongoing_${screen}_${index}`} className="modal ">
                     <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
                       <form method="dialog">
                         <h3 className="font-bold text-lg text-center text-white">
@@ -569,7 +569,7 @@ function BookingHistory(props) {
                         <button
                           className="grow bg-red text-white rounded-[4px] text-body1M font-bold  
                                 transition-all duration-300 ease-in-out p-[12px_40px] hover:bg-gray-300 active:bg-gray-400"
-                          onClick={() => cancelBooking(movie, index)}
+                          onClick={() => cancelBooking(movie, index, screen)}
                         >
                           Cancel booking
                         </button>

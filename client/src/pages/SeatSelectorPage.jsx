@@ -235,25 +235,28 @@ function SeatSelectorPage() {
           <div className="max-md:w-[375px] max-lg:w-[100%] xl:[350px]">
             <div className="flex flex-col w-[320px] text-white px-[16px] pb-[24px] pt-[16px] gap-[24px] bg-gray-0 rounded-[8px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
               {movie && (
-                <div className=" flex  gap-[12px] items-end">
+                <div className=" flex gap-[12px] ">
                   <img
                     className="w-[82.21px] h-[120px] rounded-[4px]"
                     src={movie.movie_image}
                   />
                   <div className="flex flex-col gap-[8px]">
                     <div className="font-bold text-[20px] ">{movie.title}</div>
-                    <div className="flex  gap-[8px]">
-                      {movie.movie_genres.map((item, index) => (
-                        <div
-                          className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-300"
-                          key={index}
-                        >
-                          {item}
-                        </div>
-                      ))}
-                      <div className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-400 font-medium">
+                    <div className="py-[10px] pr-[10px] grid-cols-4 grid lg:grid-cols-3 gap-3">
+                      {movie.movie_genres.map((item, index) => {
+                        return (
+                          <p
+                            className="bg-gray-100 text-gray-300 text-body2R rounded-[4px] px-[6px] py-[12px]"
+                            key={index}
+                          >
+                            {item}
+                          </p>
+                        );
+                      })}
+
+                      <p className="bg-gray-100 text-gray-400 text-body2M rounded-[4px] px-[6px] py-[12px]">
                         {movie.language}
-                      </div>
+                      </p>
                     </div>
                   </div>
                 </div>
