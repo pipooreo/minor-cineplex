@@ -242,7 +242,7 @@ function SeatSelectorPage() {
                   />
                   <div className="flex flex-col gap-[8px]">
                     <div className="font-bold text-[20px] ">{movie.title}</div>
-                    <div className="py-[10px] pr-[10px] grid-cols-4 grid lg:grid-cols-3 gap-3">
+                    <div className="py-[10px] pr-[10px] grid-cols-4 grid lg:grid-cols-3 text-center gap-3">
                       {movie.movie_genres.map((item, index) => {
                         return (
                           <p

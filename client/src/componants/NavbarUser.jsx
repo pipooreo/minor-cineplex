@@ -124,15 +124,15 @@ function NavbarUser() {
           </div>
           {isUserOpen && (
             <div className="transition-transform transform absolute top-6 right-0 z-1 mt-6">
-              <nav className="flex flex-col justify-center w-[182px] h-[192px] items-center  bg-gray-100 text-body1R  text-gray-400  shadow-lg shadow-black/50 ">
+              <nav className="flex flex-col justify-center rounded-[4px] w-[182px] h-[192px] items-center  bg-gray-100 text-body1R  text-gray-400  shadow-lg shadow-black/50 ">
                 <ul className="w-full flex flex-col gap-4 p-[20px]">
                   <li
                     className="flex justify-start items-center gap-4 active:text-gray-300"
                     onClick={() => handleNavigation("history")}
                   >
                     <svg
-                      width="20"
-                      height="20"
+                      width="24"
+                      height="24"
                       viewBox="0 0 20 20"
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
@@ -290,8 +290,8 @@ function NavbarUser() {
                   onClick={() => handleNavigation("history")}
                 >
                   <svg
-                    width="20"
-                    height="20"
+                    width="24"
+                    height="24"
                     viewBox="0 0 20 20"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"

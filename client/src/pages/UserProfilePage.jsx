@@ -34,6 +34,7 @@ function UserProfilePage() {
     arrows: false,
     swipeToSlide: true,
     variableWidth: false,
+    margin: "10px",
     responsive: [
       {
         breakpoint: 600,
@@ -41,6 +42,7 @@ function UserProfilePage() {
           slidesToShow: 2,
           slidesToScroll: 1,
           variableWidth: true,
+          margin: "10px",
         },
       },
     ],
@@ -342,7 +344,7 @@ function UserProfilePage() {
             <Slider {...settings}>
               {isHistory === "history" ? (
                 <button
-                  className="p-[16px] w-[169px] h-full rounded-[4px] text-gray-400 flex items-center gap-[12px] bg-gray-100 hover:bg-gray-100"
+                  className="p-[16px] w-[169px] h-full rounded-[4px] text-gray-400 flex items-center gap-[12px] bg-gray-100 hover:bg-BG hover:text-white"
                   onClick={() => {
                     setIsProfile(false);
                     setIsHistory("history");
@@ -391,7 +393,7 @@ function UserProfilePage() {
                 </button>
               ) : (
                 <button
-                  className="p-[16px] w-[169px] h-full rounded-[4px] text-gray-400 flex items-center gap-[12px] hover:bg-gray-100"
+                  className="p-[16px] w-[169px] h-full rounded-[4px] text-gray-400 flex items-center gap-[12px] hover:bg-BG  hover:text-white"
                   onClick={() => {
                     setIsProfile(false);
                     setIsHistory("history");
@@ -441,7 +443,7 @@ function UserProfilePage() {
               )}
               {isProfile === "profile" ? (
                 <button
-                  className="p-[16px] w-[111px] rounded-[4px] text-gray-400 flex items-center gap-[12px] bg-gray-100 hover:bg-gray-100"
+                  className="p-[16px] w-[111px] rounded-[4px] text-gray-400 flex items-center gap-[12px] bg-gray-100 hover:bg-BG hover:text-white"
                   onClick={() => {
                     setIsProfile("profile");
                     setIsHistory(false);
@@ -478,7 +480,7 @@ function UserProfilePage() {
                 </button>
               ) : (
                 <button
-                  className="p-[16px] w-[111px] rounded-[4px] text-gray-400 flex items-center gap-[12px] hover:bg-gray-100"
+                  className="p-[16px] w-[111px] rounded-[4px] text-gray-400 flex items-center gap-[12px] hover:bg-BG hover:text-white"
                   onClick={() => {
                     setIsProfile("profile");
                     setIsHistory(false);
@@ -516,7 +518,7 @@ function UserProfilePage() {
               )}
               {isResetPassword === "resetPassword" ? (
                 <button
-                  className="p-[16px] w-[170px] rounded-[4px] text-gray-400 flex items-center gap-[12px] bg-gray-100 hover:bg-gray-100"
+                  className="p-[16px] w-[170px] rounded-[4px] text-gray-400 flex items-center gap-[12px] bg-gray-100 hover:bg-BG hover:text-white"
                   onClick={() => {
                     setIsProfile(false);
                     setIsHistory(false);
@@ -543,7 +545,7 @@ function UserProfilePage() {
                 </button>
               ) : (
                 <button
-                  className="p-[16px] w-[170px] rounded-[4px] text-gray-400 flex items-center gap-[12px] hover:bg-gray-100"
+                  className="p-[16px] w-[170px] rounded-[4px] text-gray-400 flex items-center gap-[12px] hover:bg-BG hover:text-white"
                   onClick={() => {
                     setIsProfile(false);
                     setIsHistory(false);
