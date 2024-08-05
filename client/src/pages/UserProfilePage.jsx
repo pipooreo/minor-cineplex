@@ -30,7 +30,9 @@ function UserProfilePage() {
       );
       setUserProfile(results.data.data);
       // console.log(results.data.data);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function getHistory() {
@@ -40,7 +42,9 @@ function UserProfilePage() {
       );
       setHistory(result.data.data);
       // console.log(history);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function getReview() {
@@ -50,7 +54,9 @@ function UserProfilePage() {
       );
       setMyReview(result.data.data);
       // console.log(myReview);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   useEffect(() => {

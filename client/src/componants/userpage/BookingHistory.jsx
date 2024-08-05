@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { formatDate } from "../../contexts/SearchContext";
-import { boolean } from "yup";
+import { useNavigate } from "react-router-dom";
 
 function BookingHistory(props) {
   const [ratings, setRatings] = useState({});
@@ -9,7 +9,32 @@ function BookingHistory(props) {
   const history = props.user;
   const myReview = props.review;
   const profile = props.profile;
-  const today = new Date();
+  const today = new Date(formatDate(new Date()));
+  const navigate = useNavigate();
+  // console.log(profile);
+  function getCurrentTime() {
+    // Get current date/time
+    let now = new Date();
+
+    // Get hours, minutes, and seconds
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+    // console.log(hours);
+    // console.log(minutes);
+    // Format minutes and hours to two digits if needed
+    if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+    if (hours < 10) {
+      hours = "0" + hours;
+    }
+
+    // Combine into hh:mm format
+    let formattedTime = hours + "." + minutes;
+
+    return formattedTime;
+  }
+  const currentTime = getCurrentTime();
 
   const openReview = (index) => {
     const dialog = document.getElementById(`review_${index}`);
@@ -21,6 +46,14 @@ function BookingHistory(props) {
 
   const editReview = (index) => {
     const dialog = document.getElementById(`edit_${index}`);
+    // console.log(image);
+    if (dialog) {
+      dialog.showModal();
+    }
+  };
+
+  const handleOngoing = (index) => {
+    const dialog = document.getElementById(`ongoing_${index}`);
     // console.log(image);
     if (dialog) {
       dialog.showModal();
@@ -47,7 +80,9 @@ function BookingHistory(props) {
           dialog.close();
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const updateReview = async (e, index, movieId) => {
@@ -70,7 +105,54 @@ function BookingHistory(props) {
           dialog.close();
         }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteReview = async (commentId, index) => {
+    // console.log(commentId);
+    try {
+      const result = await axios.delete(
+        `${import.meta.env.VITE_SERVER_URL}/comments/${commentId}`
+      );
+      if (result.status === 200) {
+        const dialog = document.getElementById(`edit_${index}`);
+        if (dialog) {
+          dialog.close();
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const cancelBooking = async (movie, index) => {
+    console.log(movie);
+    try {
+      const result = await axios.delete(
+        `${import.meta.env.VITE_SERVER_URL}/booking`,
+        {
+          data: {
+            user: profile.id,
+            cinema: movie.cinema_name,
+            movie: movie.title,
+            hall: movie.hall_number,
+            select_date: movie.select_date,
+            time: movie.time,
+            seats: movie.seats,
+          },
+        }
+      );
+      if (result.status === 200) {
+        const dialog = document.getElementById(`ongoing_${index}`);
+        if (dialog) {
+          dialog.close();
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -86,6 +168,7 @@ function BookingHistory(props) {
           (rate) =>
             rate.movie_id === movie.movie_id && rate.user_id === movie.user_id
         );
+        const bookingDate = new Date(movie.select_date);
 
         return (
           <div className="flex flex-col w-[751px]" key={index}>
@@ -154,9 +237,13 @@ function BookingHistory(props) {
                   </div>
                 </div>
               </div>
-              {today > new Date(movie.select_date) &&
-              !reviewExists &&
-              movie.payment_status === "success" ? (
+              {(today > new Date(movie.select_date) &&
+                !reviewExists &&
+                movie.payment_status === "success") ||
+              (today.getTime() === bookingDate.getTime() &&
+                !reviewExists &&
+                movie.payment_status === "success" &&
+                currentTime > movie.time) ? (
                 <div className="flex items-center gap-[8px]">
                   <button
                     className="underline text-white font-bold"
@@ -202,7 +289,11 @@ function BookingHistory(props) {
                                     key={star}
                                     type="radio"
                                     name={`rating_${index}`}
-                                    className="mask mask-star-2 bg-blue-100"
+                                    className={`mask mask-star-2  ${
+                                      ratings[index] >= star
+                                        ? "bg-blue-100 "
+                                        : "bg-gray-0 "
+                                    }`}
                                     checked={ratings[index] === star}
                                     onChange={() =>
                                       setRatings((prevRatings) => ({
@@ -260,9 +351,13 @@ function BookingHistory(props) {
                     Completed
                   </div>
                 </div>
-              ) : reviewExists &&
-                today > new Date(movie.select_date) &&
-                movie.payment_status === "success" ? (
+              ) : (reviewExists &&
+                  today > new Date(movie.select_date) &&
+                  movie.payment_status === "success") ||
+                (today.getTime() === bookingDate.getTime() &&
+                  reviewExists &&
+                  movie.payment_status === "success" &&
+                  currentTime > movie.time) ? (
                 <div className="flex items-center gap-[8px]">
                   {Array.from({ length: reviewRating[0].rating }).map(
                     (_, i) => (
@@ -276,6 +371,10 @@ function BookingHistory(props) {
                       setComments((prevComments) => ({
                         ...prevComments,
                         [index]: reviewRating[0].comment,
+                      }));
+                      setRatings((prevRatings) => ({
+                        ...prevRatings,
+                        [index]: reviewRating[0].rating,
                       }));
                     }}
                   >
@@ -317,7 +416,11 @@ function BookingHistory(props) {
                                     key={star}
                                     type="radio"
                                     name={`rating_${index}`}
-                                    className="mask mask-star-2 bg-blue-100"
+                                    className={`mask mask-star-2  ${
+                                      ratings[index] >= star
+                                        ? "bg-blue-100 "
+                                        : "bg-gray-0 "
+                                    }`}
                                     checked={ratings[index] === star}
                                     onChange={() =>
                                       setRatings((prevRatings) => ({
@@ -348,14 +451,17 @@ function BookingHistory(props) {
                           </div>
                         </div>
                         <div className="flex gap-[16px]">
-                          <form method="dialog" className="grow flex">
-                            <button
-                              className="grow border border-gray-300 text-white rounded-[4px] text-body1M font-bold  
+                          {/* <form method="dialog" className="grow flex"> */}
+                          <button
+                            className="grow bg-red text-white rounded-[4px] text-body1M font-bold  
                                 transition-all duration-300 ease-in-out p-[12px_40px] hover:bg-gray-300 active:bg-gray-400"
-                            >
-                              Cancel
-                            </button>
-                          </form>
+                            onClick={() =>
+                              deleteReview(reviewRating[0].id, index)
+                            }
+                          >
+                            Delete
+                          </button>
+                          {/* </form> */}
                           <button
                             type="submit"
                             className={`text-body1M font-bold rounded-[4px] 
@@ -375,8 +481,11 @@ function BookingHistory(props) {
                     Completed
                   </div>
                 </div>
-              ) : movie.payment_status === "success" &&
-                today < new Date(movie.select_date) ? (
+              ) : (movie.payment_status === "success" &&
+                  today < new Date(movie.select_date)) ||
+                (today.getTime() === bookingDate.getTime() &&
+                  movie.payment_status === "success" &&
+                  currentTime < movie.time) ? (
                 <div className="flex items-center gap-[8px]">
                   <button className="bg-green p-[6px_16px] rounded-[100px] font-medium text-white text-[14px] ">
                     Paid
@@ -384,9 +493,82 @@ function BookingHistory(props) {
                 </div>
               ) : (
                 <div className="flex items-center gap-[8px]">
-                  <button className="bg-gray-200 p-[6px_16px] rounded-[100px] font-medium text-white text-[14px] ">
+                  <button
+                    className="bg-gray-200 p-[6px_16px] rounded-[100px] font-medium text-white text-[14px] "
+                    onClick={() => handleOngoing(index)}
+                  >
                     Ongoing
                   </button>
+                  <dialog id={`ongoing_${index}`} className="modal ">
+                    <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
+                      <form method="dialog">
+                        <h3 className="font-bold text-lg text-center text-white">
+                          Booking detail
+                        </h3>
+                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                          ✕
+                        </button>
+                      </form>
+                      <div className="flex flex-col gap-[24px]">
+                        <div className="flex gap-[24px]">
+                          <img
+                            className="w-[96.31p]x h-[140px] rounded"
+                            src={movie.image}
+                            alt={movie.title}
+                          />
+                          <div className="flex flex-col gap-[23px]">
+                            <div>
+                              <p className="text-white text-[24px] font-bold">
+                                {movie.title}
+                              </p>
+                            </div>
+                            <div className="bg-gray-0 p-[12px_16px] rounded-[4px] text-gray-400 font-bold text-center">
+                              {movie.seats.length} Ticket
+                            </div>
+                            <div className="flex justify-between">
+                              <p className="text-gray-300 text-[14px]">
+                                Selected Seat
+                              </p>
+                              <div className="flex gap-[5px] flex-wrap justify-end">
+                                {movie.seats.map((seat, index) => {
+                                  return (
+                                    <div
+                                      key={index}
+                                      className="text-gray-400 text-[14px] "
+                                    >
+                                      {seat}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex gap-[16px]">
+                        <button
+                          className="grow bg-red text-white rounded-[4px] text-body1M font-bold  
+                                transition-all duration-300 ease-in-out p-[12px_40px] hover:bg-gray-300 active:bg-gray-400"
+                          onClick={() => cancelBooking(movie, index)}
+                        >
+                          Cancel booking
+                        </button>
+                        {/* </form> */}
+                        <button
+                          className="text-body1M font-bold rounded-[4px] 
+                                transition-all duration-300 ease-in-out grow  p-[12px_40px] 
+                                    bg-blue-100 hover:bg-blue-200 active:bg-blue-300 text-white"
+                          onClick={() =>
+                            navigate(
+                              `/payment/${movie.title}/${movie.cinema_name}/${movie.select_date}/${movie.hall_number}/${movie.time}`
+                            )
+                          }
+                        >
+                          Go to Payment
+                        </button>
+                      </div>
+                    </div>
+                  </dialog>
                 </div>
               )}
             </div>
