@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
+import Countdown from "react-countdown";
 import { FaCheck } from "react-icons/fa6";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -16,6 +18,9 @@ export default function PaymentTest() {
   const [success, setSuccess] = useState(false);
   const [movie, setMovie] = useState();
   const [cardOwner, setCardOwner] = useState("");
+  const [countdownDate, setCountdownDate] = useState(null);
+  const [countDownPopUp, setCountDownPopUp] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
   const stripe = useStripe();
@@ -82,8 +87,19 @@ export default function PaymentTest() {
         params.time
       }&select_date=${params.date}&users_id=${user.id}`
     );
-    // console.log("Datakub: ", movieData.data.data);
+    // console.log("Movie_Data: ", movieData.data.data);
     setMovie(movieData.data.data);
+
+    const [hours, minutes, seconds] = movieData.data.data[0].booking_time
+      .split(":")
+      .map(Number);
+    const bookingDate = new Date();
+    bookingDate.setHours(hours);
+    bookingDate.setMinutes(minutes);
+    bookingDate.setSeconds(seconds);
+
+    const endTime = bookingDate.getTime() + 5 * 60 * 1000;
+    setCountdownDate(endTime);
   }
 
   useEffect(() => {
@@ -99,8 +115,6 @@ export default function PaymentTest() {
     }
 
     const cardNumberElement = elements.getElement(CardNumberElement);
-    // const cardExpiryElement = elements.getElement(CardExpiryElement);
-    // const cardCvcElement = elements.getElement(CardCvcElement);
 
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: "card",
@@ -125,11 +139,8 @@ export default function PaymentTest() {
           name,
           email,
         });
-        // console.log(response);
-        // console.log("amount", amount);
-        // console.log("id", id);
-        // console.log("name", name);
-        // console.log("email", email);
+        // console.log("response: " ,response);
+
         if (response.data.success) {
           const update_payment = await axios.put(
             "http://localhost:4000/payment",
@@ -160,6 +171,40 @@ export default function PaymentTest() {
       console.log("error: ", error.message);
     }
   };
+
+  const handleDeleteData = async (movie) => {
+    try {
+      const delete_payment = await axios.delete(
+        "http://localhost:4000/payment",
+        {
+          data: {
+            user: user.id,
+            cinema: params.cinema,
+            movie: params.title,
+            select_date: params.date,
+            time: params.time,
+            hall: params.hall,
+            seats: movie[0].seat_number,
+          },
+        }
+      );
+      if (delete_payment.status === 200) {
+        setCountDownPopUp(true);
+      } else {
+        console.error("Failed to delete booking");
+      }
+    } catch (error) {
+      console.log("Error deleting booking:", error);
+    }
+  };
+
+  const handleTimeOut = () => {
+    navigate(
+      `/seat/${params.title}/${params.cinema}/${params.date}/${params.hall}/${params.time}`
+    );
+    // setCountDownPopUp(false);
+  };
+
   return (
     <div className="w-full ">
       {!success ? (
@@ -275,29 +320,52 @@ export default function PaymentTest() {
             </form>
 
             {/* ส่วนของงการโชว์ข้อมูลที่จองหนัง */}
-            <div className="flex max-md:w-[85%] max-sm:w-[100%] lg:flex-col md:flex-row xs:flex-col max-xl:justify-evenly pt-4 bg-gray-0">
-              <div className="flex flex-col w-[100%] max-xl:w-[50%] max-xl:justify-center max-md:w-[100%] text-white px-[16px] pb-[24px] pt-[16px] gap-[24px] h-[304px] rounded-t-[8px]">
+            <div className="flex max-md:w-[85%] max-sm:w-[100%] lg:flex-col md:flex-row xs:flex-col max-xl:justify-evenly pt-4 bg-gray-0 rounded-t-[8px]">
+              <div className="flex flex-col w-[100%] max-xl:w-[50%] max-xl:justify-center max-md:w-[100%] text-white px-[16px] pb-[24px] gap-[24px]">
                 {movie && (
-                  <div className=" flex items-center gap-[12px] w-[100%]">
-                    <img
-                      className="w-[82.21px] h-[120px] rounded-[4px]"
-                      src={movie[0].image}
-                    />
-                    <div className="flex flex-col gap-[8px]">
-                      <div className="font-bold text-[20px] ">
-                        {movie[0].title}
-                      </div>
-                      <div className="flex gap-[8px] flex-wrap">
-                        {movie[0].genres.map((genres, index_genres) => (
-                          <div
-                            className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-300"
-                            key={index_genres}
-                          >
-                            {genres}
+                  <div className="flex flex-col gap-[12px] w-[100%]">
+                    {countdownDate && (
+                      <Countdown
+                        date={countdownDate}
+                        onComplete={() => handleDeleteData(movie)}
+                        intervalDelay={0}
+                        precision={3}
+                        renderer={({ minutes, seconds }) => (
+                          <div className="flex gap-[8px]">
+                            <div>Time remaining: </div>
+                            <span>
+                              {` ${minutes
+                                .toString()
+                                .padStart(2, "0")}:${seconds
+                                .toString()
+                                .padStart(2, "0")}`}
+                            </span>
                           </div>
-                        ))}
-                        <div className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-400 font-medium">
-                          {movie[0].language}
+                        )}
+                      />
+                    )}
+
+                    <div className="flex">
+                      <img
+                        className="w-[82.21px] h-[120px] rounded-[4px]"
+                        src={movie[0].image}
+                      />
+                      <div className="flex flex-col gap-[8px]">
+                        <div className="font-bold text-[20px] ">
+                          {movie[0].title}
+                        </div>
+                        <div className="flex gap-[8px] flex-wrap">
+                          {movie[0].genres.map((genres, index_genres) => (
+                            <div
+                              className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-300"
+                              key={index_genres}
+                            >
+                              {genres}
+                            </div>
+                          ))}
+                          <div className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-400 font-medium">
+                            {movie[0].language}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -359,11 +427,60 @@ export default function PaymentTest() {
                   placeholder="Coupon"
                   className="p-[12px_12px_12px_16px] placeholder-gray-300 bg-gray-100 border border-gray-200 w-full rounded-md h-[48px]"
                 />
-                <button className="btn btn-primary bg-blue-100 h-[48px] rounded-[8px] text-white">
+
+                <button
+                  className="btn bg-blue-100 border-blue-100 text-[white]"
+                  type="button"
+                  onClick={() => setShowModal(true)}
+                >
                   Next
                 </button>
+                {showModal && (
+                  <div className="modal modal-open bg-gray-100">
+                    <div className="modal-box bg-gray-100">
+                      <h3 className="font-bold text-lg">Confirm booking</h3>
+                      <p className="py-4">Confirm booking and payment?</p>
+                      <div className="modal-action">
+                        <form method="dialog">
+                          <button className="btn">Cancel</button>
+                          <button
+                            className="btn"
+                            type="button"
+                            onClick={(e) => {
+                              handleSubmit(e);
+                              setShowModal(false);
+                            }}
+                          >
+                            Confirm
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
+
+            {/* Popup Dialog */}
+            {countDownPopUp && (
+              <div className="modal modal-open bg-gray-100">
+                <div className="modal-box bg-gray-100 w-[343px] flex flex-col items-center gap-[16px]">
+                  <h3 className="font-bold text-[20px] text-[white]">
+                    Booking expired
+                  </h3>
+                  <p className="text-[14px] text-center text-gray-400">
+                    You did not complete the checkout process in time, please
+                    start again
+                  </p>
+                  <button
+                    className="btn w-[100%] bg-blue-100 border-blue-100 font-bold text-[16px] text-[white]"
+                    onClick={handleTimeOut}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            )}
           </fieldset>
         </form>
       ) : (

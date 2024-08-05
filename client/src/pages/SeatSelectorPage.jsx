@@ -35,7 +35,7 @@ function SeatSelectorPage() {
         params.time
       }&select_date=${params.date}`
     );
-    // console.log(movieData.data.data);
+    // console.log("MovieListData: ", movieData.data.data);
     setMovie(movieData.data.data);
     setSeatStatuses(movieData.data.data.seat_status_array);
   }
