@@ -386,7 +386,6 @@ function BookingHistory(props) {
                   </div>
                   <button
                     className="underline text-white font-bold text-body1M"
-                    className="underline text-white font-bold text-body1M"
                     onClick={() => {
                       editReview(index);
                       setComments((prevComments) => ({
