@@ -61,7 +61,7 @@ function BookingHistory(props) {
     }
   };
 
-  const sendingReview = async (e, index, movieId) => {
+  const sendingReview = async (e, index, movieId, screen) => {
     e.preventDefault();
     // console.log(ratings[index], comments[index], movieId, profile);
     try {
@@ -76,7 +76,7 @@ function BookingHistory(props) {
         }
       );
       if (result.status === 201) {
-        const dialog = document.getElementById(`review_${index}`);
+        const dialog = document.getElementById(`review_${screen}_${index}`);
         if (dialog) {
           dialog.close();
         }
@@ -86,7 +86,7 @@ function BookingHistory(props) {
     }
   };
 
-  const updateReview = async (e, index, movieId) => {
+  const updateReview = async (e, index, movieId, screen) => {
     e.preventDefault();
     // console.log(ratings[index], comments[index], movieId, profile);
     try {
@@ -101,7 +101,7 @@ function BookingHistory(props) {
         }
       );
       if (result.status === 200) {
-        const dialog = document.getElementById(`edit_${index}`);
+        const dialog = document.getElementById(`edit_${screen}_${index}`);
         if (dialog) {
           dialog.close();
         }
@@ -111,14 +111,14 @@ function BookingHistory(props) {
     }
   };
 
-  const deleteReview = async (commentId, index) => {
+  const deleteReview = async (commentId, index, screen) => {
     // console.log(commentId);
     try {
       const result = await axios.delete(
         `${import.meta.env.VITE_SERVER_URL}/comments/${commentId}`
       );
       if (result.status === 200) {
-        const dialog = document.getElementById(`edit_${index}`);
+        const dialog = document.getElementById(`edit_${screen}_${index}`);
         if (dialog) {
           dialog.close();
         }
@@ -128,7 +128,7 @@ function BookingHistory(props) {
     }
   };
 
-  const cancelBooking = async (movie, index) => {
+  const cancelBooking = async (movie, index, screen) => {
     console.log(movie);
     try {
       const result = await axios.delete(
@@ -146,7 +146,7 @@ function BookingHistory(props) {
         }
       );
       if (result.status === 200) {
-        const dialog = document.getElementById(`ongoing_${index}`);
+        const dialog = document.getElementById(`ongoing_${screen}_${index}`);
         if (dialog) {
           dialog.close();
         }
@@ -283,7 +283,7 @@ function BookingHistory(props) {
                         method="dialog"
                         className="flex flex-col gap-[40px] grow "
                         onSubmit={(event) =>
-                          sendingReview(event, index, movie.movie_id)
+                          sendingReview(event, index, movie.movie_id, screen)
                         }
                       >
                         <div className="flex flex-col gap-[24px]">
@@ -413,7 +413,7 @@ function BookingHistory(props) {
                       <form
                         className="flex flex-col gap-[40px]"
                         onSubmit={(event) =>
-                          updateReview(event, index, movie.movie_id)
+                          updateReview(event, index, movie.movie_id, screen)
                         }
                       >
                         <div className="flex flex-col gap-[24px]">
