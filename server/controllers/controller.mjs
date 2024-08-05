@@ -355,6 +355,7 @@ export async function getCommentsByMoviesName(req, res, next) {
       inner join movies on movies.id = comments.movie_id
       inner join users on users.id = comments.user_id
       where movies.title ilike $1
+      ORDER BY comments.created_at DESC
       `,
       [`%${movieName}%`]
     );

@@ -18,7 +18,7 @@ function ProfileForm(props) {
 
   const notify = () => {
     toast.success("Your profile has been successfully updated", {
-      position: "top-center",
+      position: "bottom-right",
       autoClose: 3000,
       hideProgressBar: true,
       closeOnClick: true,
@@ -55,7 +55,7 @@ function ProfileForm(props) {
   }
 
   return (
-    <div className="flex flex-col gap-[40px] ">
+    <div className="flex flex-col gap-[40px] px-[5%] sm:px-[20%] md:px-[25%] lg:px-[5%]">
       <h1 className="text-[36px] text-white font-bold">Profile</h1>
       <p className="text-gray-300 text-[16px]">
         Keep your personal details private.
@@ -83,7 +83,7 @@ function ProfileForm(props) {
                     <img
                       src={URL.createObjectURL(values.avatar)}
                       alt="profile-picture"
-                      className="object-cover w-full h-full rounded-full"
+                      className="object-cover   h-full rounded-full"
                     />
                   ) : (
                     <FaRegUser className="w-[48px] h-[48px] text-gray-300" />
@@ -92,7 +92,7 @@ function ProfileForm(props) {
                 <input
                   name="avatar"
                   type="file"
-                  className="bg-BG text-white file:bg-BG file:border-0 file:underline file:cursor-pointer"
+                  className="bg-BG w-[50%]  text-transparent file:text-white file:bg-BG file:border-0 file:underline file:cursor-pointer"
                   // value={avatarPreview}
                   onChange={(event) => {
                     // console.log(event);
@@ -101,7 +101,7 @@ function ProfileForm(props) {
                   }}
                 />
               </div>
-              <div className="w-[380px] flex flex-col gap-[24px]">
+              <div className="md:w-[380px] w-full flex flex-col gap-[24px]">
                 <CustomInput
                   label="Name"
                   name="name"
@@ -119,11 +119,11 @@ function ProfileForm(props) {
                 // disabled={isSubmitting}
                 disabled={isSubmitting || !(isValid && dirty)}
                 className={`w-[182px] h-[48px]  text-body1M font-bold rounded-[4px] 
-                                transition-all duration-300 ease-in-out
+                                transition-all duration-300 ease-in-out border-[1px] border-gray-300
                                 ${
                                   isValid && dirty
-                                    ? "bg-blue-100 hover:bg-blue-200 active:bg-blue-300 text-white"
-                                    : "bg-blue-100/40 text-white/40 cursor-not-allowed"
+                                    ? " hover:bg-gray-300 active:bg-gray-200 text-white"
+                                    : "opacity-40 text-gray-400 cursor-not-allowed"
                                 }
                                 max-sm:w-[343px]`}
                 type="submit"
@@ -131,7 +131,7 @@ function ProfileForm(props) {
                 Save
               </button>
               <ToastContainer
-                position="top-center"
+                position="bottom-right"
                 autoClose={3000}
                 limit={2}
                 hideProgressBar
@@ -143,7 +143,7 @@ function ProfileForm(props) {
                 pauseOnHover={false}
                 theme="colored"
                 transition:Bounce
-                className="w-[40%]"
+                // className="md:w-[40%] w-[90%]"
               />
             </Form>
           );

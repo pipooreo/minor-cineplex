@@ -9,6 +9,7 @@ function BookingHistory(props) {
   const history = props.user;
   const myReview = props.review;
   const profile = props.profile;
+  const screen = props.screen;
   const today = new Date(formatDate(new Date()));
   const navigate = useNavigate();
   // console.log(profile);
@@ -37,7 +38,7 @@ function BookingHistory(props) {
   const currentTime = getCurrentTime();
 
   const openReview = (index) => {
-    const dialog = document.getElementById(`review_${index}`);
+    const dialog = document.getElementById(`review_${screen}_${index}`);
     // console.log(image);
     if (dialog) {
       dialog.showModal();
@@ -45,7 +46,7 @@ function BookingHistory(props) {
   };
 
   const editReview = (index) => {
-    const dialog = document.getElementById(`edit_${index}`);
+    const dialog = document.getElementById(`edit_${screen}_${index}`);
     // console.log(image);
     if (dialog) {
       dialog.showModal();
@@ -53,14 +54,14 @@ function BookingHistory(props) {
   };
 
   const handleOngoing = (index) => {
-    const dialog = document.getElementById(`ongoing_${index}`);
+    const dialog = document.getElementById(`ongoing_${screen}__${index}`);
     // console.log(image);
     if (dialog) {
       dialog.showModal();
     }
   };
 
-  const sendingReview = async (e, index, movieId) => {
+  const sendingReview = async (e, index, movieId, screen) => {
     e.preventDefault();
     // console.log(ratings[index], comments[index], movieId, profile);
     try {
@@ -75,7 +76,7 @@ function BookingHistory(props) {
         }
       );
       if (result.status === 201) {
-        const dialog = document.getElementById(`review_${index}`);
+        const dialog = document.getElementById(`review_${screen}_${index}`);
         if (dialog) {
           dialog.close();
         }
@@ -85,7 +86,7 @@ function BookingHistory(props) {
     }
   };
 
-  const updateReview = async (e, index, movieId) => {
+  const updateReview = async (e, index, movieId, screen) => {
     e.preventDefault();
     // console.log(ratings[index], comments[index], movieId, profile);
     try {
@@ -100,7 +101,7 @@ function BookingHistory(props) {
         }
       );
       if (result.status === 200) {
-        const dialog = document.getElementById(`edit_${index}`);
+        const dialog = document.getElementById(`edit_${screen}_${index}`);
         if (dialog) {
           dialog.close();
         }
@@ -110,14 +111,14 @@ function BookingHistory(props) {
     }
   };
 
-  const deleteReview = async (commentId, index) => {
+  const deleteReview = async (commentId, index, screen) => {
     // console.log(commentId);
     try {
       const result = await axios.delete(
         `${import.meta.env.VITE_SERVER_URL}/comments/${commentId}`
       );
       if (result.status === 200) {
-        const dialog = document.getElementById(`edit_${index}`);
+        const dialog = document.getElementById(`edit_${screen}_${index}`);
         if (dialog) {
           dialog.close();
         }
@@ -127,7 +128,7 @@ function BookingHistory(props) {
     }
   };
 
-  const cancelBooking = async (movie, index) => {
+  const cancelBooking = async (movie, index, screen) => {
     console.log(movie);
     try {
       const result = await axios.delete(
@@ -145,7 +146,7 @@ function BookingHistory(props) {
         }
       );
       if (result.status === 200) {
-        const dialog = document.getElementById(`ongoing_${index}`);
+        const dialog = document.getElementById(`ongoing_${screen}_${index}`);
         if (dialog) {
           dialog.close();
         }
@@ -155,9 +156,34 @@ function BookingHistory(props) {
     }
   };
 
+  const renderSeats = (seats) => {
+    if (seats.length > 4) {
+      return (
+        <>
+          {seats.slice(0, 4).map((seat, index) => (
+            <span key={index} className="text-gray-400 text-[14px]">
+              {seat}
+              {index < 3 && ","}
+            </span>
+          ))}
+          <span className="text-gray-400 text-[14px]">...</span>
+        </>
+      );
+    } else {
+      return seats.map((seat, index) => (
+        <span key={index} className="text-gray-400 text-[14px]">
+          {seat}
+          {index < seats.length - 1 && ","}
+        </span>
+      ));
+    }
+  };
+
   return (
-    <div className="flex flex-col gap-[24px]">
-      <h1 className="text-[36px] text-white font-bold">Booking history</h1>
+    <div className="flex flex-col gap-[24px] px-[0px] sm:px-[20%] md:px-[5%] lg:pl-[5%] lg:pr-[10px]">
+      <h1 className="text-[36px] text-white px-[20px] sm:p-[0px]  font-bold">
+        Booking history
+      </h1>
       {history?.map((movie, index) => {
         const reviewExists = myReview.some(
           (review) =>
@@ -171,8 +197,8 @@ function BookingHistory(props) {
         const bookingDate = new Date(movie.select_date);
 
         return (
-          <div className="flex flex-col w-[751px]" key={index}>
-            <div className="flex flex-col  text-white px-[16px] pb-[24px] pt-[16px] gap-[24px] bg-gray-0 rounded-[8px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
+          <div className="flex flex-col w-full xl:w-[691px]" key={index}>
+            <div className="flex flex-col  text-white px-[16px] pb-[24px] pt-[16px] gap-[24px] bg-gray-0 rounded-[8px]">
               <div className=" flex items-center gap-[12px]">
                 <img
                   className="w-[96.31px] h-[140px] rounded-[4px]"
@@ -207,31 +233,21 @@ function BookingHistory(props) {
                 </div>
               </div>
             </div>
-
-            <div className="flex justify-between p-[16px] mt-[-10px] bg-gray-0 max-h-full rounded-[8px] gap-[16px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
-              <div className="flex gap-[24px]">
-                <div className="bg-gray-100 p-[12px_16px] rounded-[4px] text-gray-400 font-bold">
+            <div className="flex justify-between flex-col md:flex-row border-t-2 border-gray-100 p-[16px] lg:p-[16px_10px] mt-[-10px] bg-gray-0 max-h-full rounded-b-[8px] gap-[16px]">
+              <div className="flex justify-between gap-[24px]">
+                <div className="bg-gray-100 p-[12px_16px] rounded-[4px] text-gray-400 text-body1M">
                   {movie.seats.length} Ticket
                 </div>
-                <div>
+                <div className="md:w-[185px] w-[225px]">
                   <div className="flex justify-between">
-                    <p className="text-gray-300 text-[14px]">Selected Seat</p>
-                    <div className="flex gap-[5px] flex-wrap justify-end">
-                      {movie.seats.map((seat, index) => {
-                        return (
-                          <div
-                            key={index}
-                            className="text-gray-400 text-[14px] "
-                          >
-                            {seat}
-                          </div>
-                        );
-                      })}
+                    <p className="text-gray-300 text-body2R">Selected Seat</p>
+                    <div className=" text-body2M  gap-[4px]">
+                      {renderSeats(movie.seats)}
                     </div>
                   </div>
-                  <div className="flex justify-between gap-[20px]">
-                    <p className="text-gray-300 text-[14px]">Payment method</p>
-                    <div className="text-gray-400 text-[14px] ">
+                  <div className="flex justify-between">
+                    <p className="text-gray-300 text-body2R">Payment method</p>
+                    <div className="text-gray-400 text-body2M ">
                       {movie.payment_method}
                     </div>
                   </div>
@@ -244,7 +260,7 @@ function BookingHistory(props) {
                 !reviewExists &&
                 movie.payment_status === "success" &&
                 currentTime > movie.time) ? (
-                <div className="flex items-center gap-[8px]">
+                <div className="flex items-center justify-end gap-[8px]">
                   <button
                     className="underline text-white font-bold"
                     onClick={() => {
@@ -253,31 +269,32 @@ function BookingHistory(props) {
                   >
                     Review
                   </button>
-                  <dialog id={`review_${index}`} className="modal ">
-                    <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
+                  <dialog id={`review_${screen}_${index}`} className="modal">
+                    <div className="modal-box w-11/12 max-w-2xl bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
+                      <form method="dialog">
+                        <h3 className="font-bold text-lg text-center text-white">
+                          Rating & review
+                        </h3>
+                        <button className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                          ✕
+                        </button>
+                      </form>
                       <form
-                        className="flex flex-col gap-[40px]"
+                        method="dialog"
+                        className="flex flex-col gap-[40px] grow "
                         onSubmit={(event) =>
-                          sendingReview(event, index, movie.movie_id)
+                          sendingReview(event, index, movie.movie_id, screen)
                         }
                       >
-                        <form method="dialog">
-                          <h3 className="font-bold text-lg text-center text-white">
-                            Rating & review
-                          </h3>
-                          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                            ✕
-                          </button>
-                        </form>
                         <div className="flex flex-col gap-[24px]">
-                          <div className="flex gap-[24px]">
+                          <div className="flex flex-col  items-center md:items-start  md:flex-row gap-[24px]">
                             <img
                               className="w-[96.31p]x h-[140px] rounded"
                               src={movie.image}
                               alt={movie.title}
                             />
-                            <div className="flex flex-col gap-[23px]">
-                              <div>
+                            <div className="flex flex-col md:items-start items-center gap-[23px]">
+                              <div className="flex flex-col items-center md:items-start">
                                 <p className="text-gray-400">Rate this movie</p>
                                 <p className="text-white text-[24px] font-bold">
                                   {movie.title}
@@ -313,7 +330,7 @@ function BookingHistory(props) {
                             <textarea
                               name="comment"
                               value={comments[index] || ""}
-                              className="h-[102px] bg-gray-100 border border-gray-200 p-[8px_2px_2px_8px] rounded text-white"
+                              className="h-[102px]  bg-gray-100 border border-gray-200 p-[8px_2px_2px_8px] rounded text-white"
                               onChange={(e) =>
                                 setComments((prevComments) => ({
                                   ...prevComments,
@@ -358,14 +375,16 @@ function BookingHistory(props) {
                   reviewExists &&
                   movie.payment_status === "success" &&
                   currentTime > movie.time) ? (
-                <div className="flex items-center gap-[8px]">
-                  {Array.from({ length: reviewRating[0].rating }).map(
-                    (_, i) => (
-                      <i className="fas fa-star text-[#4E7BEE]" key={i}></i>
-                    )
-                  )}
+                <div className="flex items-center justify-end sm:justify-between gap-[8px] ">
+                  <div className="flex items-center gap-[2px]">
+                    {Array.from({ length: reviewRating[0].rating }).map(
+                      (_, i) => (
+                        <i className="fas fa-star text-[#4E7BEE]" key={i}></i>
+                      )
+                    )}
+                  </div>
                   <button
-                    className="underline text-white font-bold"
+                    className="underline text-white font-bold text-body1M"
                     onClick={() => {
                       editReview(index);
                       setComments((prevComments) => ({
@@ -380,31 +399,32 @@ function BookingHistory(props) {
                   >
                     Edit your review
                   </button>
-                  <dialog id={`edit_${index}`} className="modal ">
-                    <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
+
+                  <dialog id={`edit_${screen}_${index}`} className="modal ">
+                    <div className="modal-box w-11/12 max-w-2xl bg-gray-100 border-gray-200 border flex flex-col  gap-[40px]">
+                      <form method="dialog">
+                        <h3 className="font-bold text-lg text-center text-white">
+                          Rating & review
+                        </h3>
+                        <button className="btn btn-sm text-gray-400 btn-circle btn-ghost absolute right-2 top-2">
+                          ✕
+                        </button>
+                      </form>
                       <form
                         className="flex flex-col gap-[40px]"
                         onSubmit={(event) =>
-                          updateReview(event, index, movie.movie_id)
+                          updateReview(event, index, movie.movie_id, screen)
                         }
                       >
-                        <form method="dialog">
-                          <h3 className="font-bold text-lg text-center text-white">
-                            Rating & review
-                          </h3>
-                          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                            ✕
-                          </button>
-                        </form>
                         <div className="flex flex-col gap-[24px]">
-                          <div className="flex gap-[24px]">
+                          <div className="flex flex-col  items-center md:items-start  md:flex-row gap-[24px]">
                             <img
                               className="w-[96.31p]x h-[140px] rounded"
                               src={movie.image}
                               alt={movie.title}
                             />
-                            <div className="flex flex-col gap-[23px]">
-                              <div>
+                            <div className="flex flex-col md:items-start items-center gap-[23px]">
+                              <div className="flex flex-col items-center md:items-start">
                                 <p className="text-gray-400">Rate this movie</p>
                                 <p className="text-white text-[24px] font-bold">
                                   {movie.title}
@@ -486,20 +506,20 @@ function BookingHistory(props) {
                 (today.getTime() === bookingDate.getTime() &&
                   movie.payment_status === "success" &&
                   currentTime < movie.time) ? (
-                <div className="flex items-center gap-[8px]">
+                <div className="flex justify-end  items-center gap-[8px]">
                   <button className="bg-green p-[6px_16px] rounded-[100px] font-medium text-white text-[14px] ">
                     Paid
                   </button>
                 </div>
               ) : (
-                <div className="flex items-center gap-[8px]">
+                <div className="flex justify-end items-center gap-[8px]">
                   <button
                     className="bg-gray-200 p-[6px_16px] rounded-[100px] font-medium text-white text-[14px] "
                     onClick={() => handleOngoing(index)}
                   >
                     Ongoing
                   </button>
-                  <dialog id={`ongoing_${index}`} className="modal ">
+                  <dialog id={`ongoing_${screen}__${index}`} className="modal ">
                     <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
                       <form method="dialog">
                         <h3 className="font-bold text-lg text-center text-white">
