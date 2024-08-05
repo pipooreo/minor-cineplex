@@ -44,7 +44,6 @@ function BookingHistory(props) {
       dialog.showModal();
     }
   };
-  console.log(screen);
 
   const editReview = (index) => {
     const dialog = document.getElementById(`edit_${screen}_${index}`);
@@ -55,7 +54,7 @@ function BookingHistory(props) {
   };
 
   const handleOngoing = (index) => {
-    const dialog = document.getElementById(`ongoing_${index}`);
+    const dialog = document.getElementById(`ongoing_${screen}__${index}`);
     // console.log(image);
     if (dialog) {
       dialog.showModal();
@@ -520,7 +519,7 @@ function BookingHistory(props) {
                   >
                     Ongoing
                   </button>
-                  <dialog id={`ongoing_${index}`} className="modal ">
+                  <dialog id={`ongoing_${screen}__${index}`} className="modal ">
                     <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
                       <form method="dialog">
                         <h3 className="font-bold text-lg text-center text-white">
