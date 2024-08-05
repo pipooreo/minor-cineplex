@@ -46,6 +46,14 @@ function SeatSelectorPage() {
       .map((seat) => seat.number);
   }
 
+  const openDialog = () => {
+    const dialog = document.getElementById("alert");
+    // console.log(image);
+    if (dialog) {
+      dialog.showModal();
+    }
+  };
+
   async function handleReserveSeat() {
     const data = {
       user: user.id,
@@ -58,11 +66,19 @@ function SeatSelectorPage() {
     };
 
     try {
-      await axios.post(`${import.meta.env.VITE_SERVER_URL}/booking`, data);
-    } catch (err) {}
-    navigate(
-      `/payment/${movie.title}/${movie.cinema_name}/${movie.select_date}/${movie.hall_number}/${movie.screening_time}`
-    );
+      const result = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/booking`,
+        data
+      );
+      if (result.status === 200) {
+        navigate(
+          `/payment/${movie.title}/${movie.cinema_name}/${movie.select_date}/${movie.hall_number}/${movie.screening_time}`
+        );
+      }
+    } catch (err) {
+      getMovie();
+      openDialog();
+    }
   }
 
   useEffect(() => {
@@ -283,6 +299,42 @@ function SeatSelectorPage() {
                 </button>
               </div>
             )}
+            <dialog id="alert" className="modal ">
+              <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[40px] w-[343px]">
+                <form method="dialog">
+                  <h3 className="font-bold text-[20px] text-center text-white">
+                    Your chosen seat is
+                    <br />
+                    no longer available
+                  </h3>
+                  <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                    ✕
+                  </button>
+                </form>
+                <div className="text-center">
+                  <p className="text-gray-400 text-[14px]">
+                    Please select another seat to complete your booking
+                  </p>
+                </div>
+
+                {/* <div className="flex gap-[16px] justify-center"> */}
+                <form method="dialog" className="flex">
+                  <button
+                    className="text-body1M font-bold rounded-[4px] 
+                                transition-all duration-300 ease-in-out grow  p-[12px_40px] 
+                                    bg-blue-100 hover:bg-blue-200 active:bg-blue-300 text-white"
+                    // onClick={() =>
+                    //   navigate(
+                    //     `/payment/${movie.title}/${movie.cinema_name}/${movie.select_date}/${movie.hall_number}/${movie.time}`
+                    //   )
+                    // }
+                  >
+                    OK
+                  </button>
+                </form>
+                {/* </div> */}
+              </div>
+            </dialog>
           </div>
         </div>
       </div>
