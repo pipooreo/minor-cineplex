@@ -5,7 +5,8 @@ const stripe = Stripe(process.env.STRIPE_SECRET_TEST);
 
 export async function createPayment(req, res) {
   const { amount, paymentMethodId, name, email } = req.body;
-  console.log("bodyname: ", req.body);
+  // console.log("bodyname: ", req.body);
+  // console.log("Received payment_method.id: ", paymentMethodId);
 
   try {
     const userResult = await connectionPool.query(
@@ -13,7 +14,6 @@ export async function createPayment(req, res) {
       [email, name]
     );
     // console.log("Result: ", userResult);
-    console.log("Received payment_method.id: ", paymentMethodId);
 
     if (userResult.rowCount === 0) {
       // ถ้าไม่พบผู้ใช้ในฐานข้อมูล
@@ -82,7 +82,8 @@ export async function getPayment(req, res) {
           movies.language AS language,
           users.name AS username,
           users.email AS email,
-          status
+          status,
+          min(DISTINCT to_char(booking.created_at AT TIME ZONE 'Asia/Bangkok', 'HH24:MI:SS')) AS booking_time
       FROM 
           booking
       INNER JOIN 
@@ -175,6 +176,42 @@ export async function updatePayment(req, res, next) {
     console.error("Error updating booking:", error);
     return res.status(500).json({
       message: "Server error while updating booking",
+    });
+  }
+}
+
+export async function deletePayment(req, res, next) {
+  const { user, cinema, movie, select_date, time, hall, seats } = req.body;
+  console.log("DataRequest: ", req.body);
+
+  let result;
+  try {
+    for (let seat of seats) {
+      result = await connectionPool.query(
+        `DELETE FROM booking
+       WHERE user_id = $1
+         AND cinema_id = (SELECT id FROM cinemas WHERE name = $2)
+         AND movie_id = (SELECT id FROM movies WHERE title = $3)
+         AND select_date = $4::date
+         AND time_id = (SELECT id FROM screentime WHERE time = $5)
+         AND hall_id = (SELECT id FROM halls WHERE hall_number = $6)
+         AND seat_id = (SELECT id FROM seat_number WHERE seat_num = $7)`,
+        [user, cinema, movie, select_date, time, hall, seat]
+      );
+    }
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        message: "Booking not found or no changes made",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Booking deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting booking:", error);
+    return res.status(500).json({
+      message: "Server error while deleting booking",
     });
   }
 }
