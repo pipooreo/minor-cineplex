@@ -270,8 +270,8 @@ function BookingHistory(props) {
                   >
                     Review
                   </button>
-                  <dialog id={`review_${screen}_${index}`} className="modal ">
-                    <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
+                  <dialog id={`review_${screen}_${index}`} className="modal">
+                    <div className="modal-box w-11/12 max-w-2xl bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
                       <form method="dialog">
                         <h3 className="font-bold text-lg text-center text-white">
                           Rating & review
@@ -288,14 +288,14 @@ function BookingHistory(props) {
                         }
                       >
                         <div className="flex flex-col gap-[24px]">
-                          <div className="flex gap-[24px]">
+                          <div className="flex flex-col  items-center md:items-start  md:flex-row gap-[24px]">
                             <img
                               className="w-[96.31p]x h-[140px] rounded"
                               src={movie.image}
                               alt={movie.title}
                             />
-                            <div className="flex flex-col gap-[23px]">
-                              <div>
+                            <div className="flex flex-col md:items-start items-center gap-[23px]">
+                              <div className="flex flex-col items-center md:items-start">
                                 <p className="text-gray-400">Rate this movie</p>
                                 <p className="text-white text-[24px] font-bold">
                                   {movie.title}
@@ -331,7 +331,7 @@ function BookingHistory(props) {
                             <textarea
                               name="comment"
                               value={comments[index] || ""}
-                              className="h-[102px] bg-gray-100 border border-gray-200 p-[8px_2px_2px_8px] rounded text-white"
+                              className="h-[102px]  bg-gray-100 border border-gray-200 p-[8px_2px_2px_8px] rounded text-white"
                               onChange={(e) =>
                                 setComments((prevComments) => ({
                                   ...prevComments,
@@ -402,7 +402,7 @@ function BookingHistory(props) {
                   </button>
 
                   <dialog id={`edit_${screen}_${index}`} className="modal ">
-                    <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col w-full gap-[40px]">
+                    <div className="modal-box w-11/12 max-w-2xl bg-gray-100 border-gray-200 border flex flex-col  gap-[40px]">
                       <form method="dialog">
                         <h3 className="font-bold text-lg text-center text-white">
                           Rating & review
@@ -418,14 +418,14 @@ function BookingHistory(props) {
                         }
                       >
                         <div className="flex flex-col gap-[24px]">
-                          <div className="flex gap-[24px]">
+                          <div className="flex flex-col  items-center md:items-start  md:flex-row gap-[24px]">
                             <img
                               className="w-[96.31p]x h-[140px] rounded"
                               src={movie.image}
                               alt={movie.title}
                             />
-                            <div className="flex flex-col gap-[23px]">
-                              <div>
+                            <div className="flex flex-col md:items-start items-center gap-[23px]">
+                              <div className="flex flex-col items-center md:items-start">
                                 <p className="text-gray-400">Rate this movie</p>
                                 <p className="text-white text-[24px] font-bold">
                                   {movie.title}
