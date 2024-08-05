@@ -98,7 +98,7 @@ export default function PaymentTest() {
     bookingDate.setMinutes(minutes);
     bookingDate.setSeconds(seconds);
 
-    const endTime = bookingDate.getTime() + 30 * 1000;
+    const endTime = bookingDate.getTime() + 5 * 60 * 1000;
     setCountdownDate(endTime);
   }
 
@@ -429,7 +429,7 @@ export default function PaymentTest() {
                 />
 
                 <button
-                  className="btn bg-blue-100 border-blue-100"
+                  className="btn bg-blue-100 border-blue-100 text-[white]"
                   type="button"
                   onClick={() => setShowModal(true)}
                 >
