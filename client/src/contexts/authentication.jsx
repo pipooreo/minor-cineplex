@@ -117,10 +117,11 @@ function AuthProvider(props) {
   async function updatePassword(data, actions) {
     console.log(data);
     try {
-      await axios.put(
+      const result = await axios.put(
         `${import.meta.env.VITE_SERVER_URL}/auth/update-password`,
         data
       );
+      return result;
       // nevigate("/registersuccess");
     } catch (err) {
       console.log(err);

@@ -94,6 +94,7 @@ function BookingHistory(props) {
           dialog.close();
         }
       }
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -119,6 +120,7 @@ function BookingHistory(props) {
           dialog.close();
         }
       }
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -136,6 +138,7 @@ function BookingHistory(props) {
           dialog.close();
         }
       }
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -163,6 +166,7 @@ function BookingHistory(props) {
         if (dialog) {
           dialog.close();
         }
+        window.location.reload();
       }
     } catch (error) {
       console.log(error);

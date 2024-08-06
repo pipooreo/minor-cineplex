@@ -49,8 +49,8 @@ function ProfileForm(props) {
     formData.append("image", values.avatar);
 
     const result = await updateProfile(formData, actions);
-    if ((result.status = 200)) {
-      notify();
+    if (result.status == 200) {
+      window.location.reload();
     }
   }
 
