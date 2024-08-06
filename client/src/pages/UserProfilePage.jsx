@@ -90,7 +90,10 @@ function UserProfilePage() {
   }, []);
 
   return (
-    <div className="w-full bg-BG absolute">
+    <div
+      className="w-full bg-BG absolute"
+      style={{ fontFamily: "Roboto Condensed" }}
+    >
       <section className="w-full bg-BG absolute">
         <div className="h-[80px] bg-BG max-lg:h-[48px]"></div>
         {/* destop*/}
@@ -340,7 +343,7 @@ function UserProfilePage() {
 
         {/* moblie */}
         <div className="flex lg:hidden flex-col gap-[48px]">
-          <div className="bg-[#070C1B] md:mt-[32px] p-[16px_16px] text-[18px] w-full">
+          <div className="bg-gray-0 md:mt-[32px] p-[16px_16px] text-[18px] w-full">
             <Slider {...settings}>
               {isHistory === "history" ? (
                 <button
