@@ -453,6 +453,7 @@ export default function PaymentTest() {
                     <div>Payment Method</div>
                     <div> Credit card</div>
                   </div>
+
                   {discount > 0 && (
                     <div className="flex justify-between text-[#ca2d2d]">
                       <div>Coupon</div>
@@ -468,6 +469,7 @@ export default function PaymentTest() {
                     </div>
                   </div>
                 </div>
+
                 <input
                   type="text"
                   placeholder="Coupon"
@@ -475,8 +477,9 @@ export default function PaymentTest() {
                   onChange={handleCouponChange}
                   className="p-[12px_12px_12px_16px] placeholder-gray-300 bg-gray-100 border border-gray-200 w-full rounded-md h-[48px]"
                 />
+
                 {couponError && (
-                  <p className="text-[#ca2d2d] text-sm">{couponError}</p>
+                  <p className="text-[#F34335] text-sm">{couponError}</p>
                 )}
 
                 <button
@@ -486,6 +489,8 @@ export default function PaymentTest() {
                 >
                   Next
                 </button>
+
+                {/* Popup Dialog */}
                 {showModal && (
                   <div className="modal modal-open bg-gray-100">
                     <div className="modal-box bg-gray-100">
@@ -493,7 +498,13 @@ export default function PaymentTest() {
                       <p className="py-4">Confirm booking and payment?</p>
                       <div className="modal-action">
                         <form method="dialog">
-                          <button className="btn">Cancel</button>
+                          <button
+                            className="btn"
+                            type="button"
+                            onClick={() => setShowModal(false)}
+                          >
+                            Cancel
+                          </button>
                           <button
                             className="btn"
                             type="button"

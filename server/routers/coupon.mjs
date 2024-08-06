@@ -6,4 +6,3 @@ const couponsRouter = Router();
 couponsRouter.get("/", getCoupons);
 
 export default couponsRouter;
-// ลบ

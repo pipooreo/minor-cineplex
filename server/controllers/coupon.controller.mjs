@@ -1,9 +1,7 @@
 import connectionPool from "../utils/db.mjs";
 
-export async function getCoupons(req, res, next) {
-  const { coupon_code } = req.query; // Use req.query for GET request
-
-  //   console.log("Received query:", req.query); // Log the query parameters for debugging
+export async function getCoupons(req, res) {
+  const { coupon_code } = req.query;
 
   try {
     const result = await connectionPool.query(
@@ -17,11 +15,9 @@ export async function getCoupons(req, res, next) {
       return res.status(404).json({ message: "Coupon not found" });
     }
 
-    res.status(200).json(result.rows[0]); // Respond with the coupon details
+    res.status(200).json(result.rows[0]);
   } catch (error) {
-    console.error("Error fetching coupon:", error); // Improved logging
+    console.error("Error fetching coupon:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 }
-
-// ลบ
