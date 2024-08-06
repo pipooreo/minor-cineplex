@@ -23,6 +23,7 @@ export function SearchProvider({ children }) {
   const [languageSearch, setLanguageSearch] = useState("");
   const [genreSearch, setGenreSearch] = useState("");
   const [dateSearch, setDateSearch] = useState(toDay);
+  const [tagsSearch, setTagsSearch] = useState([]);
 
   const resetSearchValues = () => {
     setCitySearch("");
@@ -30,6 +31,7 @@ export function SearchProvider({ children }) {
     setLanguageSearch("");
     setGenreSearch("");
     setDateSearch(formatDate(new Date()));
+    setTagsSearch([]);
   };
 
   const getDataSearch = async () => {
@@ -37,9 +39,22 @@ export function SearchProvider({ children }) {
       setDateSearch(toDay);
     }
     try {
-      const response = await axios.get(
-        `http://localhost:4000/search?moviesCity=${citySearch}&movieName=${titleSearch}&moviesLanguage=${languageSearch}&moviesGenres=${genreSearch}&releasedDate=${dateSearch}`
-      );
+      const params = new URLSearchParams({
+        moviesCity: citySearch,
+        movieName: titleSearch,
+        moviesLanguage: languageSearch,
+        moviesGenres: genreSearch,
+        releasedDate: dateSearch,
+      });
+
+      const tagsQuery = tagsSearch
+        .map((tag) => `tags[]=${encodeURIComponent(tag)}`)
+        .join("&");
+
+      const url = `http://localhost:4000/search?${params.toString()}&${tagsQuery}`;
+
+      const response = await axios.get(url);
+
       setSearch(response.data.data);
     } catch (error) {
       console.error("Error fetching search results:", error);
@@ -61,6 +76,8 @@ export function SearchProvider({ children }) {
         setGenreSearch,
         dateSearch,
         setDateSearch,
+        tagsSearch,
+        setTagsSearch,
         resetSearchValues,
         getDataSearch,
       }}
