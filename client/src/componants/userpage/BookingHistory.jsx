@@ -223,34 +223,32 @@ function BookingHistory(props) {
                 href={`https://social-plugins.line.me/lineit/share?url=${url}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
               >
-                <button className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]">
-                  <LineShareButton url={shareUrl}>
-                    <LineIcon size={20} round />
-                  </LineShareButton>
-                </button>
+                <LineShareButton url={shareUrl}>
+                  <LineIcon size={20} round />
+                </LineShareButton>
               </a>
               <p>Line</p>
             </li>
-            <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
+            {/* <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
               <button className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]">
                 <FacebookMessengerShareButton url={shareUrl}>
                   <FacebookMessengerIcon size={20} round />
                 </FacebookMessengerShareButton>
               </button>
               <p>Messenger</p>
-            </li>
+            </li> */}
             <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
               <a
                 href={`https://www.facebook.com/share.php?u=${url}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
               >
-                <button className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]">
-                  <FacebookShareButton url={shareUrl}>
-                    <FacebookIcon size={20} round />
-                  </FacebookShareButton>
-                </button>
+                <FacebookShareButton url={shareUrl}>
+                  <FacebookIcon size={20} round />
+                </FacebookShareButton>
               </a>
               <p>Facebook</p>
             </li>
@@ -259,12 +257,11 @@ function BookingHistory(props) {
                 href={`https://x.com/intent/tweet?url=${url}`}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
               >
-                <button className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]">
-                  <TwitterShareButton url={shareUrl}>
-                    <XIcon size={20} round />
-                  </TwitterShareButton>
-                </button>
+                <TwitterShareButton url={shareUrl}>
+                  <XIcon size={20} round />
+                </TwitterShareButton>
               </a>
               <p>X</p>
             </li>
