@@ -11,15 +11,15 @@ function UpdatePassword(props) {
     confirmPassword: "",
   };
 
-  function onSubmit(values, actions) {
-    updatePassword(
-      {
-        password: values.password,
-        confirmPassword: values.confirmPassword,
-        id: props.user.id,
-      },
-      actions
-    );
+  async function onSubmit(values, actions) {
+    const result = await updatePassword({
+      password: values.password,
+      confirmPassword: values.confirmPassword,
+      id: props.user.id,
+    });
+    if (result.status == 200) {
+      actions.resetForm();
+    }
   }
 
   return (
