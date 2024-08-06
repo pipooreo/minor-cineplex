@@ -19,12 +19,16 @@ function SearchResultPage() {
     setGenreSearch,
     dateSearch,
     setDateSearch,
+    tagsSearch,
+    setTagsSearch,
     getDataSearch,
   } = useSearch();
 
   const dateRef = React.useRef();
   const [isOpen, setIsOpen] = useState([]);
   const navigate = useNavigate();
+  const [wheelchairAccess, setWheelchairAccess] = useState(false);
+  const [hearingAssistance, setHearingAssistance] = useState(false);
 
   useEffect(() => {
     getDataSearch();
@@ -40,13 +44,18 @@ function SearchResultPage() {
     ) {
       getDataSearch();
     }
-  }, [citySearch, titleSearch, languageSearch, genreSearch, dateSearch]);
+  }, [
+    citySearch,
+    titleSearch,
+    languageSearch,
+    genreSearch,
+    dateSearch,
+    tagsSearch,
+  ]);
 
   useEffect(() => {
     if (dateRef.current) {
       dateRef.current.value = dateSearch;
-      console.log(dateRef.current.value);
-      console.log(dateSearch);
     }
   }, [dateSearch]);
 
@@ -65,7 +74,45 @@ function SearchResultPage() {
     setLanguageSearch("");
     setGenreSearch("");
     setDateSearch(formatDate(new Date()));
+    setTagsSearch([]);
+    setWheelchairAccess(false);
+    setHearingAssistance(false);
     navigate("/moviesearch");
+  };
+
+  const handleCheckboxChange = (event, type) => {
+    const isChecked = event.target.checked;
+    const wheelchairTag = "Wheelchair Access";
+    const hearingAssistanceTag = "Hearing Assistance";
+
+    if (type === "wheelchair") {
+      setWheelchairAccess(isChecked);
+    } else if (type === "hearing") {
+      setHearingAssistance(isChecked);
+    }
+
+    setTagsSearch((prevTags) => {
+      let newTags = [...prevTags];
+
+      if (type === "wheelchair") {
+        if (isChecked) {
+          if (!newTags.includes(wheelchairTag)) {
+            newTags.push(wheelchairTag);
+          }
+        } else {
+          newTags = newTags.filter((tag) => tag !== wheelchairTag);
+        }
+      } else if (type === "hearing") {
+        if (isChecked) {
+          if (!newTags.includes(hearingAssistanceTag)) {
+            newTags.push(hearingAssistanceTag);
+          }
+        } else {
+          newTags = newTags.filter((tag) => tag !== hearingAssistanceTag);
+        }
+      }
+      return newTags;
+    });
   };
 
   const toggleMenu = (index) => {
@@ -75,8 +122,6 @@ function SearchResultPage() {
       return newIsOpen;
     });
   };
-
-  console.log("title", titleSearch);
   return (
     <div style={{ fontFamily: "Roboto Condensed" }}>
       <section className="bg-gray-0 pt-[120px] pb-[40px] flex flex-col items-center gap-[24px]">
@@ -155,7 +200,6 @@ function SearchResultPage() {
             <button
               onClick={() => {
                 setDateSearch(dateRef?.current?.value);
-                console.log(dateRef?.current?.value);
                 getDataSearch();
               }}
               className="w-[72px] h-[48px] bg-[#4E7BEE] rounded-[4px] active:w-[71.5px] active:h-[47.5px]"
@@ -178,6 +222,10 @@ function SearchResultPage() {
               className="text-gray-400 text-body2R"
               control={
                 <Checkbox
+                  checked={wheelchairAccess}
+                  onChange={(event) =>
+                    handleCheckboxChange(event, "wheelchair")
+                  }
                   sx={{
                     color: "#8B93B0",
                   }}
@@ -189,6 +237,8 @@ function SearchResultPage() {
               className="text-gray-400 text-body2R"
               control={
                 <Checkbox
+                  checked={hearingAssistance}
+                  onChange={(event) => handleCheckboxChange(event, "hearing")}
                   sx={{
                     color: "#8B93B0",
                   }}
