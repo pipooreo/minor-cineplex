@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import connectionPool from "./utils/db.mjs";
 import authRouter from "./routers/auth.mjs";
 import moviesRouter from "./routers/movies.mjs";
 import cinemasRouter from "./routers/cinemas.mjs";
@@ -10,9 +9,10 @@ import commentRouter from "./routers/comments.mjs";
 import searchBarRouter from "./routers/searchBar.mjs";
 import daysRouter from "./routers/days.mjs";
 import bookedRouter from "./routers/booking.mjs";
+import couponsRouter from "./routers/coupon.mjs";
 import { v2 as cloudinary } from "cloudinary";
 import paymentRouter from "./routers/payment.mjs";
-// import getMoviesScreenTime from "./routers/ticket.mjs";
+
 import ticketRouter from "./routers/ticket.mjs";
 dotenv.config();
 
@@ -41,10 +41,10 @@ app.use("/comments", commentRouter);
 app.use("/city", cityRouter);
 app.use("/search", searchBarRouter);
 app.use("/days", daysRouter);
-// app.use("/date", getMoviesScreenTime);
 app.use("/booking", bookedRouter);
 app.use("/ticket", ticketRouter);
 app.use("/payment", paymentRouter);
+app.use("/coupons", couponsRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

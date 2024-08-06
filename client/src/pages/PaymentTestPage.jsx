@@ -21,6 +21,9 @@ export default function PaymentTest() {
   const [countdownDate, setCountdownDate] = useState(null);
   const [countDownPopUp, setCountDownPopUp] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [couponCode, setCouponCode] = useState(""); // เพิ่ม state สำหรับเก็บคูปอง
+  const [couponError, setCouponError] = useState("");
+  const [discount, setDiscount] = useState(0); // state สำหรับเก็บค่าลดราคา
 
   const navigate = useNavigate();
   const stripe = useStripe();
@@ -40,6 +43,7 @@ export default function PaymentTest() {
       setCardError("");
     }
   };
+
   const handleOwnerChange = (event) => {
     const value = event.target.value;
     setOwnerError(""); // Clear any previous error
@@ -53,6 +57,7 @@ export default function PaymentTest() {
       setexpiryError("");
     }
   };
+
   const handleCVCChange = (event) => {
     if (event.error) {
       setcvcError("CVC is not valid");
@@ -129,7 +134,7 @@ export default function PaymentTest() {
     if (!error) {
       try {
         const { id } = paymentMethod;
-        const amount = movie[0].seat_number.length * 150 * 100;
+        const amount = movie[0].seat_number.length * 150 * 100 - discount * 100;
         const name = cardOwner;
         const email = movie[0].email;
 
@@ -203,6 +208,37 @@ export default function PaymentTest() {
       `/seat/${params.title}/${params.cinema}/${params.date}/${params.hall}/${params.time}`
     );
     // setCountDownPopUp(false);
+  };
+
+  const handleCouponChange = async (e) => {
+    const code = e.target.value;
+    setCouponCode(code);
+
+    if (code.length === 8) {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_SERVER_URL}/coupons?coupon_code=${code}`
+        );
+        const coupon = response.data;
+
+        // check type of coupon
+        if (coupon.type === "percentage") {
+          setDiscount(
+            (movie[0].seat_number.length * 150 * coupon.discount_value) / 100
+          );
+        } else if (coupon.type === "fixed") {
+          setDiscount(coupon.discount_value);
+        }
+
+        setCouponError("");
+      } catch (error) {
+        setCouponError("Invalid coupon");
+        setDiscount(0);
+      }
+    } else {
+      setDiscount(0);
+      setCouponError("");
+    }
   };
 
   return (
@@ -417,16 +453,34 @@ export default function PaymentTest() {
                     <div>Payment Method</div>
                     <div> Credit card</div>
                   </div>
+
+                  {discount > 0 && (
+                    <div className="flex justify-between text-[#ca2d2d]">
+                      <div>Coupon</div>
+                      <div>- THB{discount}</div>
+                    </div>
+                  )}
+
                   <div className="flex justify-between">
-                    <div>total</div>
-                    <div>THB{movie && movie[0].seat_number.length * 150}</div>
+                    <div>Total</div>
+                    <div>
+                      THB
+                      {(movie && movie[0].seat_number.length * 150) - discount}
+                    </div>
                   </div>
                 </div>
+
                 <input
                   type="text"
                   placeholder="Coupon"
+                  value={couponCode}
+                  onChange={handleCouponChange}
                   className="p-[12px_12px_12px_16px] placeholder-gray-300 bg-gray-100 border border-gray-200 w-full rounded-md h-[48px]"
                 />
+
+                {couponError && (
+                  <p className="text-[#F34335] text-sm">{couponError}</p>
+                )}
 
                 <button
                   className="btn bg-blue-100 border-blue-100 text-[white]"
@@ -435,6 +489,8 @@ export default function PaymentTest() {
                 >
                   Next
                 </button>
+
+                {/* Popup Dialog */}
                 {showModal && (
                   <div className="modal modal-open bg-gray-100">
                     <div className="modal-box bg-gray-100">
@@ -442,7 +498,13 @@ export default function PaymentTest() {
                       <p className="py-4">Confirm booking and payment?</p>
                       <div className="modal-action">
                         <form method="dialog">
-                          <button className="btn">Cancel</button>
+                          <button
+                            className="btn"
+                            type="button"
+                            onClick={() => setShowModal(false)}
+                          >
+                            Cancel
+                          </button>
                           <button
                             className="btn"
                             type="button"
