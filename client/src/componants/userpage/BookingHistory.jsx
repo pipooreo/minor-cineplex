@@ -2,16 +2,29 @@ import axios from "axios";
 import { useState } from "react";
 import { formatDate } from "../../contexts/SearchContext";
 import { useNavigate } from "react-router-dom";
+import {
+  FacebookMessengerIcon,
+  FacebookMessengerShareButton,
+  TwitterShareButton,
+  XIcon,
+  FacebookShareButton,
+  FacebookIcon,
+  LineIcon,
+  LineShareButton,
+} from "react-share";
 
 function BookingHistory(props) {
   const [ratings, setRatings] = useState({});
   const [comments, setComments] = useState({});
+  const [isOpen, setIsOpen] = useState(false);
+
   const history = props.user;
   const myReview = props.review;
   const profile = props.profile;
   const screen = props.screen;
   const today = new Date(formatDate(new Date()));
   const navigate = useNavigate();
+
   // console.log(profile);
   function getCurrentTime() {
     // Get current date/time
@@ -179,8 +192,117 @@ function BookingHistory(props) {
     }
   };
 
+  const toggleShareMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const shareUrl = "https://github.com/pipooreo/minor-cineplex";
+  // const shareUrl = window.location.href;
+
+  const SocialShareButtons = ({ url }) => {
+    const handleCopyLink = () => {
+      navigator.clipboard.writeText(url).then(
+        () => alert("Link copied to clipboard!"),
+        (err) => alert("Failed to copy link: " + err)
+      );
+    };
+    return (
+      <div
+        className="transition-transform transform absolute top-7 right-0 sm:right-10 z-1 mt-6"
+        style={{ fontFamily: "Roboto Condensed" }}
+      >
+        <nav className="flex flex-col gap-[8px] p-[16px] justify-center rounded-b-lg border-[1px] border-BG items-center  bg-gray-100  text-gray-400  shadow-xl  shadow-black/50 ">
+          <h1 className="text-body1M text-white">Share Booking</h1>
+          <ul className="grid gap-4 grid-cols-3 sm:grid-cols-5 text-body2R">
+            <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
+              <a
+                href={`https://social-plugins.line.me/lineit/share?url=${url}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <button className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]">
+                  <LineShareButton url={shareUrl}>
+                    <LineIcon size={20} round />
+                  </LineShareButton>
+                </button>
+              </a>
+              <p>Line</p>
+            </li>
+            <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
+              <button className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]">
+                <FacebookMessengerShareButton url={shareUrl}>
+                  <FacebookMessengerIcon size={20} round />
+                </FacebookMessengerShareButton>
+              </button>
+              <p>Messenger</p>
+            </li>
+            <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
+              <a
+                href={`https://www.facebook.com/share.php?u=${url}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <button className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]">
+                  <FacebookShareButton url={shareUrl}>
+                    <FacebookIcon size={20} round />
+                  </FacebookShareButton>
+                </button>
+              </a>
+              <p>Facebook</p>
+            </li>
+            <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
+              <a
+                href={`https://x.com/intent/tweet?url=${url}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <button className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]">
+                  <TwitterShareButton url={shareUrl}>
+                    <XIcon size={20} round />
+                  </TwitterShareButton>
+                </button>
+              </a>
+              <p>X</p>
+            </li>
+            <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
+              <button
+                className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
+                onClick={handleCopyLink}
+              >
+                <svg
+                  width="40"
+                  height="40"
+                  viewBox="0 0 40 40"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect width="40" height="40" rx="20" fill="#070C1B" />
+                  <path
+                    d="M22 15V15C22 14.0681 22 13.6022 21.8478 13.2346C21.6448 12.7446 21.2554 12.3552 20.7654 12.1522C20.3978 12 19.9319 12 19 12H16C14.1144 12 13.1716 12 12.5858 12.5858C12 13.1716 12 14.1144 12 16V19C12 19.9319 12 20.3978 12.1522 20.7654C12.3552 21.2554 12.7446 21.6448 13.2346 21.8478C13.6022 22 14.0681 22 15 22V22"
+                    stroke="#C8CEDD"
+                  />
+                  <rect
+                    x="18"
+                    y="18"
+                    width="10"
+                    height="10"
+                    rx="2"
+                    stroke="#C8CEDD"
+                  />
+                </svg>
+              </button>
+              <p>Copy link</p>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    );
+  };
   return (
-    <div className="flex flex-col gap-[24px] px-[0px] sm:px-[20%] md:px-[5%] lg:pl-[5%] lg:pr-[10px]">
+    <div
+      className="flex flex-col gap-[24px] px-[0px] sm:px-[20%] md:px-[5%] lg:pl-[5%] lg:pr-[10px]"
+      style={{ fontFamily: "Roboto Condensed" }}
+    >
       <h1 className="text-[36px] text-white px-[20px] sm:p-[0px]  font-bold">
         Booking history
       </h1>
@@ -275,6 +397,29 @@ function BookingHistory(props) {
                         <h3 className="font-bold text-lg text-center text-white">
                           Rating & review
                         </h3>
+                        <div
+                          className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-10 top-3"
+                          onClick={toggleShareMenu}
+                        >
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M20 3V2.5H20.5V3H20ZM10.3536 13.3536C10.1583 13.5488 9.84171 13.5488 9.64645 13.3536C9.45118 13.1583 9.45118 12.8417 9.64645 12.6464L10.3536 13.3536ZM19.5 11V3H20.5V11H19.5ZM20 3.5H12V2.5H20V3.5ZM20.3536 3.35355L10.3536 13.3536L9.64645 12.6464L19.6464 2.64645L20.3536 3.35355Z"
+                              fill="#C8CEDD"
+                            />
+                            <path
+                              d="M18 14.625V14.625C18 15.9056 18 16.5459 17.8077 17.0568C17.5034 17.8653 16.8653 18.5034 16.0568 18.8077C15.5459 19 14.9056 19 13.625 19H10C7.17157 19 5.75736 19 4.87868 18.1213C4 17.2426 4 15.8284 4 13V9.375C4 8.09442 4 7.45413 4.19228 6.94325C4.4966 6.1347 5.1347 5.4966 5.94325 5.19228C6.45413 5 7.09442 5 8.375 5V5"
+                              stroke="#C8CEDD"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </div>
+                        {isOpen && <SocialShareButtons url={shareUrl} />}
                         <button className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-2 top-2">
                           ✕
                         </button>
@@ -406,6 +551,29 @@ function BookingHistory(props) {
                         <h3 className="font-bold text-lg text-center text-white">
                           Rating & review
                         </h3>
+                        <div
+                          className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-10 top-3"
+                          onClick={toggleShareMenu}
+                        >
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M20 3V2.5H20.5V3H20ZM10.3536 13.3536C10.1583 13.5488 9.84171 13.5488 9.64645 13.3536C9.45118 13.1583 9.45118 12.8417 9.64645 12.6464L10.3536 13.3536ZM19.5 11V3H20.5V11H19.5ZM20 3.5H12V2.5H20V3.5ZM20.3536 3.35355L10.3536 13.3536L9.64645 12.6464L19.6464 2.64645L20.3536 3.35355Z"
+                              fill="#C8CEDD"
+                            />
+                            <path
+                              d="M18 14.625V14.625C18 15.9056 18 16.5459 17.8077 17.0568C17.5034 17.8653 16.8653 18.5034 16.0568 18.8077C15.5459 19 14.9056 19 13.625 19H10C7.17157 19 5.75736 19 4.87868 18.1213C4 17.2426 4 15.8284 4 13V9.375C4 8.09442 4 7.45413 4.19228 6.94325C4.4966 6.1347 5.1347 5.4966 5.94325 5.19228C6.45413 5 7.09442 5 8.375 5V5"
+                              stroke="#C8CEDD"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </div>
+                        {isOpen && <SocialShareButtons url={shareUrl} />}
                         <button className="btn btn-sm text-gray-400 btn-circle btn-ghost absolute right-2 top-2">
                           ✕
                         </button>

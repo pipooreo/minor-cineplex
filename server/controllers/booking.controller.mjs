@@ -262,11 +262,11 @@ export async function BookingHistory(req, res) {
       // [user, cinema, movie, select_date, time, hall, seat]
     );
     // console.log(result);
-    if (result.rowCount === 0) {
-      return res.status(404).json({
-        message: "Booking not found or no changes made",
-      });
-    }
+    // if (result.rowCount === 0) {
+    //   return res.status(404).json({
+    //     message: "Booking not found or no changes made",
+    //   });
+    // }
 
     return res.status(200).json({
       data: result.rows,
