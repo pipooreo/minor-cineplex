@@ -10,6 +10,8 @@ import commentRouter from "./routers/comments.mjs";
 import searchBarRouter from "./routers/searchBar.mjs";
 import daysRouter from "./routers/days.mjs";
 import bookedRouter from "./routers/booking.mjs";
+// อย่าลืมลบ
+import couponsRouter from "./routers/coupon.mjs";
 import { v2 as cloudinary } from "cloudinary";
 import paymentRouter from "./routers/payment.mjs";
 // import getMoviesScreenTime from "./routers/ticket.mjs";
@@ -45,6 +47,8 @@ app.use("/days", daysRouter);
 app.use("/booking", bookedRouter);
 app.use("/ticket", ticketRouter);
 app.use("/payment", paymentRouter);
+// อย่าลืมลบ
+app.use("/coupons", couponsRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
