@@ -6,11 +6,10 @@ import {
   getPayment,
   updatePayment,
   deletePayment,
+  getPaymentSuccess,
   createRefund,
 } from "../controllers/payment.controller.mjs";
-import {
-  processPayment,
-} from "../controllers/processpayment.controller.mjs";
+import { processPayment } from "../controllers/processpayment.controller.mjs";
 const paymentRouter = Router();
 
 paymentRouter.post("/", createPayment);
@@ -19,6 +18,7 @@ paymentRouter.put("/", updatePayment);
 paymentRouter.put("/", updatePaymentQR);
 paymentRouter.post("/process-payment", processPayment);
 paymentRouter.delete("/", deletePayment);
+paymentRouter.get("/success", getPaymentSuccess);
 paymentRouter.post("/refund", createRefund);
 
 export default paymentRouter;

@@ -53,7 +53,10 @@ function App() {
               element={<StripeTest />}
             />
             <Route path="/payment/qr" element={<StripeQr />} />
-            <Route path="/payment/success" element={<PaymentPageSuccess />} />
+            <Route
+              path="/paymentsuccess/:title/:cinema/:date/:hall/:time"
+              element={<PaymentPageSuccess />}
+            />
             <Route
               path="/refund/success/:price"
               element={<RefundPageSuccess />}
