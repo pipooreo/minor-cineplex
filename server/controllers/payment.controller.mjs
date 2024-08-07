@@ -142,17 +142,21 @@ export async function getPayment(req, res) {
 }
 
 export async function updatePayment(req, res, next) {
-  const { user, cinema, movie, select_date, time, hall, seats } = req.body;
+  const { user, cinema, movie, select_date, time, hall, seats, coupon } =
+    req.body;
   // console.log(req.body);
   let result;
   try {
     for (let seat of seats) {
-      result = await connectionPool.query(
-        `UPDATE booking
+      if (coupon) {
+        result = await connectionPool.query(
+          `UPDATE booking
        SET status = 'booked',
         payment_method = 'credit card', 
         payment_status = 'success', 
-        updated_at = CURRENT_TIMESTAMP
+        updated_at = CURRENT_TIMESTAMP,
+        coupon_id = (
+        select id from coupons where coupon_code = $8)
        WHERE user_id = $1
          AND cinema_id = (SELECT id FROM cinemas WHERE name = $2)
          AND movie_id = (SELECT id FROM movies WHERE title = $3)
@@ -160,8 +164,25 @@ export async function updatePayment(req, res, next) {
          AND time_id = (SELECT id FROM screentime WHERE time = $5)
          AND hall_id = (SELECT id FROM halls WHERE hall_number = $6)
           AND seat_id = (SELECT id FROM seat_number WHERE seat_num = $7)`,
-        [user, cinema, movie, select_date, time, hall, seat]
-      );
+          [user, cinema, movie, select_date, time, hall, seat, coupon]
+        );
+      } else {
+        result = await connectionPool.query(
+          `UPDATE booking
+         SET status = 'booked',
+          payment_method = 'credit card', 
+          payment_status = 'success', 
+          updated_at = CURRENT_TIMESTAMP
+         WHERE user_id = $1
+           AND cinema_id = (SELECT id FROM cinemas WHERE name = $2)
+           AND movie_id = (SELECT id FROM movies WHERE title = $3)
+           AND select_date = $4::date
+           AND time_id = (SELECT id FROM screentime WHERE time = $5)
+           AND hall_id = (SELECT id FROM halls WHERE hall_number = $6)
+            AND seat_id = (SELECT id FROM seat_number WHERE seat_num = $7)`,
+          [user, cinema, movie, select_date, time, hall, seat]
+        );
+      }
     }
     if (result.rowCount === 0) {
       return res.status(404).json({
