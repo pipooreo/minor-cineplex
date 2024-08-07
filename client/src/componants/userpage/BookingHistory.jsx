@@ -25,7 +25,7 @@ function BookingHistory(props) {
   const today = new Date(formatDate(new Date()));
   const navigate = useNavigate();
 
-  // console.log(profile);
+  // console.log(history);
   function getCurrentTime() {
     // Get current date/time
     let now = new Date();
@@ -68,6 +68,14 @@ function BookingHistory(props) {
 
   const handleOngoing = (index, screen) => {
     const dialog = document.getElementById(`ongoing_${screen}_${index}`);
+    // console.log(image);
+    if (dialog) {
+      dialog.showModal();
+    }
+  };
+
+  const handleBookingDetail = (index, screen) => {
+    const dialog = document.getElementById(`detail_${screen}_${index}`);
     // console.log(image);
     if (dialog) {
       dialog.showModal();
@@ -676,9 +684,167 @@ function BookingHistory(props) {
                   movie.payment_status === "success" &&
                   currentTime < movie.time) ? (
                 <div className="flex justify-end  items-center gap-[8px]">
-                  <button className="bg-green p-[6px_16px] rounded-[100px] font-medium text-white text-[14px] ">
+                  <button
+                    className="bg-green p-[6px_16px] rounded-[100px] font-medium text-white text-[14px] "
+                    onClick={() => handleBookingDetail(index, screen)}
+                  >
                     Paid
                   </button>
+                  <dialog id={`detail_${screen}_${index}`} className="modal">
+                    {/* <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[20px] p-[24px_0px]"> */}
+                    <div className="modal-box w-11/12 max-w-2xl bg-gray-100 border-gray-200 border flex flex-col  gap-[20px] p-[24px_0px]">
+                      <form method="dialog">
+                        <h3 className="font-bold text-lg text-center text-white">
+                          Booking detail
+                        </h3>
+                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                          ✕
+                        </button>
+                      </form>
+                      <div className="flex flex-col gap-[24px] bg-gray-0 p-[24px] rounded">
+                        <div className="flex gap-[24px]">
+                          <img
+                            className="w-[96.31p]x h-[140px] rounded"
+                            src={movie.image}
+                            alt={movie.title}
+                          />
+                          <div className="flex flex-col gap-[23px]">
+                            <div>
+                              <p className="text-white text-[24px] font-bold">
+                                {movie.title}
+                              </p>
+                            </div>
+                            <div className="flex flex-col gap-[8px]">
+                              <div className="flex gap-[12px] items-center">
+                                <i className="fa-solid fa-location-dot w-[16px] h-[16px] text-gray-200"></i>
+                                <p className="text-gray-400 text-[14px]">
+                                  {movie.cinema_name}
+                                </p>
+                              </div>
+                              <div className="flex gap-[12px] items-center">
+                                <i className="fa-solid fa-calendar-days w-[16px] h-[16px] text-gray-200"></i>
+                                <p className="text-gray-400 text-[14px]">
+                                  {movie.select_date}
+                                </p>
+                              </div>
+                              <div className="flex gap-[12px] items-center">
+                                <i className="fa-solid fa-clock w-[16px] h-[16px] text-gray-200"></i>
+                                <p className="text-gray-400 text-[14px]">
+                                  {movie.time}
+                                </p>
+                              </div>
+                              <div className="flex gap-[12px] items-center">
+                                <i className="fa-solid fa-shop w-[16px] h-[16px] text-gray-200"></i>
+                                <p className="text-gray-400 text-[14px]">
+                                  {movie.hall_number}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-[100%] h-[1px] bg-gray-100"></div>
+                        <div className="flex justify-between flex-col md:flex-row    bg-gray-0 max-h-full rounded-b-[8px] gap-[16px]">
+                          <div className="flex justify-between gap-[24px]">
+                            <div className="bg-gray-100 text-center p-[12px_16px] max-md:w-[100px] rounded-[4px] text-gray-400 text-body1M">
+                              {movie.seats.length} Ticket
+                            </div>
+                            <div className="md:w-[185px] w-[225px]">
+                              <div className="flex justify-between">
+                                <p className="text-gray-300 text-body2R">
+                                  Selected Seat
+                                </p>
+                                <div className=" text-body2M  gap-[4px]">
+                                  {renderSeats(movie.seats)}
+                                </div>
+                              </div>
+                              <div className="flex justify-between">
+                                <p className="text-gray-300 text-body2R">
+                                  Payment method
+                                </p>
+                                <div className="text-gray-400 text-body2M ">
+                                  {movie.payment_method}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex justify-end items-center gap-[8px]">
+                            <button className="bg-green p-[6px_16px] rounded-[100px] font-medium text-white text-[14px] ">
+                              Paid
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap-[8px] p-[0px_24px] items-center">
+                        <div className="flex flex-col gap-[8px] w-full">
+                          <div className="flex justify-between">
+                            <p className="text-gray-300 text-body2R">
+                              Payment method
+                            </p>
+                            <div className="text-gray-400 text-body2M ">
+                              {movie.payment_method}
+                            </div>
+                          </div>
+                          <div className="flex justify-between">
+                            <p className="text-gray-300 text-body2R">
+                              Ticket x{movie.seats.length}
+                            </p>
+                            <div className="text-gray-400 text-body2M ">
+                              THB{movie.seats.length * 150}
+                            </div>
+                          </div>
+                          {movie.coupon_type === "fixed" && (
+                            <>
+                              <div className="flex justify-between">
+                                <p className="text-gray-300 text-body2R">
+                                  Coupon
+                                </p>
+                                <div className=" text-body2M text-red">
+                                  - THB{movie.discount}
+                                </div>
+                              </div>
+                              <div className="w-full bg-gray-200 h-[1px]" />
+                              <div className="flex justify-between">
+                                <p className="text-gray-300 text-body2R">
+                                  Total
+                                </p>
+                                <div className=" text-body2M text-gray-400">
+                                  THB{movie.seats.length * 150 - movie.discount}
+                                </div>
+                              </div>
+                            </>
+                          )}
+                          {movie.coupon_type === "percentage" && (
+                            <>
+                              <div className="flex justify-between">
+                                <p className="text-gray-300 text-body2R">
+                                  Coupon
+                                </p>
+                                <div className=" text-body2M text-red">
+                                  - THB
+                                  {(movie.seats.length * 150 * movie.discount) /
+                                    100}
+                                </div>
+                              </div>
+                              <div className="w-full bg-gray-200 h-[1px]" />
+                              <div className="flex justify-between">
+                                <p className="text-gray-300 text-body2R">
+                                  Total
+                                </p>
+                                <div className=" text-body2M text-gray-400">
+                                  THB
+                                  {movie.seats.length * 150 -
+                                    movie.seats.length *
+                                      150 *
+                                      (movie.discount / 100)}
+                                </div>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </dialog>
                 </div>
               ) : (
                 <div className="flex justify-end items-center gap-[8px]">
