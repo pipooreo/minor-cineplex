@@ -21,6 +21,7 @@ import { ScrollToTop } from "./componants/ScrollToTop";
 import StripeTest from "./pages/StripeTestPage";
 // import TestPaymentPage from "./pages/TestPaymentPage";
 import PaymentPageSuccess from "./pages/PaymentPageSuccess";
+import StripeQr from "./pages/StripeQrCode";
 import RefundPageSuccess from "./pages/RefundPageSuccess";
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
               path="/payment/:title/:cinema/:date/:hall/:time"
               element={<StripeTest />}
             />
+            <Route path="/QR" element={<StripeQr />} />
             <Route path="/payment/success" element={<PaymentPageSuccess />} />
             <Route
               path="/refund/success/:price"
