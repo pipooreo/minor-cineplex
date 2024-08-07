@@ -274,7 +274,7 @@ function BookingHistory(props) {
         className="transition-transform transform absolute top-7 right-0 sm:right-10 z-1 mt-6"
         style={{ fontFamily: "Roboto Condensed" }}
       >
-        <nav className="flex flex-col gap-[8px] p-[16px] justify-center rounded-b-lg border-[1px] border-BG items-center  bg-gray-100  text-gray-400  shadow-xl  shadow-black/50 ">
+        <nav className="flex flex-col gap-[8px] p-[16px] justify-center rounded-lg border-[1px] border-BG items-center  bg-gray-100  text-gray-400  shadow-xl  shadow-black/50 ">
           <h1 className="text-body1M text-white">Share Booking</h1>
           <ul className="grid gap-4 grid-cols-3 sm:grid-cols-5 text-body2R">
             <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
@@ -484,29 +484,6 @@ function BookingHistory(props) {
                         <h3 className="font-bold text-lg text-center text-white">
                           Rating & review
                         </h3>
-                        <div
-                          className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-10 top-3"
-                          onClick={toggleShareMenu}
-                        >
-                          <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M20 3V2.5H20.5V3H20ZM10.3536 13.3536C10.1583 13.5488 9.84171 13.5488 9.64645 13.3536C9.45118 13.1583 9.45118 12.8417 9.64645 12.6464L10.3536 13.3536ZM19.5 11V3H20.5V11H19.5ZM20 3.5H12V2.5H20V3.5ZM20.3536 3.35355L10.3536 13.3536L9.64645 12.6464L19.6464 2.64645L20.3536 3.35355Z"
-                              fill="#C8CEDD"
-                            />
-                            <path
-                              d="M18 14.625V14.625C18 15.9056 18 16.5459 17.8077 17.0568C17.5034 17.8653 16.8653 18.5034 16.0568 18.8077C15.5459 19 14.9056 19 13.625 19H10C7.17157 19 5.75736 19 4.87868 18.1213C4 17.2426 4 15.8284 4 13V9.375C4 8.09442 4 7.45413 4.19228 6.94325C4.4966 6.1347 5.1347 5.4966 5.94325 5.19228C6.45413 5 7.09442 5 8.375 5V5"
-                              stroke="#C8CEDD"
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                        </div>
-                        {isOpen && <SocialShareButtons url={shareUrl} />}
                         <button className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-2 top-2">
                           ✕
                         </button>
@@ -639,7 +616,7 @@ function BookingHistory(props) {
                           Rating & review
                         </h3>
                         <div
-                          className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-10 top-3"
+                          className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-10 top-[9px]"
                           onClick={toggleShareMenu}
                         >
                           <svg
@@ -775,7 +752,30 @@ function BookingHistory(props) {
                         <h3 className="font-bold text-lg text-center text-white">
                           Booking detail
                         </h3>
-                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                        <div
+                          className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-10 top-[9px]"
+                          onClick={toggleShareMenu}
+                        >
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M20 3V2.5H20.5V3H20ZM10.3536 13.3536C10.1583 13.5488 9.84171 13.5488 9.64645 13.3536C9.45118 13.1583 9.45118 12.8417 9.64645 12.6464L10.3536 13.3536ZM19.5 11V3H20.5V11H19.5ZM20 3.5H12V2.5H20V3.5ZM20.3536 3.35355L10.3536 13.3536L9.64645 12.6464L19.6464 2.64645L20.3536 3.35355Z"
+                              fill="#C8CEDD"
+                            />
+                            <path
+                              d="M18 14.625V14.625C18 15.9056 18 16.5459 17.8077 17.0568C17.5034 17.8653 16.8653 18.5034 16.0568 18.8077C15.5459 19 14.9056 19 13.625 19H10C7.17157 19 5.75736 19 4.87868 18.1213C4 17.2426 4 15.8284 4 13V9.375C4 8.09442 4 7.45413 4.19228 6.94325C4.4966 6.1347 5.1347 5.4966 5.94325 5.19228C6.45413 5 7.09442 5 8.375 5V5"
+                              stroke="#C8CEDD"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </div>
+                        {isOpen && <SocialShareButtons url={shareUrl} />}
+                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-gray-400">
                           ✕
                         </button>
                       </form>
