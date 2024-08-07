@@ -147,9 +147,8 @@ export default function PaymentTest() {
         // console.log("response: " ,response);
 
         if (response.data.success) {
-          const update_payment = await axios.put(
-            "http://localhost:4000/payment",
-            {
+          if (!couponCode) {
+            await axios.put("http://localhost:4000/payment", {
               user: user.id,
               cinema: params.cinema,
               movie: params.title,
@@ -157,8 +156,20 @@ export default function PaymentTest() {
               time: params.time,
               hall: params.hall,
               seats: movie[0].seat_number,
-            }
-          );
+            });
+          } else {
+            await axios.put("http://localhost:4000/payment", {
+              user: user.id,
+              cinema: params.cinema,
+              movie: params.title,
+              select_date: params.date,
+              time: params.time,
+              hall: params.hall,
+              seats: movie[0].seat_number,
+              coupon: couponCode,
+            });
+          }
+
           // console.log(update_payment);
           // console.log("Success Payment");
           setSuccess(true);
