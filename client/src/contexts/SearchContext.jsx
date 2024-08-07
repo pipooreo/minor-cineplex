@@ -51,7 +51,9 @@ export function SearchProvider({ children }) {
         .map((tag) => `tags[]=${encodeURIComponent(tag)}`)
         .join("&");
 
-      const url = `http://localhost:4000/search?${params.toString()}&${tagsQuery}`;
+      const url = `${
+        import.meta.env.VITE_SERVER_URL
+      }/search?${params.toString()}&${tagsQuery}`;
 
       const response = await axios.get(url);
 

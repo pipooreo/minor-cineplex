@@ -253,7 +253,26 @@ export default function PaymentTest() {
       setCouponError("");
     }
   };
+  const renderSelectedSeats = () => {
+    const seatNumbers = movie && movie[0].seat_number;
+    if (!seatNumbers) return null; // ตรวจสอบว่ามีค่า seatNumbers หรือไม่
 
+    const rows = seatNumbers.reduce((rows, seatNumber, index) => {
+      if (index % 4 === 0) rows.push([]);
+      rows[rows.length - 1].push(seatNumber);
+      return rows;
+    }, []);
+
+    return rows.map((row, rowIndex) => (
+      <div key={rowIndex} className="flex flex-col items-end gap-1">
+        <div key={rowIndex} className="flex gap-1">
+          <span className="inline-block p-[1px_6px] bg-blue-500 text-white text-center rounded-[4px] text-sm">
+            {row.join(", ")}
+          </span>
+        </div>
+      </div>
+    ));
+  };
   return (
     <div className="w-full ">
       {!success ? (
@@ -369,7 +388,7 @@ export default function PaymentTest() {
             </form>
 
             {/* ส่วนของงการโชว์ข้อมูลที่จองหนัง */}
-            <div className="flex max-md:w-[85%] max-sm:w-[100%] lg:flex-col md:flex-row xs:flex-col max-xl:justify-evenly pt-4 bg-gray-0 rounded-t-[8px]">
+            <div className="flex xl:w-[30%] w-[100%] flex-col max-xl:justify-evenly pt-4 bg-gray-0 rounded-t-[8px]">
               <div className="flex flex-col w-[100%] max-xl:w-[50%] max-xl:justify-center max-md:w-[100%] text-white px-[16px] pb-[24px] gap-[24px]">
                 {movie && (
                   <div className="flex flex-col gap-[12px] w-[100%]">
@@ -394,25 +413,25 @@ export default function PaymentTest() {
                       />
                     )}
 
-                    <div className="flex">
+                    <div className="flex gap-[12px]">
                       <img
                         className="w-[82.21px] h-[120px] rounded-[4px]"
                         src={movie[0].image}
                       />
-                      <div className="flex flex-col gap-[8px]">
+                      <div className="flex flex-col justify-center gap-[8px]">
                         <div className="font-bold text-[20px] ">
                           {movie[0].title}
                         </div>
                         <div className="flex gap-[8px] flex-wrap">
                           {movie[0].genres.map((genres, index_genres) => (
                             <div
-                              className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-300"
+                              className="bg-gray-100 text-gray-300 text-body2R rounded-[4px] px-[6px] py-[12px]"
                               key={index_genres}
                             >
                               {genres}
                             </div>
                           ))}
-                          <div className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-400 font-medium">
+                          <div className="bg-gray-100 text-gray-400 text-body2M rounded-[4px] px-[6px] py-[12px]">
                             {movie[0].language}
                           </div>
                         </div>
@@ -450,16 +469,8 @@ export default function PaymentTest() {
                   <div className=" border-t-[1px] max-lg:hidden pb-4"></div>
                   <div className="flex justify-between">
                     <div>Select Seat</div>
-                    <div className="flex gap-[5px] flex-wrap w-[40%] justify-end">
-                      {movie &&
-                        movie[0].seat_number.map((seatNumber, index) => (
-                          <p
-                            key={index}
-                            className="p-[1px_2px] bg-blue-100 text-white rounded-[4px]"
-                          >
-                            {seatNumber}
-                          </p>
-                        ))}
+                    <div className="flex-col w-[40%] justify-end">
+                      {renderSelectedSeats()}
                     </div>
                   </div>
                   <div className="flex justify-between ">

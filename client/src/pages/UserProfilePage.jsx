@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { FaRegUser } from "react-icons/fa6";
 import ProfileForm from "../componants/userpage/ProfileForm";
 import UpdatePassword from "../componants/userpage/UpdatePassword";
 import BookingHistory from "../componants/userpage/BookingHistory";

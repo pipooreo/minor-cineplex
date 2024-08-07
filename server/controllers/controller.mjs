@@ -391,6 +391,34 @@ export async function getCommentByUser(req, res) {
   }
 }
 
+export async function getCommentByMovie(req, res) {
+  const { userId, movieId } = req.params;
+  try {
+    const result = await connectionPool.query(
+      `SELECT 
+        u.name,
+          u.image,
+          c.created_at,
+          c.comment,
+          c.rating,
+          m.title
+        from
+          users u
+          left join comments c on c.user_id = u.id
+          left join movies m on c.movie_id = m.id WHERE user_id = $1 AND movie_id = $2`,
+      [userId, movieId]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+    return res.status(200).json({ data: result.rows[0] });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Server could not fetch the comment due to a database error",
+    });
+  }
+}
+
 export async function createComment(req, res) {
   // console.log(req.body);
   const { user_id, movie_id, date, comment, rating } = req.body;
