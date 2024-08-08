@@ -195,7 +195,7 @@ export default function PaymentTest() {
           name,
           email,
         });
-        // console.log("response: ", response);
+        // console.log("response: " ,response);
 
         if (response.data.success) {
           if (!couponCode) {
@@ -225,7 +225,6 @@ export default function PaymentTest() {
 
           // console.log(update_payment);
           // console.log("Success Payment");
-          // console.log("moviekub: ", movie);
 
           navigate(
             `/paymentsuccess/${movie[0].title}/${movie[0].cinema_name}/${movie[0].select_date}/${movie[0].hall_number}/${movie[0].time}`
@@ -606,7 +605,7 @@ export default function PaymentTest() {
                     <div className="flex justify-center gap-5">
                       <form method="dialog" className="flex gap-5">
                         <button
-                          className="btn border w-[139.5px] bg-gray-100  border-gray-300 text-white rounded-[4px] text-body1M hover:bg-gray-300 active:bg-gray-400"
+                          className="btn border w-[139.5px] bg-gray-100  border-gray-300 hover:bg-gray-300 active:bg-gray-400 text-white rounded-[4px] text-body1M "
                           type="button"
                           onClick={() => setShowModal(false)}
                         >
@@ -633,6 +632,25 @@ export default function PaymentTest() {
               )}
             </div>
           </div>
+          {countDownPopUp && (
+            <div className="modal modal-open bg-gray-100">
+              <div className="modal-box bg-gray-100 w-[343px] flex flex-col items-center gap-[16px]">
+                <h3 className="font-bold text-[20px] text-[white]">
+                  Booking expired
+                </h3>
+                <p className="text-[14px] text-center text-gray-400">
+                  You did not complete the checkout process in time, please
+                  start again
+                </p>
+                <button
+                  className="btn w-[100%] bg-blue-100 border-blue-100 font-bold text-[16px] text-[white]"
+                  onClick={handleTimeOut}
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          )}
         </fieldset>
       </form>
     </div>

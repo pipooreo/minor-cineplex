@@ -126,7 +126,7 @@ function MoviePage() {
           <div className="flex gap-3 justify-start items-center w-[100%]  mt-0 md:w-[50%] my-[30px] mx-0 md:m-[50px]">
             <p className="bg-gray-100 text-white text-head4 px-[16px] py-[12px]">
               <i className="fas fa-star text-blue-100 px-2"></i>
-              {averageRating}
+              {averageRating.toFixed(1)}
             </p>
             <h2 className="text-head3 text-white">Rating & Reviews</h2>
           </div>

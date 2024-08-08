@@ -105,14 +105,14 @@ function PaymentPageSuccess() {
             </div>
             <div className="w-[100%] grid grid-cols-2 gap-[16px]">
               <button
-                className="col-span-1 btn  bg-blue-100 hover:bg-blue-200 active:bg-blue-300 h-[48px] bg-[color:hsla(223, 82%, 62%, 1)]] text-white text-[16px] font-bold max-sm:w-[343px]"
+                className="col-span-1 btn  bg-gray-100  border-gray-300 hover:bg-gray-300 active:bg-gray-400 h-[48px] bg-[color:hsla(223, 82%, 62%, 1)]] text-white text-[16px] font-bold max-sm:w-[343px]"
                 type="text"
                 onClick={() => nevigate("/")}
               >
                 Back to home
               </button>
               <button
-                className="col-span-1 btn bg-gray-100 hover:bg-blue-200 active:bg-blue-300 h-[48px] bg-[color:hsla(223, 82%, 62%, 1)]] text-white text-[16px] font-bold max-sm:w-[343px]"
+                className="col-span-1 btn bg-blue-100 border-blue-100 hover:bg-blue-200 active:bg-blue-300 hover:border-blue-200 active:border-blue-300 h-[48px] bg-[color:hsla(223, 82%, 62%, 1)]] text-white text-[16px] font-bold max-sm:w-[343px]"
                 type="text"
                 onClick={() => nevigate("/")}
               >
