@@ -43,6 +43,11 @@ export default function PaymentTest() {
     }
   };
 
+  const username = user.name;
+  console.log("username meow:", username);
+  console.log("stripe ja", stripe);
+  console.log("elements JA", elements);
+
   const handleOwnerChange = (event) => {
     const value = event.target.value;
     setOwnerError(""); // Clear any previous error
@@ -113,13 +118,48 @@ export default function PaymentTest() {
 
   const handleSubmitQR = async (e) => {
     e.preventDefault();
+    console.log("user", user);
+    const cardOwner = user.name;
+    // const paymentMethod = "QR";
 
-    const paymentMethod = "QR";
-    const amount = (movie[0].seat_number.length * 150 - discount) * 100;
+    const amount = movie[0].seat_number.length * 150 - discount;
     const email = movie[0].email;
-    navigate("/QR", {
-      state: { amount, paymentMethod, cardOwner, email },
-    });
+    const userid = user.id;
+
+    if (!couponCode) {
+      navigate("/payment/qr", {
+        state: {
+          amount,
+          paymentMethodId: user.id,
+          email,
+          userid,
+          username,
+          cinema: params.cinema,
+          movie: params.title,
+          select_date: params.date,
+          time: params.time,
+          hall: params.hall,
+          seats: movie[0].seat_number,
+        },
+      });
+    } else {
+      navigate("/payment/qr", {
+        state: {
+          amount,
+          paymentMethodId: user.id,
+          username,
+          email,
+          userid,
+          couponCode,
+          cinema: params.cinema,
+          movie: params.title,
+          select_date: params.date,
+          time: params.time,
+          hall: params.hall,
+          seats: movie[0].seat_number,
+        },
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -148,33 +188,6 @@ export default function PaymentTest() {
         const amount = (movie[0].seat_number.length * 150 - discount) * 100;
         const name = cardOwner;
         const email = movie[0].email;
-
-        // if
-        // if method === "QR" { }
-        //navigate ("/QR PAGE SMTH with params.id, marpas.amount")
-        // const QrCode = insert qr here tum ngai wa 55
-        //ข้างล่างจะเกิดขึ้นเมื่ออเราแสกนqrเรียบร้อยแล้ว
-        // const responseQR = await axios.post("http://localhost:4000/payment", {
-        //   amount,
-        //   paymentMethodId: id,
-        //   name,
-        //   email,
-        // });
-        // if (responseQR.data.success) {
-        //   const update_payment = await axios.put(
-        //     "http://localhost:4000/payment",
-        //     {
-        //       user: user.id,
-        //       cinema: params.cinema,
-        //       movie: params.title,
-        //       select_date: params.date,
-        //       time: params.time,
-        //       hall: params.hall,
-        //       seats: movie[0].seat_number,
-        //     }
-        //   );
-        // console.log(update_payment);
-        // navigate("/payment/success");
 
         const response = await axios.post("http://localhost:4000/payment", {
           amount,
@@ -332,18 +345,23 @@ export default function PaymentTest() {
             <div className="font-bold flex text-[24px] gap-5 pb-4">
               <button
                 type="button"
-                className={`text-white h-[38px] ${
-                  method === "CreditCard" ? "bg-blue-500" : ""
-                }`}
+                className={`h-[38px]  leading-[30px] ${
+                  method === "CreditCard"
+                    ? "bg-blue-500 text-white border-b border-gray-200"
+                    : "text-gray-300"
+                }  active:text-white active:underline`}
                 onClick={() => setMethod("CreditCard")}
               >
                 Credit card
               </button>
               <button
                 type="button"
-                className={`text-white h-[38px] ${
-                  method === "QR" ? "bg-blue-500" : ""
-                }`}
+                className={`h-[38px] leading-[30px]
+                   ${
+                     method === "QR"
+                       ? "bg-blue-500 text-white border-b border-gray-200"
+                       : "text-gray-300"
+                   }`}
                 onClick={() => setMethod("QR")}
               >
                 QR Code
@@ -422,6 +440,7 @@ export default function PaymentTest() {
             {method === "QR" && (
               <div className="w-[100%] bg-gray-100 text-gray-400 h-[80%] p-[40px_24px_40px_24px] flex justify-center items-center">
                 {console.log("method", method)}
+                {console.log("coupon used", couponCode)}
                 QR Code Payment
               </div>
             )}
