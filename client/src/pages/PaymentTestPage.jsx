@@ -195,7 +195,7 @@ export default function PaymentTest() {
           name,
           email,
         });
-        // console.log("response: " ,response);
+        // console.log("response: ", response);
 
         if (response.data.success) {
           if (!couponCode) {
@@ -225,8 +225,11 @@ export default function PaymentTest() {
 
           // console.log(update_payment);
           // console.log("Success Payment");
+          // console.log("moviekub: ", movie);
 
-          navigate("/payment/success");
+          navigate(
+            `/paymentsuccess/${movie[0].title}/${movie[0].cinema_name}/${movie[0].select_date}/${movie[0].hall_number}/${movie[0].time}`
+          );
         }
       } catch (error) {
         if (cardOwner !== user.id) {
