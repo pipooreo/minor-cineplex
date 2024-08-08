@@ -15,7 +15,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function PaymentTest() {
-  const [success, setSuccess] = useState(false);
   const [movie, setMovie] = useState();
   const [cardOwner, setCardOwner] = useState("");
   const [countdownDate, setCountdownDate] = useState(null);
@@ -24,7 +23,7 @@ export default function PaymentTest() {
   const [couponCode, setCouponCode] = useState(""); // เพิ่ม state สำหรับเก็บคูปอง
   const [couponError, setCouponError] = useState("");
   const [discount, setDiscount] = useState(0); // state สำหรับเก็บค่าลดราคา
-
+  const [method, setMethod] = useState("CreditCard");
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
@@ -44,10 +43,16 @@ export default function PaymentTest() {
     }
   };
 
+  const username = user.name;
+  console.log("username meow:", username);
+  console.log("stripe ja", stripe);
+  console.log("elements JA", elements);
+
   const handleOwnerChange = (event) => {
     const value = event.target.value;
     setOwnerError(""); // Clear any previous error
     setCardOwner(value);
+    console.log("card owrner", cardOwner);
   };
 
   const handleExpiryDateChange = (event) => {
@@ -111,6 +116,52 @@ export default function PaymentTest() {
     getMovie();
   }, []);
 
+  const handleSubmitQR = async (e) => {
+    e.preventDefault();
+    console.log("user", user);
+    const cardOwner = user.name;
+    // const paymentMethod = "QR";
+
+    const amount = movie[0].seat_number.length * 150 - discount;
+    const email = movie[0].email;
+    const userid = user.id;
+
+    if (!couponCode) {
+      navigate("/payment/qr", {
+        state: {
+          amount,
+          paymentMethodId: user.id,
+          email,
+          userid,
+          username,
+          cinema: params.cinema,
+          movie: params.title,
+          select_date: params.date,
+          time: params.time,
+          hall: params.hall,
+          seats: movie[0].seat_number,
+        },
+      });
+    } else {
+      navigate("/payment/qr", {
+        state: {
+          amount,
+          paymentMethodId: user.id,
+          username,
+          email,
+          userid,
+          couponCode,
+          cinema: params.cinema,
+          movie: params.title,
+          select_date: params.date,
+          time: params.time,
+          hall: params.hall,
+          seats: movie[0].seat_number,
+        },
+      });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -134,7 +185,7 @@ export default function PaymentTest() {
     if (!error) {
       try {
         const { id } = paymentMethod;
-        const amount = movie[0].seat_number.length * 150 * 100 - discount * 100;
+        const amount = (movie[0].seat_number.length * 150 - discount) * 100;
         const name = cardOwner;
         const email = movie[0].email;
 
@@ -144,7 +195,7 @@ export default function PaymentTest() {
           name,
           email,
         });
-        console.log("response: ", response);
+        // console.log("response: " ,response);
 
         if (response.data.success) {
           if (!couponCode) {
@@ -174,7 +225,6 @@ export default function PaymentTest() {
 
           // console.log(update_payment);
           // console.log("Success Payment");
-          setSuccess(true);
 
           navigate("/payment/success");
         }
@@ -236,6 +286,7 @@ export default function PaymentTest() {
 
         // check type of coupon
         if (coupon.type === "percentage") {
+          //ex couponname : ARHMHAMXDDD
           setDiscount(
             (movie[0].seat_number.length * 150 * coupon.discount_value) / 100
           );
@@ -256,51 +307,68 @@ export default function PaymentTest() {
 
   return (
     <div className="w-full ">
-      {!success ? (
-        <form onSubmit={handleSubmit}>
-          <div className="bg-BG ">
-            <div className="h-[80px] bg-BG max-md:h-[48px]"></div>
-            <header className="bg-gray-0 h-[106px] flex justify-center items-center gap-[190px] max-md:gap-[80px]">
+      <form onSubmit={handleSubmit}>
+        <div className="bg-BG ">
+          <div className="h-[80px] bg-BG max-md:h-[48px]"></div>
+          <header className="bg-gray-0 h-[106px] flex justify-center items-center gap-[190px] max-md:gap-[80px]">
+            <button
+              className="flex flex-col items-center w-[140px]"
+              // onClick={() => navigate(-2)}
+            >
+              <FaCheck className="w-[44px] h-[44px] bg-blue-300  rounded-full text-white p-3 " />
+              <p className="text-white text-[16px] max-md:text-[14px]">
+                Select showtime
+              </p>
+            </button>
+            <button
+              className="flex flex-col items-center w-[140px] absolute z-10 "
+              onClick={() => navigate(-1)}
+            >
+              <FaCheck className="w-[44px] h-[44px] bg-blue-300  rounded-full text-white p-3 " />
+              <p className="text-white text-[16px] max-md:text-[14px]">
+                Select seat
+              </p>
+            </button>
+            <div className="flex flex-col items-center w-[140px]">
+              <div className="w-[44px] h-[44px] bg-blue-100 rounded-full text-white text-center pt-[9px] border-gray-100 border">
+                3
+              </div>
+              <p className="text-white text-[16px] max-md:text-[14px]">
+                Payment
+              </p>
+            </div>
+            <hr className="w-[287px] absolute mb-[20px] border-gray-100 max-md:w-[176px]" />
+          </header>
+        </div>
+        <fieldset className="flex max-xl:flex-col  gap-10 justify-evenly max-md:items-center bg-BG  md:p-[80px_120px_80px_120px] lg:justify-between">
+          <form className="flex flex-col w-[60%] gap-4 h-full max-xl:w-full text-2xl leading-[30px] max-md:px-[16px] max-md:pt-[40px] max-md:pb-[40px]">
+            <div className="font-bold flex text-[24px] gap-5 pb-4">
               <button
-                className="flex flex-col items-center w-[140px]"
-                // onClick={() => navigate(-2)}
+                type="button"
+                className={`h-[38px]  leading-[30px] ${
+                  method === "CreditCard"
+                    ? "bg-blue-500 text-white border-b border-gray-200"
+                    : "text-gray-300"
+                }  active:text-white active:underline`}
+                onClick={() => setMethod("CreditCard")}
               >
-                <FaCheck className="w-[44px] h-[44px] bg-blue-300  rounded-full text-white p-3 " />
-                <p className="text-white text-[16px] max-md:text-[14px]">
-                  Select showtime
-                </p>
+                Credit card
               </button>
               <button
-                className="flex flex-col items-center w-[140px] absolute z-10 "
-                onClick={() => navigate(-1)}
+                type="button"
+                className={`h-[38px] leading-[30px]
+                   ${
+                     method === "QR"
+                       ? "bg-blue-500 text-white border-b border-gray-200"
+                       : "text-gray-300"
+                   }`}
+                onClick={() => setMethod("QR")}
               >
-                <FaCheck className="w-[44px] h-[44px] bg-blue-300  rounded-full text-white p-3 " />
-                <p className="text-white text-[16px] max-md:text-[14px]">
-                  Select seat
-                </p>
+                QR Code
               </button>
-              <div className="flex flex-col items-center w-[140px]">
-                <div className="w-[44px] h-[44px] bg-blue-100 rounded-full text-white text-center pt-[9px] border-gray-100 border">
-                  3
-                </div>
-                <p className="text-white text-[16px] max-md:text-[14px]">
-                  Payment
-                </p>
-              </div>
-              <hr className="w-[287px] absolute mb-[20px] border-gray-100 max-md:w-[176px]" />
-            </header>
-          </div>
-          <fieldset className="flex max-xl:flex-col  gap-10 justify-evenly max-md:items-center bg-BG  md:p-[80px_120px_80px_120px] lg:justify-between">
-            <form className="flex flex-col w-[60%] gap-4 h-full max-xl:w-full text-2xl leading-[30px] max-md:px-[16px] max-md:pt-[40px] max-md:pb-[40px]">
-              <div className="font-bold flex text-[24px] gap-5">
-                <button type="button" className="text-white  h-[38px] ">
-                  Credit card
-                </button>
-                <button type="button" className="text-white  h-[38px]">
-                  QR Code
-                </button>
-              </div>
+            </div>
 
+            {method === "CreditCard" && (
               <div className="bg-BG grid grid-cols-2 max-lg:grid-cols-1 gap-[40px]">
                 <div className="flex flex-col gap-2">
                   <label className="text-gray-400 text-[16px] leading-[24px]">
@@ -317,8 +385,9 @@ export default function PaymentTest() {
                     <div className="text-[#F34335] mt-2">{cardError}</div>
                   )}
                 </div>
+
                 <div className="flex flex-col gap-2">
-                  <label className="text-gray-400 text-[16px] leading-[24px] h-[24px]">
+                  <label className="text-gray-400 text-[16px] leading-[24px]">
                     Card Owner
                   </label>
                   <input
@@ -366,203 +435,209 @@ export default function PaymentTest() {
                   )}
                 </div>
               </div>
-            </form>
+            )}
 
-            {/* ส่วนของงการโชว์ข้อมูลที่จองหนัง */}
-            <div className="flex max-md:w-[85%] max-sm:w-[100%] lg:flex-col md:flex-row xs:flex-col max-xl:justify-evenly pt-4 bg-gray-0 rounded-t-[8px]">
-              <div className="flex flex-col w-[100%] max-xl:w-[50%] max-xl:justify-center max-md:w-[100%] text-white px-[16px] pb-[24px] gap-[24px]">
-                {movie && (
-                  <div className="flex flex-col gap-[12px] w-[100%]">
-                    {countdownDate && (
-                      <Countdown
-                        date={countdownDate}
-                        onComplete={() => handleDeleteData(movie)}
-                        intervalDelay={0}
-                        precision={3}
-                        renderer={({ minutes, seconds }) => (
-                          <div className="flex gap-[8px]">
-                            <div>Time remaining: </div>
-                            <span>
-                              {` ${minutes
-                                .toString()
-                                .padStart(2, "0")}:${seconds
-                                .toString()
-                                .padStart(2, "0")}`}
-                            </span>
-                          </div>
-                        )}
-                      />
-                    )}
-
-                    <div className="flex">
-                      <img
-                        className="w-[82.21px] h-[120px] rounded-[4px]"
-                        src={movie[0].image}
-                      />
-                      <div className="flex flex-col gap-[8px]">
-                        <div className="font-bold text-[20px] ">
-                          {movie[0].title}
-                        </div>
-                        <div className="flex gap-[8px] flex-wrap">
-                          {movie[0].genres.map((genres, index_genres) => (
-                            <div
-                              className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-300"
-                              key={index_genres}
-                            >
-                              {genres}
-                            </div>
-                          ))}
-                          <div className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-400 font-medium">
-                            {movie[0].language}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                <div className="flex flex-col gap-[8px]">
-                  <div className="flex gap-[12px] items-center">
-                    <i className="fa-solid fa-location-dot w-[16px] h-[16px] text-gray-200"></i>
-                    <p className="text-gray-400">
-                      {movie && movie[0].cinema_name}
-                    </p>
-                  </div>
-                  <div className="flex gap-[12px] items-center">
-                    <i className="fa-solid fa-calendar-days w-[16px] h-[16px] text-gray-200"></i>
-                    <p className="text-gray-400">
-                      {movie && movie[0].select_date}
-                    </p>
-                  </div>
-                  <div className="flex gap-[12px] items-center">
-                    <i className="fa-solid fa-clock w-[16px] h-[16px] text-gray-200"></i>
-                    <p className="text-gray-400">{movie && movie[0].time}</p>
-                  </div>
-                  <div className="flex gap-[12px] items-center">
-                    <i className="fa-solid fa-shop w-[16px] h-[16px] text-gray-200"></i>
-                    <p className="text-gray-400">
-                      {movie && movie[0].hall_number}
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="text-white  flex flex-col gap-[20px] px-[16px] pt-[16px] pb-[24px] rounded-b-[8px] bg-gray-0">
-                <div className="">
-                  <div className=" border-t-[1px] max-lg:hidden pb-4"></div>
-                  <div className="flex justify-between">
-                    <div>Select Seat</div>
-                    <div className="flex gap-[5px] flex-wrap w-[40%] justify-end">
-                      {movie &&
-                        movie[0].seat_number.map((seatNumber, index) => (
-                          <p
-                            key={index}
-                            className="p-[1px_2px] bg-blue-100 text-white rounded-[4px]"
-                          >
-                            {seatNumber}
-                          </p>
-                        ))}
-                    </div>
-                  </div>
-                  <div className="flex justify-between ">
-                    <div>Payment Method</div>
-                    <div> Credit card</div>
-                  </div>
-
-                  {discount > 0 && (
-                    <div className="flex justify-between text-[#ca2d2d]">
-                      <div>Coupon</div>
-                      <div>- THB{discount}</div>
-                    </div>
-                  )}
-
-                  <div className="flex justify-between">
-                    <div>Total</div>
-                    <div>
-                      THB
-                      {(movie && movie[0].seat_number.length * 150) - discount}
-                    </div>
-                  </div>
-                </div>
-
-                <input
-                  type="text"
-                  placeholder="Coupon"
-                  value={couponCode}
-                  onChange={handleCouponChange}
-                  className="p-[12px_12px_12px_16px] placeholder-gray-300 bg-gray-100 border border-gray-200 w-full rounded-md h-[48px]"
-                />
-
-                {couponError && (
-                  <p className="text-[#F34335] text-sm">{couponError}</p>
-                )}
-
-                <button
-                  className="btn bg-blue-100 border-blue-100 text-[white]"
-                  type="button"
-                  onClick={() => setShowModal(true)}
-                >
-                  Next
-                </button>
-
-                {/* Popup Dialog */}
-                {showModal && (
-                  <div className="modal modal-open bg-gray-100">
-                    <div className="modal-box bg-gray-100">
-                      <h3 className="font-bold text-lg">Confirm booking</h3>
-                      <p className="py-4">Confirm booking and payment?</p>
-                      <div className="modal-action">
-                        <form method="dialog">
-                          <button
-                            className="btn"
-                            type="button"
-                            onClick={() => setShowModal(false)}
-                          >
-                            Cancel
-                          </button>
-                          <button
-                            className="btn"
-                            type="button"
-                            onClick={(e) => {
-                              handleSubmit(e);
-                              setShowModal(false);
-                            }}
-                          >
-                            Confirm
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Popup Dialog */}
-            {countDownPopUp && (
-              <div className="modal modal-open bg-gray-100">
-                <div className="modal-box bg-gray-100 w-[343px] flex flex-col items-center gap-[16px]">
-                  <h3 className="font-bold text-[20px] text-[white]">
-                    Booking expired
-                  </h3>
-                  <p className="text-[14px] text-center text-gray-400">
-                    You did not complete the checkout process in time, please
-                    start again
-                  </p>
-                  <button
-                    className="btn w-[100%] bg-blue-100 border-blue-100 font-bold text-[16px] text-[white]"
-                    onClick={handleTimeOut}
-                  >
-                    OK
-                  </button>
-                </div>
+            {method === "QR" && (
+              <div className="w-[100%] bg-gray-100 text-gray-400 h-[80%] p-[40px_24px_40px_24px] flex justify-center items-center">
+                {console.log("method", method)}
+                {console.log("coupon used", couponCode)}
+                QR Code Payment
               </div>
             )}
-          </fieldset>
-        </form>
-      ) : (
-        <div>
-          <h2>Good</h2>
-        </div>
-      )}
+          </form>
+
+          {/* ส่วนของงการโชว์ข้อมูลที่จองหนัง */}
+          <div className="flex max-md:w-[85%] max-sm:w-[100%] lg:flex-col md:flex-row xs:flex-col max-xl:justify-evenly pt-4 bg-gray-0 rounded-t-[8px]">
+            <div className="flex flex-col w-[100%] max-xl:w-[50%] max-xl:justify-center max-md:w-[100%] text-white px-[16px] pb-[24px] gap-[24px]">
+              {movie && (
+                <div className="flex flex-col gap-[12px] w-[100%]">
+                  {countdownDate && (
+                    <Countdown
+                      date={countdownDate}
+                      onComplete={() => handleDeleteData(movie)}
+                      intervalDelay={0}
+                      precision={3}
+                      renderer={({ minutes, seconds }) => (
+                        <div className="flex gap-[8px]">
+                          <div>Time remaining: </div>
+                          <span>
+                            {` ${minutes.toString().padStart(2, "0")}:${seconds
+                              .toString()
+                              .padStart(2, "0")}`}
+                          </span>
+                        </div>
+                      )}
+                    />
+                  )}
+
+                  <div className="flex">
+                    <img
+                      className="w-[82.21px] h-[120px] rounded-[4px]"
+                      src={movie[0].image}
+                    />
+                    <div className="flex flex-col gap-[8px]">
+                      <div className="font-bold text-[20px] ">
+                        {movie[0].title}
+                      </div>
+                      <div className="flex gap-[8px] flex-wrap">
+                        {movie[0].genres.map((genres, index_genres) => (
+                          <div
+                            className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-300"
+                            key={index_genres}
+                          >
+                            {genres}
+                          </div>
+                        ))}
+                        <div className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-400 font-medium">
+                          {movie[0].language}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div className="flex flex-col gap-[8px]">
+                <div className="flex gap-[12px] items-center">
+                  <i className="fa-solid fa-location-dot w-[16px] h-[16px] text-gray-200"></i>
+                  <p className="text-gray-400">
+                    {movie && movie[0].cinema_name}
+                  </p>
+                </div>
+                <div className="flex gap-[12px] items-center">
+                  <i className="fa-solid fa-calendar-days w-[16px] h-[16px] text-gray-200"></i>
+                  <p className="text-gray-400">
+                    {movie && movie[0].select_date}
+                  </p>
+                </div>
+                <div className="flex gap-[12px] items-center">
+                  <i className="fa-solid fa-clock w-[16px] h-[16px] text-gray-200"></i>
+                  <p className="text-gray-400">{movie && movie[0].time}</p>
+                </div>
+                <div className="flex gap-[12px] items-center">
+                  <i className="fa-solid fa-shop w-[16px] h-[16px] text-gray-200"></i>
+                  <p className="text-gray-400">
+                    {movie && movie[0].hall_number}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="text-white  flex flex-col gap-[20px] px-[16px] pt-[16px] pb-[24px] rounded-b-[8px] bg-gray-0">
+              <div className="">
+                <div className=" border-t-[1px] max-lg:hidden pb-4"></div>
+                <div className="flex justify-between">
+                  <div>Select Seat</div>
+                  <div className="flex gap-[5px] flex-wrap w-[40%] justify-end">
+                    {movie &&
+                      movie[0].seat_number.map((seatNumber, index) => (
+                        <p
+                          key={index}
+                          className="p-[1px_2px] bg-blue-100 text-white rounded-[4px]"
+                        >
+                          {seatNumber}
+                        </p>
+                      ))}
+                  </div>
+                </div>
+                <div className="flex justify-between ">
+                  <div>Payment Method</div>
+                  <div> Credit card</div>
+                </div>
+
+                {discount > 0 && (
+                  <div className="flex justify-between text-[#ca2d2d]">
+                    <div>Coupon</div>
+                    <div>- THB{discount}</div>
+                  </div>
+                )}
+
+                <div className="flex justify-between">
+                  <div>Total</div>
+                  <div>
+                    THB
+                    {(movie && movie[0].seat_number.length * 150) - discount}
+                  </div>
+                </div>
+              </div>
+
+              <input
+                type="text"
+                placeholder="Coupon"
+                value={couponCode}
+                onChange={handleCouponChange}
+                className="p-[12px_12px_12px_16px] placeholder-gray-300 bg-gray-100 border border-gray-200 w-full rounded-md h-[48px]"
+              />
+
+              {couponError && (
+                <p className="text-[#F34335] text-sm">{couponError}</p>
+              )}
+
+              <button
+                className="btn bg-blue-100 border-blue-100 text-[white]"
+                type="button"
+                onClick={() => setShowModal(true)}
+              >
+                Next
+              </button>
+
+              {/* Popup Dialog */}
+              {showModal && (
+                <div className="modal modal-open bg-gray-100">
+                  <div className="modal-box bg-gray-100">
+                    <h3 className="font-bold text-lg">Confirm booking</h3>
+                    <p className="py-4">Confirm booking and payment?</p>
+                    <div className="modal-action">
+                      <form method="dialog">
+                        <button
+                          className="btn"
+                          type="button"
+                          onClick={() => setShowModal(false)}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="btn"
+                          type="button"
+                          onClick={(e) => {
+                            if (method === "CreditCard") {
+                              handleSubmit(e);
+                              setShowModal(false);
+                            } else if (method === "QR") {
+                              handleSubmitQR(e);
+                            }
+                          }}
+                        >
+                          Confirm
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Popup Dialog */}
+          {countDownPopUp && (
+            <div className="modal modal-open bg-gray-100">
+              <div className="modal-box bg-gray-100 w-[343px] flex flex-col items-center gap-[16px]">
+                <h3 className="font-bold text-[20px] text-[white]">
+                  Booking expired
+                </h3>
+                <p className="text-[14px] text-center text-gray-400">
+                  You did not complete the checkout process in time, please
+                  start again
+                </p>
+                <button
+                  className="btn w-[100%] bg-blue-100 border-blue-100 font-bold text-[16px] text-[white]"
+                  onClick={handleTimeOut}
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          )}
+        </fieldset>
+      </form>
     </div>
   );
 }

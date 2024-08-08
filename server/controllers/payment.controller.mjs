@@ -222,6 +222,44 @@ export async function updatePayment(req, res, next) {
     });
   }
 }
+export async function updatePaymentQR(req, res, next) {
+  const { user, cinema, movie, select_date, time, hall, seats } = req.body;
+  // console.log(req.body);
+  let result;
+  try {
+    for (let seat of seats) {
+      result = await connectionPool.query(
+        `UPDATE booking
+       SET status = 'booked',
+        payment_method = 'QR code', 
+        payment_status = 'success', 
+        updated_at = CURRENT_TIMESTAMP
+       WHERE user_id = $1
+         AND cinema_id = (SELECT id FROM cinemas WHERE name = $2)
+         AND movie_id = (SELECT id FROM movies WHERE title = $3)
+         AND select_date = $4::date
+         AND time_id = (SELECT id FROM screentime WHERE time = $5)
+         AND hall_id = (SELECT id FROM halls WHERE hall_number = $6)
+          AND seat_id = (SELECT id FROM seat_number WHERE seat_num = $7)`,
+        [user, cinema, movie, select_date, time, hall, seat]
+      );
+    }
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        message: "Booking not found or no changes made",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Booking updated successfully",
+    });
+  } catch (error) {
+    console.error("Error updating booking:", error);
+    return res.status(500).json({
+      message: "Server error while updating booking",
+    });
+  }
+}
 
 export async function deletePayment(req, res, next) {
   const { user, cinema, movie, select_date, time, hall, seats } = req.body;
