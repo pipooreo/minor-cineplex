@@ -195,7 +195,7 @@ export default function PaymentTest() {
           name,
           email,
         });
-        // console.log("response: ", response);
+        // console.log("response: " ,response);
 
         if (response.data.success) {
           if (!couponCode) {
