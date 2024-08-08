@@ -516,21 +516,23 @@ export default function PaymentTest() {
 
                 {/* Popup Dialog */}
                 {showModal && (
-                  <div className="modal modal-open bg-gray-100">
-                    <div className="modal-box bg-gray-100">
+                  <div className="modal modal-open bg-gray-100 ">
+                    <div className="modal-box bg-gray-100 w-11/12 max-w-sm">
                       <h3 className="font-bold text-lg">Confirm booking</h3>
-                      <p className="py-4">Confirm booking and payment?</p>
-                      <div className="modal-action">
-                        <form method="dialog">
+                      <p className="py-4 text-gray-400">
+                        Confirm booking and payment?
+                      </p>
+                      <div className="flex justify-center gap-5">
+                        <form method="dialog" className="flex gap-5">
                           <button
-                            className="btn"
+                            className="btn border w-[139.5px] bg-gray-100  border-gray-300 text-white rounded-[4px] text-body1M hover:bg-gray-300 active:bg-gray-400"
                             type="button"
                             onClick={() => setShowModal(false)}
                           >
                             Cancel
                           </button>
                           <button
-                            className="btn"
+                            className="btn text-body1M w-[139.5px] rounded-[4px] bg-blue-100 border-blue-100 hover:bg-blue-200 active:bg-blue-300 text-white"
                             type="button"
                             onClick={(e) => {
                               handleSubmit(e);
