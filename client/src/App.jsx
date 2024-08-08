@@ -21,6 +21,7 @@ import { ScrollToTop } from "./componants/ScrollToTop";
 import StripeTest from "./pages/StripeTestPage";
 // import TestPaymentPage from "./pages/TestPaymentPage";
 import PaymentPageSuccess from "./pages/PaymentPageSuccess";
+import RefundPageSuccess from "./pages/RefundPageSuccess";
 
 function App() {
   const auth = useAuth();
@@ -50,6 +51,10 @@ function App() {
               element={<StripeTest />}
             />
             <Route path="/payment/success" element={<PaymentPageSuccess />} />
+            <Route
+              path="/refund/success/:price"
+              element={<RefundPageSuccess />}
+            />
           </Routes>
           <Footer />
         </ScrollToTop>

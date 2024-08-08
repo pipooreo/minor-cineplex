@@ -16,6 +16,7 @@ import {
 function BookingHistory(props) {
   const [ratings, setRatings] = useState({});
   const [comments, setComments] = useState({});
+  const [reasonRefunds, setReasonRefunds] = useState({});
   const [isOpen, setIsOpen] = useState(false);
 
   const history = props.user;
@@ -76,6 +77,15 @@ function BookingHistory(props) {
 
   const handleBookingDetail = (index, screen) => {
     const dialog = document.getElementById(`detail_${screen}_${index}`);
+    // console.log(image);
+    if (dialog) {
+      dialog.showModal();
+    }
+  };
+
+  const handlerefund = (index, screen) => {
+    document.getElementById(`detail_${screen}_${index}`).close();
+    const dialog = document.getElementById(`refund_${screen}_${index}`);
     // console.log(image);
     if (dialog) {
       dialog.showModal();
@@ -175,6 +185,43 @@ function BookingHistory(props) {
           dialog.close();
         }
         window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const sendRefund = async (movie, index, screen) => {
+    console.log(movie);
+    try {
+      const result = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/payment/refund`,
+        {
+          paymentIntentId: movie.payment_id,
+        }
+      );
+      const deleteBooking = await axios.delete(
+        `${import.meta.env.VITE_SERVER_URL}/booking`,
+        {
+          data: {
+            user: profile.id,
+            cinema: movie.cinema_name,
+            movie: movie.title,
+            hall: movie.hall_number,
+            select_date: movie.select_date,
+            time: movie.time,
+            seats: movie.seats,
+          },
+        }
+      );
+      console.log(result);
+      // if(result)
+      if (result.status === 200 && deleteBooking.status === 200) {
+        const dialog = document.getElementById(`refund_${screen}_${index}`);
+        if (dialog) {
+          dialog.close();
+        }
+        navigate(`/refund/success/${result.data.refundPrice / 100}`);
       }
     } catch (error) {
       console.log(error);
@@ -326,39 +373,63 @@ function BookingHistory(props) {
             rate.movie_id === movie.movie_id && rate.user_id === movie.user_id
         );
         const bookingDate = new Date(movie.select_date);
+        console.log(
+          today.getTime() === bookingDate.getTime() &&
+            !reviewExists &&
+            movie.payment_status === "success" &&
+            currentTime > movie.time - 1
+        );
 
         return (
           <div className="flex flex-col w-full xl:w-[691px]" key={index}>
             <div className="flex flex-col  text-white px-[16px] pb-[24px] pt-[16px] gap-[24px] bg-gray-0 rounded-[8px]">
-              <div className=" flex items-center gap-[12px]">
-                <img
-                  className="w-[96.31px] h-[140px] rounded-[4px]"
-                  src={movie.image}
-                />
+              <div className=" flex  justify-between gap-[12px]">
+                <div className=" flex items-center gap-[12px]">
+                  <img
+                    className="w-[96.31px] h-[140px] rounded-[4px]"
+                    src={movie.image}
+                  />
+                  <div className="flex flex-col gap-[4px]">
+                    <div className="font-bold text-[20px] ">{movie.title}</div>
+                    <div className="flex flex-col gap-[8px]">
+                      <div className="flex gap-[12px] items-center">
+                        <i className="fa-solid fa-location-dot w-[16px] h-[16px] text-gray-200"></i>
+                        <p className="text-gray-400 text-[14px]">
+                          {movie.cinema_name}
+                        </p>
+                      </div>
+                      <div className="flex gap-[12px] items-center">
+                        <i className="fa-solid fa-calendar-days w-[16px] h-[16px] text-gray-200"></i>
+                        <p className="text-gray-400 text-[14px]">
+                          {movie.select_date}
+                        </p>
+                      </div>
+                      <div className="flex gap-[12px] items-center">
+                        <i className="fa-solid fa-clock w-[16px] h-[16px] text-gray-200"></i>
+                        <p className="text-gray-400 text-[14px]">
+                          {movie.time}
+                        </p>
+                      </div>
+                      <div className="flex gap-[12px] items-center">
+                        <i className="fa-solid fa-shop w-[16px] h-[16px] text-gray-200"></i>
+                        <p className="text-gray-400 text-[14px]">
+                          {movie.hall_number}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div className="flex flex-col gap-[4px]">
-                  <div className="font-bold text-[20px] ">{movie.title}</div>
-                  <div className="flex flex-col gap-[8px]">
-                    <div className="flex gap-[12px] items-center">
-                      <i className="fa-solid fa-location-dot w-[16px] h-[16px] text-gray-200"></i>
-                      <p className="text-gray-400 text-[14px]">
-                        {movie.cinema_name}
-                      </p>
+                  <div className="flex gap-[8px]">
+                    <p className="text-gray-300 text-body2R">Booking No.</p>
+                    <div className=" text-body2M text-gray-300 gap-[4px]">
+                      AK{movie.booking_id}
                     </div>
-                    <div className="flex gap-[12px] items-center">
-                      <i className="fa-solid fa-calendar-days w-[16px] h-[16px] text-gray-200"></i>
-                      <p className="text-gray-400 text-[14px]">
-                        {movie.select_date}
-                      </p>
-                    </div>
-                    <div className="flex gap-[12px] items-center">
-                      <i className="fa-solid fa-clock w-[16px] h-[16px] text-gray-200"></i>
-                      <p className="text-gray-400 text-[14px]">{movie.time}</p>
-                    </div>
-                    <div className="flex gap-[12px] items-center">
-                      <i className="fa-solid fa-shop w-[16px] h-[16px] text-gray-200"></i>
-                      <p className="text-gray-400 text-[14px]">
-                        {movie.hall_number}
-                      </p>
+                  </div>
+                  <div className="flex gap-[8px]">
+                    <p className="text-gray-300 text-body2R">Booked date</p>
+                    <div className=" text-body2M text-gray-300 gap-[4px]">
+                      {formatDate(new Date(movie.booking_date))}
                     </div>
                   </div>
                 </div>
@@ -390,7 +461,7 @@ function BookingHistory(props) {
               (today.getTime() === bookingDate.getTime() &&
                 !reviewExists &&
                 movie.payment_status === "success" &&
-                currentTime > movie.time) ? (
+                currentTime > movie.time - 1) ? (
                 <div className="flex items-center justify-end gap-[8px]">
                   <button
                     className="underline text-white font-bold"
@@ -528,7 +599,7 @@ function BookingHistory(props) {
                 (today.getTime() === bookingDate.getTime() &&
                   reviewExists &&
                   movie.payment_status === "success" &&
-                  currentTime > movie.time) ? (
+                  currentTime > movie.time - 1) ? (
                 <div className="flex items-center justify-end sm:justify-between gap-[8px] ">
                   <div className="flex items-center gap-[2px]">
                     {Array.from({ length: reviewRating[0].rating }).map(
@@ -702,42 +773,62 @@ function BookingHistory(props) {
                         </button>
                       </form>
                       <div className="flex flex-col gap-[24px] bg-gray-0 p-[24px] rounded">
-                        <div className="flex gap-[24px]">
-                          <img
-                            className="w-[96.31p]x h-[140px] rounded"
-                            src={movie.image}
-                            alt={movie.title}
-                          />
-                          <div className="flex flex-col gap-[23px]">
-                            <div>
-                              <p className="text-white text-[24px] font-bold">
-                                {movie.title}
-                              </p>
+                        <div className="flex justify-between max-md:flex-col max-md:gap-[16px]">
+                          <div className="flex gap-[24px]">
+                            <img
+                              className="w-[96.31p]x h-[140px] rounded"
+                              src={movie.image}
+                              alt={movie.title}
+                            />
+                            <div className="flex flex-col gap-[23px]">
+                              <div>
+                                <p className="text-white text-[24px] font-bold">
+                                  {movie.title}
+                                </p>
+                              </div>
+                              <div className="flex flex-col gap-[8px]">
+                                <div className="flex gap-[12px] items-center">
+                                  <i className="fa-solid fa-location-dot w-[16px] h-[16px] text-gray-200"></i>
+                                  <p className="text-gray-400 text-[14px]">
+                                    {movie.cinema_name}
+                                  </p>
+                                </div>
+                                <div className="flex gap-[12px] items-center">
+                                  <i className="fa-solid fa-calendar-days w-[16px] h-[16px] text-gray-200"></i>
+                                  <p className="text-gray-400 text-[14px]">
+                                    {movie.select_date}
+                                  </p>
+                                </div>
+                                <div className="flex gap-[12px] items-center">
+                                  <i className="fa-solid fa-clock w-[16px] h-[16px] text-gray-200"></i>
+                                  <p className="text-gray-400 text-[14px]">
+                                    {movie.time}
+                                  </p>
+                                </div>
+                                <div className="flex gap-[12px] items-center">
+                                  <i className="fa-solid fa-shop w-[16px] h-[16px] text-gray-200"></i>
+                                  <p className="text-gray-400 text-[14px]">
+                                    {movie.hall_number}
+                                  </p>
+                                </div>
+                              </div>
                             </div>
-                            <div className="flex flex-col gap-[8px]">
-                              <div className="flex gap-[12px] items-center">
-                                <i className="fa-solid fa-location-dot w-[16px] h-[16px] text-gray-200"></i>
-                                <p className="text-gray-400 text-[14px]">
-                                  {movie.cinema_name}
-                                </p>
+                          </div>
+                          <div className="flex flex-col gap-[4px]">
+                            <div className="flex gap-[8px]">
+                              <p className="text-gray-300 text-body2R">
+                                Booking No.
+                              </p>
+                              <div className=" text-body2M text-gray-300 gap-[4px]">
+                                AK{movie.booking_id}
                               </div>
-                              <div className="flex gap-[12px] items-center">
-                                <i className="fa-solid fa-calendar-days w-[16px] h-[16px] text-gray-200"></i>
-                                <p className="text-gray-400 text-[14px]">
-                                  {movie.select_date}
-                                </p>
-                              </div>
-                              <div className="flex gap-[12px] items-center">
-                                <i className="fa-solid fa-clock w-[16px] h-[16px] text-gray-200"></i>
-                                <p className="text-gray-400 text-[14px]">
-                                  {movie.time}
-                                </p>
-                              </div>
-                              <div className="flex gap-[12px] items-center">
-                                <i className="fa-solid fa-shop w-[16px] h-[16px] text-gray-200"></i>
-                                <p className="text-gray-400 text-[14px]">
-                                  {movie.hall_number}
-                                </p>
+                            </div>
+                            <div className="flex gap-[8px]">
+                              <p className="text-gray-300 text-body2R">
+                                Booked date
+                              </p>
+                              <div className=" text-body2M text-gray-300 gap-[4px]">
+                                {formatDate(new Date(movie.booking_date))}
                               </div>
                             </div>
                           </div>
@@ -775,8 +866,8 @@ function BookingHistory(props) {
                           </div>
                         </div>
                       </div>
-                      <div className="flex flex-col gap-[8px] p-[0px_24px] items-center">
-                        <div className="flex flex-col gap-[8px] w-full">
+                      <div className="flex justify-between p-[0px_24px] items-center max-md:flex-col max-md:gap-[16px]">
+                        <div className="flex flex-col gap-[8px] grow max-md:w-full">
                           <div className="flex justify-between">
                             <p className="text-gray-300 text-body2R">
                               Payment method
@@ -841,6 +932,211 @@ function BookingHistory(props) {
                               </div>
                             </>
                           )}
+                        </div>
+                        <div className="grow flex justify-end">
+                          <button
+                            className="border rounded-[4px] p-[12px_40px] text-body1M text-white"
+                            onClick={() => handlerefund(index, screen)}
+                          >
+                            Cancel booking
+                          </button>
+                          <dialog
+                            id={`refund_${screen}_${index}`}
+                            className="modal "
+                          >
+                            <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
+                              <form method="dialog">
+                                <h3 className="font-bold text-lg text-center text-white">
+                                  Cancel booking
+                                </h3>
+                                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                                  ✕
+                                </button>
+                              </form>
+                              <div className="flex max-md:flex-col max-md:gap-[16px]">
+                                <div className="flex flex-col items-start gap-[12px] grow">
+                                  <p>Reason for cancellation</p>
+                                  <div className="flex gap-[8px]">
+                                    <input
+                                      type="radio"
+                                      name="reason"
+                                      value="I had changed my mind"
+                                      onChange={(e) => {
+                                        setReasonRefunds((prevReason) => ({
+                                          ...prevReason,
+                                          [index]: e.target.value,
+                                        }));
+                                      }}
+                                    />
+                                    <label>I had changed my mind</label>
+                                  </div>
+                                  <div className="flex gap-[8px]">
+                                    <input
+                                      type="radio"
+                                      name="reason"
+                                      value="I found an alternative"
+                                      onChange={(e) => {
+                                        setReasonRefunds((prevReason) => ({
+                                          ...prevReason,
+                                          [index]: e.target.value,
+                                        }));
+                                      }}
+                                    />
+                                    <label>I found an alternative</label>
+                                  </div>
+                                  <div className="flex gap-[8px]">
+                                    <input
+                                      type="radio"
+                                      name="reason"
+                                      value="The booking was created by accident"
+                                      onChange={(e) => {
+                                        setReasonRefunds((prevReason) => ({
+                                          ...prevReason,
+                                          [index]: e.target.value,
+                                        }));
+                                      }}
+                                    />
+                                    <label>
+                                      The booking was created by accident
+                                    </label>
+                                  </div>
+                                  <div className="flex gap-[8px]">
+                                    <input
+                                      type="radio"
+                                      name="reason"
+                                      value="Other reasons"
+                                      onChange={(e) => {
+                                        setReasonRefunds((prevReason) => ({
+                                          ...prevReason,
+                                          [index]: e.target.value,
+                                        }));
+                                      }}
+                                    />
+                                    <label>Other reasons</label>
+                                  </div>
+                                </div>
+                                <div className="grow bg-gray-0 rounded flex flex-col gap-[8px] p-[16px]">
+                                  <div className="flex justify-between">
+                                    <p className="text-gray-300 text-body2R">
+                                      Ticket x{movie.seats.length}
+                                    </p>
+                                    <div className="text-gray-400 text-body2M ">
+                                      THB{movie.seats.length * 150}
+                                    </div>
+                                  </div>
+                                  {movie.coupon_type === "fixed" && (
+                                    <>
+                                      <div className="flex justify-between">
+                                        <p className="text-gray-300 text-body2R">
+                                          Coupon
+                                        </p>
+                                        <div className=" text-body2M text-red">
+                                          - THB{movie.discount}
+                                        </div>
+                                      </div>
+
+                                      <div className="flex justify-between">
+                                        <p className="text-gray-300 text-body2R">
+                                          Total
+                                        </p>
+                                        <div className=" text-body2M text-gray-400">
+                                          THB
+                                          {movie.seats.length * 150 -
+                                            movie.discount}
+                                        </div>
+                                      </div>
+                                      <div className="w-full bg-gray-200 h-[1px]" />
+                                      <div className="flex justify-between">
+                                        <p className="text-gray-300 text-body2R">
+                                          Total refund
+                                        </p>
+                                        <div className=" text-body2M text-gray-400">
+                                          THB
+                                          {movie.seats.length * 150 -
+                                            movie.discount}
+                                        </div>
+                                      </div>
+                                    </>
+                                  )}
+                                  {movie.coupon_type === "percentage" && (
+                                    <>
+                                      <div className="flex justify-between">
+                                        <p className="text-gray-300 text-body2R">
+                                          Coupon
+                                        </p>
+                                        <div className=" text-body2M text-red">
+                                          - THB
+                                          {(movie.seats.length *
+                                            150 *
+                                            movie.discount) /
+                                            100}
+                                        </div>
+                                      </div>
+
+                                      <div className="flex justify-between">
+                                        <p className="text-gray-300 text-body2R">
+                                          Total
+                                        </p>
+                                        <div className=" text-body2M text-gray-400">
+                                          THB
+                                          {movie.seats.length * 150 -
+                                            movie.seats.length *
+                                              150 *
+                                              (movie.discount / 100)}
+                                        </div>
+                                      </div>
+                                      <div className="w-full bg-gray-200 h-[1px]" />
+                                      <div className="flex justify-between">
+                                        <p className="text-gray-300 text-body2R">
+                                          Total refund
+                                        </p>
+                                        <div className=" text-body2M text-gray-400">
+                                          THB
+                                          {movie.seats.length * 150 -
+                                            movie.seats.length *
+                                              150 *
+                                              (movie.discount / 100)}
+                                        </div>
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="flex ">
+                                <span className="text-body2R">
+                                  {`Cancel booking before ${(
+                                    movie.time - 1
+                                  ).toFixed(2)} ${
+                                    movie.select_date
+                                  }, Refunds will be done according to `}
+                                  <span className="text-white underline">
+                                    Cancellation Policy
+                                  </span>
+                                </span>
+                              </div>
+                              <div className="flex justify-between gap-">
+                                <form method="dialog">
+                                  <button className="border   rounded p-[12px_40px]">
+                                    Back
+                                  </button>
+                                </form>
+                                <button
+                                  // type="submit"
+                                  onClick={() =>
+                                    sendRefund(movie, index, screen)
+                                  }
+                                  className={`text-body1M font-bold rounded-[4px] 
+                                transition-all duration-300 ease-in-out   p-[12px_40px] ${
+                                  reasonRefunds[index]
+                                    ? "bg-blue-100 hover:bg-blue-200 active:bg-blue-300 text-white"
+                                    : "bg-blue-100/40 text-white/40 cursor-not-allowed"
+                                }`}
+                                >
+                                  Refund
+                                </button>
+                              </div>
+                            </div>
+                          </dialog>
                         </div>
                       </div>
                     </div>

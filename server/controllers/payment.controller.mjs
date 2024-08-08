@@ -55,6 +55,7 @@ export async function createPayment(req, res) {
     res.send({
       success: true,
       clientSecret: paymentIntents_create.client_secret,
+      paymentId: paymentIntents_create.id,
       customer,
     });
   } catch (error) {
@@ -142,9 +143,18 @@ export async function getPayment(req, res) {
 }
 
 export async function updatePayment(req, res, next) {
-  const { user, cinema, movie, select_date, time, hall, seats, coupon } =
-    req.body;
-  // console.log(req.body);
+  const {
+    user,
+    cinema,
+    movie,
+    select_date,
+    time,
+    hall,
+    seats,
+    payment_id,
+    coupon,
+  } = req.body;
+  console.log(req.body);
   let result;
   try {
     for (let seat of seats) {
@@ -152,11 +162,12 @@ export async function updatePayment(req, res, next) {
         result = await connectionPool.query(
           `UPDATE booking
        SET status = 'booked',
+       payment_id = $8,
         payment_method = 'credit card', 
         payment_status = 'success', 
         updated_at = CURRENT_TIMESTAMP,
         coupon_id = (
-        select id from coupons where coupon_code = $8)
+        select id from coupons where coupon_code = $9)
        WHERE user_id = $1
          AND cinema_id = (SELECT id FROM cinemas WHERE name = $2)
          AND movie_id = (SELECT id FROM movies WHERE title = $3)
@@ -164,12 +175,23 @@ export async function updatePayment(req, res, next) {
          AND time_id = (SELECT id FROM screentime WHERE time = $5)
          AND hall_id = (SELECT id FROM halls WHERE hall_number = $6)
           AND seat_id = (SELECT id FROM seat_number WHERE seat_num = $7)`,
-          [user, cinema, movie, select_date, time, hall, seat, coupon]
+          [
+            user,
+            cinema,
+            movie,
+            select_date,
+            time,
+            hall,
+            seat,
+            payment_id,
+            coupon,
+          ]
         );
       } else {
         result = await connectionPool.query(
           `UPDATE booking
          SET status = 'booked',
+         payment_id = $8,
           payment_method = 'credit card', 
           payment_status = 'success', 
           updated_at = CURRENT_TIMESTAMP
@@ -180,7 +202,7 @@ export async function updatePayment(req, res, next) {
            AND time_id = (SELECT id FROM screentime WHERE time = $5)
            AND hall_id = (SELECT id FROM halls WHERE hall_number = $6)
             AND seat_id = (SELECT id FROM seat_number WHERE seat_num = $7)`,
-          [user, cinema, movie, select_date, time, hall, seat]
+          [user, cinema, movie, select_date, time, hall, seat, payment_id]
         );
       }
     }
@@ -233,6 +255,34 @@ export async function deletePayment(req, res, next) {
     console.error("Error deleting booking:", error);
     return res.status(500).json({
       message: "Server error while deleting booking",
+    });
+  }
+}
+
+export async function createRefund(req, res) {
+  const { paymentIntentId } = req.body;
+  // console.log("bodyname: ", req.body);
+  // console.log("Received payment_method.id: ", paymentMethodId);
+
+  try {
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    // console.log("paymentIntent", paymentIntent);
+
+    const refund = await stripe.refunds.create({
+      payment_intent: paymentIntentId,
+      amount: paymentIntent.amount,
+      reason: "requested_by_customer",
+    });
+    // console.log("refund", refund);
+
+    res.status(200).json({
+      success: true,
+      refundPrice: refund.amount,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error,
+      message: "Server could not get  the movies because database connection",
     });
   }
 }
