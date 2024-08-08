@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "../contexts/SearchContext";
 import { formatDate } from "../contexts/SearchContext";
@@ -29,6 +29,7 @@ function SearchResultPage() {
   const navigate = useNavigate();
   const [wheelchairAccess, setWheelchairAccess] = useState(false);
   const [hearingAssistance, setHearingAssistance] = useState(false);
+  const [searchTriggered, setSearchTriggered] = useState(true);
 
   useEffect(() => {
     getDataSearch();
@@ -54,6 +55,22 @@ function SearchResultPage() {
   ]);
 
   useEffect(() => {
+    if (searchTriggered) {
+      getDataSearch();
+    }
+  }, [
+    searchTriggered,
+    wheelchairAccess,
+    hearingAssistance,
+    citySearch,
+    titleSearch,
+    languageSearch,
+    genreSearch,
+    dateSearch,
+    tagsSearch,
+  ]);
+
+  useEffect(() => {
     if (dateRef.current) {
       dateRef.current.value = dateSearch;
     }
@@ -68,6 +85,10 @@ function SearchResultPage() {
     }
   }, [search]);
 
+  const handleSearch = () => {
+    setSearchTriggered(true);
+  };
+
   const handleClear = () => {
     setCitySearch("");
     setTitleSearch("");
@@ -77,6 +98,7 @@ function SearchResultPage() {
     setTagsSearch([]);
     setWheelchairAccess(false);
     setHearingAssistance(false);
+    setSearchTriggered(false);
     navigate("/moviesearch");
   };
 
@@ -122,6 +144,7 @@ function SearchResultPage() {
       return newIsOpen;
     });
   };
+
   return (
     <div style={{ fontFamily: "Roboto Condensed" }}>
       <section className="bg-gray-0 pt-[120px] pb-[40px] flex flex-col items-center gap-[24px]">
@@ -129,7 +152,11 @@ function SearchResultPage() {
           <div className="bg-gray-0 w-[100%] grid grid-cols-2 gap-[12px] xl:flex xl:justify-between xl:gap-[12px]">
             <select
               value={titleSearch}
-              onChange={(event) => setTitleSearch(event.target.value)}
+              onChange={(event) => {
+                setTitleSearch(event.target.value);
+                setSearchTriggered(false);
+                // searchInitiated.current = false;
+              }}
               className={`col-span-2 xl:w-[30%] h-[48px] rounded-[4px] bg-[#21263F] border-[1px] p-[12px] text-body1R outline-none ${
                 titleSearch ? "text-white" : "text-gray-300 border-[#565F7E]"
               }`}
@@ -144,7 +171,11 @@ function SearchResultPage() {
 
             <select
               value={languageSearch}
-              onChange={(event) => setLanguageSearch(event.target.value)}
+              onChange={(event) => {
+                setLanguageSearch(event.target.value);
+                setSearchTriggered(false);
+                // searchInitiated.current = false;
+              }}
               className={`col-span-1 xl:w-[20%] h-[48px] rounded-[4px] bg-[#21263F] border-[1px] p-[12px] text-body1R outline-none ${
                 languageSearch ? "text-white" : "text-gray-300 border-[#565F7E]"
               }`}
@@ -158,7 +189,11 @@ function SearchResultPage() {
 
             <select
               value={genreSearch}
-              onChange={(event) => setGenreSearch(event.target.value)}
+              onChange={(event) => {
+                setGenreSearch(event.target.value);
+                setSearchTriggered(false);
+                // searchInitiated.current = false;
+              }}
               className={`col-span-1 xl:w-[20%] h-[48px] rounded-[4px] bg-[#21263F] border-[1px] p-[12px] text-body1R outline-none ${
                 genreSearch ? "text-white" : "text-gray-300 border-[#565F7E]"
               }`}
@@ -174,7 +209,11 @@ function SearchResultPage() {
 
             <select
               value={citySearch}
-              onChange={(event) => setCitySearch(event.target.value)}
+              onChange={(event) => {
+                setCitySearch(event.target.value);
+                setSearchTriggered(false);
+                // searchInitiated.current = false;
+              }}
               className={`col-span-1 xl:w-[20%] h-[48px] rounded-[4px] bg-[#21263F] border-[1px] p-[12px] text-body1R outline-none ${
                 citySearch ? "text-white" : "text-gray-300 border-[#565F7E]"
               }`}
@@ -200,7 +239,7 @@ function SearchResultPage() {
             <button
               onClick={() => {
                 setDateSearch(dateRef?.current?.value);
-                getDataSearch();
+                handleSearch();
               }}
               className="w-[72px] h-[48px] bg-[#4E7BEE] rounded-[4px] active:w-[71.5px] active:h-[47.5px]"
             >

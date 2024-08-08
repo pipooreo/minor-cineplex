@@ -4,7 +4,6 @@ import { formatDate } from "../../contexts/SearchContext";
 import { useNavigate } from "react-router-dom";
 import {
   FacebookMessengerIcon,
-  FacebookMessengerShareButton,
   TwitterShareButton,
   XIcon,
   FacebookShareButton,
@@ -18,6 +17,7 @@ function BookingHistory(props) {
   const [comments, setComments] = useState({});
   const [reasonRefunds, setReasonRefunds] = useState({});
   const [isOpen, setIsOpen] = useState(false);
+  const [showComment, setShowComment] = useState();
 
   const history = props.user;
   const myReview = props.review;
@@ -83,6 +83,14 @@ function BookingHistory(props) {
     }
   };
 
+  const handleCloseAndReload = () => {
+    const modal = document.getElementById("success_modal_${screen}_${index}");
+    if (modal) {
+      modal.close();
+    }
+    window.location.reload();
+  };
+
   const handlerefund = (index, screen) => {
     document.getElementById(`detail_${screen}_${index}`).close();
     const dialog = document.getElementById(`refund_${screen}_${index}`);
@@ -94,7 +102,6 @@ function BookingHistory(props) {
 
   const sendingReview = async (e, index, movieId, screen) => {
     e.preventDefault();
-    // console.log(ratings[index], comments[index], movieId, profile);
     try {
       const result = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/comments`,
@@ -107,12 +114,30 @@ function BookingHistory(props) {
         }
       );
       if (result.status === 201) {
-        const dialog = document.getElementById(`review_${screen}_${index}`);
-        if (dialog) {
-          dialog.close();
+        // ปิด review dialog
+        const reviewDialog = document.getElementById(
+          `review_${screen}_${index}`
+        );
+        if (reviewDialog) {
+          reviewDialog.close();
+        }
+
+        // ดึงข้อมูล comment ที่เพิ่งสร้าง
+        const getResult = await axios.get(
+          `${import.meta.env.VITE_SERVER_URL}/comments/${profile.id}/${movieId}`
+        );
+
+        // เก็บข้อมูล comment ใน state
+        setShowComment(getResult.data.data);
+
+        // เปิด success modal
+        const successModal = document.getElementById(
+          `success_modal_${screen}_${index}`
+        );
+        if (successModal) {
+          successModal.showModal();
         }
       }
-      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -137,8 +162,22 @@ function BookingHistory(props) {
         if (dialog) {
           dialog.close();
         }
+
+        const getResult = await axios.get(
+          `${import.meta.env.VITE_SERVER_URL}/comments/${profile.id}/${movieId}`
+        );
+
+        // เก็บข้อมูล comment ใน state
+        setShowComment(getResult.data.data);
+
+        // เปิด success modal
+        const successModal = document.getElementById(
+          `success_modal_${screen}_${index}`
+        );
+        if (successModal) {
+          successModal.showModal();
+        }
       }
-      window.location.reload();
     } catch (error) {
       console.log(error);
     }
@@ -265,12 +304,16 @@ function BookingHistory(props) {
         (err) => alert("Failed to copy link: " + err)
       );
     };
+    const appId = import.meta.env.VITE_FACEBOOK_APP_ID;
+    const encodedShareUrl = encodeURIComponent(url);
+    const messengerShareUrl = `https://www.facebook.com/dialog/send?app_id=${appId}&link=${encodedShareUrl}&redirect_uri=${encodedShareUrl}`;
+
     return (
       <div
         className="transition-transform transform absolute top-7 right-0 sm:right-10 z-1 mt-6"
         style={{ fontFamily: "Roboto Condensed" }}
       >
-        <nav className="flex flex-col gap-[8px] p-[16px] justify-center rounded-b-lg border-[1px] border-BG items-center  bg-gray-100  text-gray-400  shadow-xl  shadow-black/50 ">
+        <nav className="flex flex-col gap-[8px] p-[16px] justify-center rounded-lg border-[1px] border-BG items-center  bg-gray-100  text-gray-400  shadow-xl  shadow-black/50 ">
           <h1 className="text-body1M text-white">Share Booking</h1>
           <ul className="grid gap-4 grid-cols-3 sm:grid-cols-5 text-body2R">
             <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
@@ -286,14 +329,17 @@ function BookingHistory(props) {
               </a>
               <p>Line</p>
             </li>
-            {/* <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
-              <button className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]">
-                <FacebookMessengerShareButton url={shareUrl}>
-                  <FacebookMessengerIcon size={20} round />
-                </FacebookMessengerShareButton>
-              </button>
+            <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
+              <a
+                href={messengerShareUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
+              >
+                <FacebookMessengerIcon size={20} round />
+              </a>
               <p>Messenger</p>
-            </li> */}
+            </li>
             <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
               <a
                 href={`https://www.facebook.com/share.php?u=${url}`}
@@ -373,12 +419,6 @@ function BookingHistory(props) {
             rate.movie_id === movie.movie_id && rate.user_id === movie.user_id
         );
         const bookingDate = new Date(movie.select_date);
-        console.log(
-          today.getTime() === bookingDate.getTime() &&
-            !reviewExists &&
-            movie.payment_status === "success" &&
-            currentTime > movie.time - 1
-        );
 
         return (
           <div className="flex flex-col w-full xl:w-[691px]" key={index}>
@@ -477,29 +517,6 @@ function BookingHistory(props) {
                         <h3 className="font-bold text-lg text-center text-white">
                           Rating & review
                         </h3>
-                        <div
-                          className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-10 top-3"
-                          onClick={toggleShareMenu}
-                        >
-                          <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M20 3V2.5H20.5V3H20ZM10.3536 13.3536C10.1583 13.5488 9.84171 13.5488 9.64645 13.3536C9.45118 13.1583 9.45118 12.8417 9.64645 12.6464L10.3536 13.3536ZM19.5 11V3H20.5V11H19.5ZM20 3.5H12V2.5H20V3.5ZM20.3536 3.35355L10.3536 13.3536L9.64645 12.6464L19.6464 2.64645L20.3536 3.35355Z"
-                              fill="#C8CEDD"
-                            />
-                            <path
-                              d="M18 14.625V14.625C18 15.9056 18 16.5459 17.8077 17.0568C17.5034 17.8653 16.8653 18.5034 16.0568 18.8077C15.5459 19 14.9056 19 13.625 19H10C7.17157 19 5.75736 19 4.87868 18.1213C4 17.2426 4 15.8284 4 13V9.375C4 8.09442 4 7.45413 4.19228 6.94325C4.4966 6.1347 5.1347 5.4966 5.94325 5.19228C6.45413 5 7.09442 5 8.375 5V5"
-                              stroke="#C8CEDD"
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                        </div>
-                        {isOpen && <SocialShareButtons url={shareUrl} />}
                         <button className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-2 top-2">
                           ✕
                         </button>
@@ -507,9 +524,10 @@ function BookingHistory(props) {
                       <form
                         method="dialog"
                         className="flex flex-col gap-[40px] grow "
-                        onSubmit={(event) =>
-                          sendingReview(event, index, movie.movie_id, screen)
-                        }
+                        onSubmit={(event) => {
+                          event.preventDefault();
+                          sendingReview(event, index, movie.movie_id, screen);
+                        }}
                       >
                         <div className="flex flex-col gap-[24px]">
                           <div className="flex flex-col  items-center md:items-start  md:flex-row gap-[24px]">
@@ -589,6 +607,114 @@ function BookingHistory(props) {
                       </form>
                     </div>
                   </dialog>
+                  {/* Add this near the end of your component */}
+                  <dialog
+                    id={`success_modal_${screen}_${index}`}
+                    className="modal"
+                  >
+                    <div className="modal-box w-11/12 max-w-2xl bg-gray-100 border-gray-200 border flex flex-col  gap-[40px]">
+                      <form method="dialog">
+                        <h3 className="text-head4 text-center text-white">
+                          Your rating & review
+                        </h3>
+                        <div
+                          className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-10 top-[9px]"
+                          onClick={toggleShareMenu}
+                        >
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M20 3V2.5H20.5V3H20ZM10.3536 13.3536C10.1583 13.5488 9.84171 13.5488 9.64645 13.3536C9.45118 13.1583 9.45118 12.8417 9.64645 12.6464L10.3536 13.3536ZM19.5 11V3H20.5V11H19.5ZM20 3.5H12V2.5H20V3.5ZM20.3536 3.35355L10.3536 13.3536L9.64645 12.6464L19.6464 2.64645L20.3536 3.35355Z"
+                              fill="#C8CEDD"
+                            />
+                            <path
+                              d="M18 14.625V14.625C18 15.9056 18 16.5459 17.8077 17.0568C17.5034 17.8653 16.8653 18.5034 16.0568 18.8077C15.5459 19 14.9056 19 13.625 19H10C7.17157 19 5.75736 19 4.87868 18.1213C4 17.2426 4 15.8284 4 13V9.375C4 8.09442 4 7.45413 4.19228 6.94325C4.4966 6.1347 5.1347 5.4966 5.94325 5.19228C6.45413 5 7.09442 5 8.375 5V5"
+                              stroke="#C8CEDD"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </div>
+                        {isOpen && <SocialShareButtons url={shareUrl} />}
+                        <button
+                          onClick={handleCloseAndReload}
+                          className="btn btn-sm text-gray-400 btn-circle btn-ghost absolute right-2 top-2"
+                        >
+                          ✕
+                        </button>
+                      </form>
+                      {showComment && (
+                        <div className="flex flex-col gap-[16px] md:px-[24px] px-[16px]">
+                          <div className="flex justify-between  md:gap-2">
+                            <div className="flex gap-[10px]">
+                              <img
+                                className="w-[44px] h-[44px] bg-white rounded-full"
+                                src={showComment.image}
+                                alt={showComment.name}
+                              />
+                              <div>
+                                <h3 className="text-body1M text-gray-400">
+                                  {showComment.name}
+                                </h3>
+                                <p className="text-body2R text-gray-300">
+                                  {showComment.created_at}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex gap-1 md:gap-3">
+                              {Array.from({ length: showComment.rating }).map(
+                                (_, i) => (
+                                  <i
+                                    className="fas fa-star text-[#4E7BEE]"
+                                    key={i}
+                                  ></i>
+                                )
+                              )}
+                            </div>
+                          </div>
+
+                          <p className="py-[20px] text-body2R text-gray-300">
+                            {showComment.comment}
+                          </p>
+                        </div>
+                      )}
+                      <form
+                        className="flex flex-col gap-[40px]"
+                        method="dialog"
+                      >
+                        <div className="flex flex-col gap-[24px]">
+                          <div className="flex flex-col  items-center md:items-start  md:flex-row gap-[24px]">
+                            <div className="flex flex-col md:items-start items-center gap-[23px]"></div>
+                          </div>
+                        </div>
+                        <div className="flex justify-evenly gap-[6px] md:gap-[16px]">
+                          {/* <form method="dialog" className="grow flex"> */}
+                          <button
+                            className="sm:w-[268px] w-[147.5px] border border-gray-300 text-white rounded-[4px] text-body1M font-bold  
+                               sm:p-[12px_40px] p-[12px_5px] hover:bg-gray-300 active:bg-gray-400"
+                            onClick={() => {
+                              navigate(`/movie/${showComment.title}`);
+                            }}
+                          >
+                            View movie detail
+                          </button>
+                          {/* </form> */}
+                          <button
+                            type="submit"
+                            className="sm:w-[268px] w-[147.5px] text-body1M font-bold rounded-[4px] sm:p-[12px_40px] p-[12px_5px]
+                                  bg-blue-100 hover:bg-blue-200 active:bg-blue-300 text-white"
+                            onClick={handleCloseAndReload}
+                          >
+                            OK
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </dialog>
                   <div className="text-white text-[14px] font-medium border border-gray-100 p-[6px_16px] rounded-[100px]">
                     Completed
                   </div>
@@ -631,29 +757,6 @@ function BookingHistory(props) {
                         <h3 className="font-bold text-lg text-center text-white">
                           Rating & review
                         </h3>
-                        <div
-                          className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-10 top-3"
-                          onClick={toggleShareMenu}
-                        >
-                          <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M20 3V2.5H20.5V3H20ZM10.3536 13.3536C10.1583 13.5488 9.84171 13.5488 9.64645 13.3536C9.45118 13.1583 9.45118 12.8417 9.64645 12.6464L10.3536 13.3536ZM19.5 11V3H20.5V11H19.5ZM20 3.5H12V2.5H20V3.5ZM20.3536 3.35355L10.3536 13.3536L9.64645 12.6464L19.6464 2.64645L20.3536 3.35355Z"
-                              fill="#C8CEDD"
-                            />
-                            <path
-                              d="M18 14.625V14.625C18 15.9056 18 16.5459 17.8077 17.0568C17.5034 17.8653 16.8653 18.5034 16.0568 18.8077C15.5459 19 14.9056 19 13.625 19H10C7.17157 19 5.75736 19 4.87868 18.1213C4 17.2426 4 15.8284 4 13V9.375C4 8.09442 4 7.45413 4.19228 6.94325C4.4966 6.1347 5.1347 5.4966 5.94325 5.19228C6.45413 5 7.09442 5 8.375 5V5"
-                              stroke="#C8CEDD"
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                        </div>
-                        {isOpen && <SocialShareButtons url={shareUrl} />}
                         <button className="btn btn-sm text-gray-400 btn-circle btn-ghost absolute right-2 top-2">
                           ✕
                         </button>
@@ -719,7 +822,6 @@ function BookingHistory(props) {
                           </div>
                         </div>
                         <div className="flex gap-[16px]">
-                          {/* <form method="dialog" className="grow flex"> */}
                           <button
                             className="grow bg-red text-white rounded-[4px] text-body1M font-bold  
                                 transition-all duration-300 ease-in-out p-[12px_40px] hover:bg-gray-300 active:bg-gray-400"
@@ -729,7 +831,6 @@ function BookingHistory(props) {
                           >
                             Delete
                           </button>
-                          {/* </form> */}
                           <button
                             type="submit"
                             className={`text-body1M font-bold rounded-[4px] 
@@ -740,6 +841,110 @@ function BookingHistory(props) {
                                 }`}
                           >
                             Update
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </dialog>
+                  <dialog
+                    id={`success_modal_${screen}_${index}`}
+                    className="modal"
+                  >
+                    <div className="modal-box w-11/12 max-w-2xl bg-gray-100 border-gray-200 border flex flex-col  gap-[40px]">
+                      <form method="dialog">
+                        <h3 className="text-head4 text-center text-white">
+                          Your rating & review
+                        </h3>
+                        <div
+                          className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-10 top-[9px]"
+                          onClick={toggleShareMenu}
+                        >
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M20 3V2.5H20.5V3H20ZM10.3536 13.3536C10.1583 13.5488 9.84171 13.5488 9.64645 13.3536C9.45118 13.1583 9.45118 12.8417 9.64645 12.6464L10.3536 13.3536ZM19.5 11V3H20.5V11H19.5ZM20 3.5H12V2.5H20V3.5ZM20.3536 3.35355L10.3536 13.3536L9.64645 12.6464L19.6464 2.64645L20.3536 3.35355Z"
+                              fill="#C8CEDD"
+                            />
+                            <path
+                              d="M18 14.625V14.625C18 15.9056 18 16.5459 17.8077 17.0568C17.5034 17.8653 16.8653 18.5034 16.0568 18.8077C15.5459 19 14.9056 19 13.625 19H10C7.17157 19 5.75736 19 4.87868 18.1213C4 17.2426 4 15.8284 4 13V9.375C4 8.09442 4 7.45413 4.19228 6.94325C4.4966 6.1347 5.1347 5.4966 5.94325 5.19228C6.45413 5 7.09442 5 8.375 5V5"
+                              stroke="#C8CEDD"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </div>
+                        {isOpen && <SocialShareButtons url={shareUrl} />}
+                        <button
+                          onClick={handleCloseAndReload}
+                          className="btn btn-sm text-gray-400 btn-circle btn-ghost absolute right-2 top-2"
+                        >
+                          ✕
+                        </button>
+                      </form>
+                      {showComment && (
+                        <div className="flex flex-col gap-[16px] md:px-[24px] px-[16px]">
+                          <div className="flex justify-between  md:gap-2">
+                            <div className="flex gap-[10px]">
+                              <img
+                                className="w-[44px] h-[44px] bg-white rounded-full"
+                                src={showComment.image}
+                                alt={showComment.name}
+                              />
+                              <div>
+                                <h3 className="text-body1M text-gray-400">
+                                  {showComment.name}
+                                </h3>
+                                <p className="text-body2R text-gray-300">
+                                  {showComment.created_at}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex gap-1 md:gap-3">
+                              {Array.from({ length: showComment.rating }).map(
+                                (_, i) => (
+                                  <i
+                                    className="fas fa-star text-[#4E7BEE]"
+                                    key={i}
+                                  ></i>
+                                )
+                              )}
+                            </div>
+                          </div>
+                          <p className="py-[20px] text-body2R text-gray-300">
+                            {showComment.comment}
+                          </p>
+                        </div>
+                      )}
+                      <form
+                        className="flex flex-col gap-[40px]"
+                        method="dialog"
+                      >
+                        <div className="flex flex-col gap-[24px]">
+                          <div className="flex flex-col  items-center md:items-start  md:flex-row gap-[24px]">
+                            <div className="flex flex-col md:items-start items-center gap-[23px]"></div>
+                          </div>
+                        </div>
+                        <div className="flex justify-evenly gap-[6px] md:gap-[16px]">
+                          <button
+                            className="sm:w-[268px] w-[147.5px] border border-gray-300 text-white rounded-[4px] text-body1M font-bold  
+                               sm:p-[12px_40px] p-[12px_5px] hover:bg-gray-300 active:bg-gray-400"
+                            onClick={() => {
+                              navigate(`/movie/${showComment.title}`);
+                            }}
+                          >
+                            View movie detail
+                          </button>
+                          <button
+                            type="submit"
+                            className="sm:w-[268px] w-[147.5px] text-body1M font-bold rounded-[4px] sm:p-[12px_40px] p-[12px_5px]
+                                  bg-blue-100 hover:bg-blue-200 active:bg-blue-300 text-white"
+                            onClick={handleCloseAndReload}
+                          >
+                            OK
                           </button>
                         </div>
                       </form>
@@ -768,7 +973,30 @@ function BookingHistory(props) {
                         <h3 className="font-bold text-lg text-center text-white">
                           Booking detail
                         </h3>
-                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                        <div
+                          className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-10 top-[9px]"
+                          onClick={toggleShareMenu}
+                        >
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M20 3V2.5H20.5V3H20ZM10.3536 13.3536C10.1583 13.5488 9.84171 13.5488 9.64645 13.3536C9.45118 13.1583 9.45118 12.8417 9.64645 12.6464L10.3536 13.3536ZM19.5 11V3H20.5V11H19.5ZM20 3.5H12V2.5H20V3.5ZM20.3536 3.35355L10.3536 13.3536L9.64645 12.6464L19.6464 2.64645L20.3536 3.35355Z"
+                              fill="#C8CEDD"
+                            />
+                            <path
+                              d="M18 14.625V14.625C18 15.9056 18 16.5459 17.8077 17.0568C17.5034 17.8653 16.8653 18.5034 16.0568 18.8077C15.5459 19 14.9056 19 13.625 19H10C7.17157 19 5.75736 19 4.87868 18.1213C4 17.2426 4 15.8284 4 13V9.375C4 8.09442 4 7.45413 4.19228 6.94325C4.4966 6.1347 5.1347 5.4966 5.94325 5.19228C6.45413 5 7.09442 5 8.375 5V5"
+                              stroke="#C8CEDD"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </div>
+                        {isOpen && <SocialShareButtons url={shareUrl} />}
+                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-gray-400">
                           ✕
                         </button>
                       </form>
@@ -942,9 +1170,9 @@ function BookingHistory(props) {
                           </button>
                           <dialog
                             id={`refund_${screen}_${index}`}
-                            className="modal "
+                            className="modal"
                           >
-                            <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
+                            <div className="modal-box  max-w-2xl bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
                               <form method="dialog">
                                 <h3 className="font-bold text-lg text-center text-white">
                                   Cancel booking
@@ -955,7 +1183,9 @@ function BookingHistory(props) {
                               </form>
                               <div className="flex max-md:flex-col max-md:gap-[16px]">
                                 <div className="flex flex-col items-start gap-[12px] grow">
-                                  <p>Reason for cancellation</p>
+                                  <p className="text-white text-body1R">
+                                    Reason for cancellation
+                                  </p>
                                   <div className="flex gap-[8px]">
                                     <input
                                       type="radio"
@@ -968,7 +1198,9 @@ function BookingHistory(props) {
                                         }));
                                       }}
                                     />
-                                    <label>I had changed my mind</label>
+                                    <label className="text-gray-400 text-body2R">
+                                      I had changed my mind
+                                    </label>
                                   </div>
                                   <div className="flex gap-[8px]">
                                     <input
@@ -982,7 +1214,9 @@ function BookingHistory(props) {
                                         }));
                                       }}
                                     />
-                                    <label>I found an alternative</label>
+                                    <label className="text-gray-400 text-body2R">
+                                      I found an alternative
+                                    </label>
                                   </div>
                                   <div className="flex gap-[8px]">
                                     <input
@@ -996,7 +1230,7 @@ function BookingHistory(props) {
                                         }));
                                       }}
                                     />
-                                    <label>
+                                    <label className="text-gray-400 text-body2R">
                                       The booking was created by accident
                                     </label>
                                   </div>
@@ -1012,7 +1246,9 @@ function BookingHistory(props) {
                                         }));
                                       }}
                                     />
-                                    <label>Other reasons</label>
+                                    <label className="text-gray-400 text-body2R">
+                                      Other reasons
+                                    </label>
                                   </div>
                                 </div>
                                 <div className="grow bg-gray-0 rounded flex flex-col gap-[8px] p-[16px]">
@@ -1103,20 +1339,20 @@ function BookingHistory(props) {
                                 </div>
                               </div>
                               <div className="flex ">
-                                <span className="text-body2R">
+                                <span className="text-body2R text-gray-300">
                                   {`Cancel booking before ${(
                                     movie.time - 1
                                   ).toFixed(2)} ${
                                     movie.select_date
                                   }, Refunds will be done according to `}
-                                  <span className="text-white underline">
+                                  <span className="text-white underline text-body2R text-[700]">
                                     Cancellation Policy
                                   </span>
                                 </span>
                               </div>
                               <div className="flex justify-between gap-">
                                 <form method="dialog">
-                                  <button className="border   rounded p-[12px_40px]">
+                                  <button className="border rounded p-[12px_40px] border-gray-300 text-white hover:bg-gray-300 active:bg-gray-400">
                                     Back
                                   </button>
                                 </form>
