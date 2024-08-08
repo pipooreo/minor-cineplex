@@ -35,7 +35,7 @@ function PaymentPageSuccess() {
       <section className="w-full h-screen absolute flex flex-col items-center justify-center bg-BG">
         {dataSuccess && (
           <div className="w-[380px] h-[512px] flex flex-col items-center justify-center gap-[48px] align-center max-sm:w-[375px]">
-            <div className="border-[1px] flex flex-col items-center">
+            <div className="flex flex-col items-center">
               <FaCheck className="w-[80px] h-[80px] bg-green rounded-full text-white p-3" />
               <h1 className="text-[36px] font-bold text-white align-center max-sm:w-[343px]">
                 Booking success
