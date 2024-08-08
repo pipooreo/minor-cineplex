@@ -126,7 +126,7 @@ function MoviePage() {
           <div className="flex gap-3 justify-start items-center w-[100%]  mt-0 md:w-[50%] my-[30px] mx-0 md:m-[50px]">
             <p className="bg-gray-100 text-white text-head4 px-[16px] py-[12px]">
               <i className="fas fa-star text-blue-100 px-2"></i>
-              {averageRating.toFixed(2)}
+              {averageRating}
             </p>
             <h2 className="text-head3 text-white">Rating & Reviews</h2>
           </div>
@@ -134,12 +134,12 @@ function MoviePage() {
             const isLastComment = index === comments.length - 1;
             return (
               <div
-                className={`m-5 w-[100%] md:w-[50%] ${
+                className={`flex flex-col m-5 p-5 gap-[24px] w-[100%] md:w-[50%] ${
                   !isLastComment ? "border-b-2 border-gray-100" : ""
                 }`}
                 key={index}
               >
-                <div className="flex justify-between  md:gap-2">
+                <div className="flex justify-between  md:gap-[24px]">
                   <div className="flex gap-[10px]">
                     <img
                       className="w-[44px] h-[44px] bg-white rounded-full"
@@ -153,9 +153,6 @@ function MoviePage() {
                       <p className="text-body2R text-gray-300">
                         {comment.post_date}
                       </p>
-                      <p className="text-body2R text-gray-300">
-                        {comment.rating}
-                      </p>
                     </div>
                   </div>
                   <div className="flex gap-1 md:gap-3">
@@ -163,6 +160,9 @@ function MoviePage() {
                       <i className="fas fa-star text-[#4E7BEE]" key={i}></i>
                     ))}
                   </div>
+                </div>
+                <div>
+                  <p className="text-body2R text-gray-300">{comment.comment}</p>
                 </div>
               </div>
             );

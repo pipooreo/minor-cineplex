@@ -1275,9 +1275,9 @@ function BookingHistory(props) {
                           </button>
                           <dialog
                             id={`refund_${screen}_${index}`}
-                            className="modal "
+                            className="modal"
                           >
-                            <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
+                            <div className="modal-box  max-w-2xl bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
                               <form method="dialog">
                                 <h3 className="font-bold text-lg text-center text-white">
                                   Cancel booking
@@ -1288,7 +1288,9 @@ function BookingHistory(props) {
                               </form>
                               <div className="flex max-md:flex-col max-md:gap-[16px]">
                                 <div className="flex flex-col items-start gap-[12px] grow">
-                                  <p>Reason for cancellation</p>
+                                  <p className="text-white text-body1R">
+                                    Reason for cancellation
+                                  </p>
                                   <div className="flex gap-[8px]">
                                     <input
                                       type="radio"
@@ -1301,7 +1303,9 @@ function BookingHistory(props) {
                                         }));
                                       }}
                                     />
-                                    <label>I had changed my mind</label>
+                                    <label className="text-gray-400 text-body2R">
+                                      I had changed my mind
+                                    </label>
                                   </div>
                                   <div className="flex gap-[8px]">
                                     <input
@@ -1315,7 +1319,9 @@ function BookingHistory(props) {
                                         }));
                                       }}
                                     />
-                                    <label>I found an alternative</label>
+                                    <label className="text-gray-400 text-body2R">
+                                      I found an alternative
+                                    </label>
                                   </div>
                                   <div className="flex gap-[8px]">
                                     <input
@@ -1329,7 +1335,7 @@ function BookingHistory(props) {
                                         }));
                                       }}
                                     />
-                                    <label>
+                                    <label className="text-gray-400 text-body2R">
                                       The booking was created by accident
                                     </label>
                                   </div>
@@ -1345,7 +1351,9 @@ function BookingHistory(props) {
                                         }));
                                       }}
                                     />
-                                    <label>Other reasons</label>
+                                    <label className="text-gray-400 text-body2R">
+                                      Other reasons
+                                    </label>
                                   </div>
                                 </div>
                                 <div className="grow bg-gray-0 rounded flex flex-col gap-[8px] p-[16px]">
@@ -1436,20 +1444,20 @@ function BookingHistory(props) {
                                 </div>
                               </div>
                               <div className="flex ">
-                                <span className="text-body2R">
+                                <span className="text-body2R text-gray-300">
                                   {`Cancel booking before ${(
                                     movie.time - 1
                                   ).toFixed(2)} ${
                                     movie.select_date
                                   }, Refunds will be done according to `}
-                                  <span className="text-white underline">
+                                  <span className="text-white underline text-body2R text-[700]">
                                     Cancellation Policy
                                   </span>
                                 </span>
                               </div>
                               <div className="flex justify-between gap-">
                                 <form method="dialog">
-                                  <button className="border   rounded p-[12px_40px]">
+                                  <button className="border rounded p-[12px_40px] border-gray-300 text-white hover:bg-gray-300 active:bg-gray-400">
                                     Back
                                   </button>
                                 </form>

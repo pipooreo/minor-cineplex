@@ -274,7 +274,7 @@ export default function PaymentTest() {
     ));
   };
   return (
-    <div className="w-full ">
+    <div className="w-full " style={{ fontFamily: "Roboto Condensed" }}>
       {!success ? (
         <form onSubmit={handleSubmit}>
           <div className="bg-BG ">
@@ -507,7 +507,7 @@ export default function PaymentTest() {
                 )}
 
                 <button
-                  className="btn bg-blue-100 border-blue-100 text-[white]"
+                  className="btn bg-blue-100 border-blue-100 hover:bg-blue-200 active:bg-blue-300 hover:border-blue-200 active:border-blue-300 text-[white]"
                   type="button"
                   onClick={() => setShowModal(true)}
                 >
@@ -517,9 +517,11 @@ export default function PaymentTest() {
                 {/* Popup Dialog */}
                 {showModal && (
                   <div className="modal modal-open bg-gray-100 ">
-                    <div className="modal-box bg-gray-100 w-11/12 max-w-sm">
-                      <h3 className="font-bold text-lg">Confirm booking</h3>
-                      <p className="py-4 text-gray-400">
+                    <div className="modal-box bg-gray-100 w-11/12 max-w-sm flex flex-col justify-center items-center">
+                      <h3 className="font-bold text-lg text-head4">
+                        Confirm booking
+                      </h3>
+                      <p className="py-4 text-gray-400 ">
                         Confirm booking and payment?
                       </p>
                       <div className="flex justify-center gap-5">
@@ -532,7 +534,7 @@ export default function PaymentTest() {
                             Cancel
                           </button>
                           <button
-                            className="btn text-body1M w-[139.5px] rounded-[4px] bg-blue-100 border-blue-100 hover:bg-blue-200 active:bg-blue-300 text-white"
+                            className="btn text-body1M w-[139.5px] rounded-[4px] bg-blue-100 border-blue-100 hover:bg-blue-200 active:bg-blue-300 hover:border-blue-200 active:border-blue-300  text-white"
                             type="button"
                             onClick={(e) => {
                               handleSubmit(e);
@@ -561,7 +563,7 @@ export default function PaymentTest() {
                     start again
                   </p>
                   <button
-                    className="btn w-[100%] bg-blue-100 border-blue-100 font-bold text-[16px] text-[white]"
+                    className="btn w-[100%] bg-blue-100 border-blue-100 hover:bg-blue-200 active:bg-blue-300 hover:border-blue-200 active:border-blue-300   font-bold text-[16px] text-[white]"
                     onClick={handleTimeOut}
                   >
                     OK
