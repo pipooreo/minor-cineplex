@@ -303,6 +303,7 @@ export default function PaymentTest() {
       setCouponError("");
     }
   };
+
   const renderSelectedSeats = () => {
     const seatNumbers = movie && movie[0].seat_number;
     if (!seatNumbers) return null; // ตรวจสอบว่ามีค่า seatNumbers หรือไม่
@@ -323,6 +324,7 @@ export default function PaymentTest() {
       </div>
     ));
   };
+
   return (
     <div className="w-full " style={{ fontFamily: "Roboto Condensed" }}>
       <form onSubmit={handleSubmit}>
