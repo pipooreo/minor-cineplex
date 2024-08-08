@@ -248,7 +248,9 @@ export async function BookingHistory(req, res) {
   let result;
   try {
     result = await connectionPool.query(
-      `select select_date::text,cinemas.name as cinema_name, user_id, movie_id, movies.title as title, movies.image, halls.hall_number, screentime.time, payment_status, payment_method,array_agg(seat_number.seat_num) as seats, users.name, coupons.type as coupon_type, coupons.discount_value as discount from booking
+      `select select_date::text,cinemas.name as cinema_name, user_id, movie_id, movies.title as title, movies.image, halls.hall_number, 
+      screentime.time, payment_status, payment_method,array_agg(seat_number.seat_num) as seats, users.name, coupons.type as coupon_type, 
+      coupons.discount_value as discount, max(booking.created_at) as booking_date, max(booking.id) as booking_id, payment_id from booking
         inner join movies on movies.id = booking.movie_id
         inner join cinemas on cinemas.id = booking.cinema_id
         inner join halls on halls.id = booking.hall_id
@@ -257,8 +259,9 @@ export async function BookingHistory(req, res) {
         inner join users on users.id = booking.user_id
         left join coupons on coupons.id = booking.coupon_id
         where users.id = $1
-        group by select_date,cinemas.name, user_id, movie_id, movies.title, halls.hall_number, screentime.time, payment_status, users.name, payment_method,movies.image, coupons.discount_value, coupons.type
-        order by select_date desc`,
+        group by select_date,cinemas.name, user_id, movie_id, movies.title, halls.hall_number, screentime.time, payment_status, users.name, 
+        payment_method,movies.image, coupons.discount_value, coupons.type, payment_id
+        order by select_date desc, screentime.time desc`,
       [userId]
       // [user, cinema, movie, select_date, time, hall, seat]
     );

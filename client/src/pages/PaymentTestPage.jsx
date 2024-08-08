@@ -144,7 +144,7 @@ export default function PaymentTest() {
           name,
           email,
         });
-        // console.log("response: " ,response);
+        console.log("response: ", response);
 
         if (response.data.success) {
           if (!couponCode) {
@@ -156,6 +156,7 @@ export default function PaymentTest() {
               time: params.time,
               hall: params.hall,
               seats: movie[0].seat_number,
+              payment_id: response.data.paymentId,
             });
           } else {
             await axios.put("http://localhost:4000/payment", {
@@ -166,6 +167,7 @@ export default function PaymentTest() {
               time: params.time,
               hall: params.hall,
               seats: movie[0].seat_number,
+              payment_id: response.data.paymentId,
               coupon: couponCode,
             });
           }
