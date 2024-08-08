@@ -9,7 +9,7 @@ import {
 import { protect } from "../middlewares/protect.mjs";
 
 const bookRouter = Router();
-
+bookRouter.use(protect);
 bookRouter.get("/", dataSeat);
 bookRouter.post("/", bookingReserved);
 bookRouter.put("/", updateBooking);
