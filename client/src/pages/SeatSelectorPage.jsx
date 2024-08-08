@@ -295,7 +295,7 @@ function SeatSelectorPage() {
                   <p className=" text-white">THB{totalPrice}</p>
                 </div>
                 <button
-                  className="btn btn-primary bg-blue-100 h-[48px] rounded-[8px] text-white"
+                  className="btn btn-primary bg-blue-100 h-[48px] hover:bg-blue-200 active:bg-blue-300 rounded-[8px] text-white"
                   onClick={handleReserveSeat}
                 >
                   Pay THB{totalPrice}

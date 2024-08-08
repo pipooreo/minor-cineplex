@@ -126,35 +126,38 @@ export async function getMoviesReleased(req, res, next) {
   let results;
   try {
     results = await connectionPool.query(`
-      SELECT 
-        movies.id, 
-        movies.title, 
-        movies.image, 
-        movies.theatrical_release::date AS theatrical_release,
-        movies.out_of_theaters::date AS out_of_theaters,
-        movies.rating, 
-        array_agg(genres.genres_name) AS genres,
-        movies.language
-      FROM 
-          movies
-      INNER JOIN
-          movies_genres ON movies.id = movies_genres.movie_id
-      INNER JOIN
-          genres ON genres.id = movies_genres.genre_id
-      WHERE 
-          CURRENT_TIMESTAMP BETWEEN 
-              movies.theatrical_release::date AND 
-              movies.out_of_theaters::date
-      GROUP BY
-          movies.id, 
-          movies.title, 
-          movies.image, 
-          movies.theatrical_release,
-          movies.out_of_theaters, 
-          movies.rating,
-          movies.language
-      ORDER BY 
-          movies.id
+SELECT 
+    movies.id, 
+    movies.title, 
+    movies.image, 
+    movies.theatrical_release::date AS theatrical_release,
+    movies.out_of_theaters::date AS out_of_theaters,
+    movies.rating, 
+    (
+        SELECT array_agg(DISTINCT genres.genres_name)
+        FROM movies_genres
+        INNER JOIN genres ON genres.id = movies_genres.genre_id
+        WHERE movies_genres.movie_id = movies.id
+    ) AS genres,
+    movies.language,
+  ROUND(AVG(comments.rating)::numeric, 1) AS average_rating FROM 
+    movies
+INNER JOIN 
+    comments ON movies.id = comments.movie_id
+WHERE 
+    CURRENT_TIMESTAMP BETWEEN 
+        movies.theatrical_release::date AND 
+        movies.out_of_theaters::date
+GROUP BY
+    movies.id, 
+    movies.title, 
+    movies.image, 
+    movies.theatrical_release,
+    movies.out_of_theaters, 
+    movies.rating,
+    movies.language
+ORDER BY 
+    movies.id
       `);
     res.status(200).json({ data: results.rows });
   } catch (error) {
@@ -387,6 +390,34 @@ export async function getCommentByUser(req, res) {
     return res.status(500).json({
       message:
         "Server could not create the comment because database connection",
+    });
+  }
+}
+
+export async function getCommentByMovie(req, res) {
+  const { userId, movieId } = req.params;
+  try {
+    const result = await connectionPool.query(
+      `SELECT 
+        u.name,
+          u.image,
+          c.created_at,
+          c.comment,
+          c.rating,
+          m.title
+        from
+          users u
+          left join comments c on c.user_id = u.id
+          left join movies m on c.movie_id = m.id WHERE user_id = $1 AND movie_id = $2`,
+      [userId, movieId]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+    return res.status(200).json({ data: result.rows[0] });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Server could not fetch the comment due to a database error",
     });
   }
 }

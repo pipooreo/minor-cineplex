@@ -9,13 +9,17 @@ function MoviePage() {
   const params = useParams();
   async function getTitleMovie() {
     let movieData = await axios.get(
-      `http://localhost:4000/movies/movie?movieSearch=${params.title}`
+      `${import.meta.env.VITE_SERVER_URL}/movies/movie?movieSearch=${
+        params.title
+      }`
     );
     setMovie(movieData.data.data[0]);
   }
   async function getCommentMovie() {
     let commentsData = await axios.get(
-      `http://localhost:4000/comments/moviesComment?movieName=${params.title}`
+      `${import.meta.env.VITE_SERVER_URL}/comments/moviesComment?movieName=${
+        params.title
+      }`
     );
     setComents(commentsData.data.data);
   }
@@ -24,6 +28,18 @@ function MoviePage() {
     getTitleMovie();
     getCommentMovie();
   }, []);
+
+  const calculateAverageRating = (comments) => {
+    const totalRating = comments.reduce(
+      (total, comment) => total + Number(comment.rating),
+      0
+    );
+    const averageRating = totalRating / comments.length;
+
+    return averageRating;
+  };
+
+  const averageRating = calculateAverageRating(comments);
 
   return (
     <div className="bg-BG relative" style={{ fontFamily: "Roboto Condensed" }}>
@@ -106,21 +122,24 @@ function MoviePage() {
             )}
           </div>
         </section>
-        <section className="reviews flex flex-col justify-center px-[10px] items-center p-[20px] ">
+        <section className="reviews bg-BG flex flex-col justify-center px-[10px] items-center p-[20px] ">
           <div className="flex gap-3 justify-start items-center w-[100%]  mt-0 md:w-[50%] my-[30px] mx-0 md:m-[50px]">
             <p className="bg-gray-100 text-white text-head4 px-[16px] py-[12px]">
               <i className="fas fa-star text-blue-100 px-2"></i>
-              {movie && movie.rating}
+              {averageRating.toFixed(1)}
             </p>
             <h2 className="text-head3 text-white">Rating & Reviews</h2>
           </div>
-          {comments.map((comment) => {
+          {comments.map((comment, index) => {
+            const isLastComment = index === comments.length - 1;
             return (
               <div
-                className=" border-b-2 border-gray-100 m-5 w-[100%]  md:w-[50%]"
-                key={comment.comment_id}
+                className={`flex flex-col m-5 p-5 gap-[24px] w-[100%] md:w-[50%] ${
+                  !isLastComment ? "border-b-2 border-gray-100" : ""
+                }`}
+                key={index}
               >
-                <div className="flex justify-between  md:gap-2">
+                <div className="flex justify-between  md:gap-[24px]">
                   <div className="flex gap-[10px]">
                     <img
                       className="w-[44px] h-[44px] bg-white rounded-full"
@@ -142,9 +161,9 @@ function MoviePage() {
                     ))}
                   </div>
                 </div>
-                <p className="py-[20px] text-body2R text-gray-300">
-                  {comment.comment}
-                </p>
+                <div>
+                  <p className="text-body2R text-gray-300">{comment.comment}</p>
+                </div>
               </div>
             );
           })}

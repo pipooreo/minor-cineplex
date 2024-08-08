@@ -88,7 +88,7 @@ function MovieList() {
                       <div className="text-[#8B93B0]">{formattedDate}</div>
                       <div className="text-[#8B93B0]">
                         <i className="fas fa-star text-[#4E7BEE]"></i>
-                        {data.rating}
+                        {data.average_rating}
                       </div>
                     </div>
                     <div
