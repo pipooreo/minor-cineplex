@@ -23,7 +23,7 @@ function MoviePage() {
     setComents(commentsData.data.data);
   }
   // console.log(movie);
-  console.log(comments);
+  // console.log(comments);
   useEffect(() => {
     getTitleMovie();
     getCommentMovie();

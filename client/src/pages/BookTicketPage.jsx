@@ -36,13 +36,13 @@ function BookTicketPage() {
 
   const getDataSearch = async () => {
     try {
-      console.log("Data search has been performed", params.title);
+      // console.log("Data search has been performed", params.title);
       const response = await axios.get(
         `http://localhost:4000/ticket?movieName=${params.title}&moviesCity=${citySearch}&releasedDate=${dateSearch}&cinemaName=${cinemaSearch}`
       );
       setSearch(response.data.data);
 
-      console.log(response.data.data);
+      // console.log(response.data.data);
     } catch (error) {
       console.error("Error fetching search data:", error);
     }
@@ -56,7 +56,6 @@ function BookTicketPage() {
   };
 
   const handleDayClick = (day) => {
-    console.log("Day clicked:", day);
     const formattedDate = formatDate(day);
     setDateSearch(formattedDate);
     setSelectedDate(day);
@@ -131,7 +130,6 @@ function BookTicketPage() {
       const movieInfo = movieData.data.data[0];
       if (movieInfo) {
         setMovie(movieInfo);
-        console.log("movie info", movieInfo);
         // setMovieTitle(movieInfo.title);
       }
     } catch (error) {

@@ -16,12 +16,12 @@ const cloudinaryUpload = async (file) => {
   }
   try {
     // Upload file to Cloudinary
-    console.log(result);
+    // console.log(result);
     result = await cloudinary.uploader.upload(filePath, {
       folder: "minor_cineplex/users",
       private: true,
     });
-    console.log(result);
+    // console.log(result);
   } catch (error) {
     console.error("Error uploading to Cloudinary:", error);
     throw new Error("Failed to upload file to Cloudinary"); // Throwing error to let the caller handle it
