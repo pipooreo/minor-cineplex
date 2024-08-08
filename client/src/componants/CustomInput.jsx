@@ -2,7 +2,6 @@ import { useField } from "formik";
 
 export function CustomInput({ label, ...props }) {
   const [field, meta] = useField(props);
-  // console.log(field, meta);
   return (
     <div className="flex flex-col">
       <label className="text-gray-400 py-2 text-body2R">{label}</label>
@@ -25,21 +24,7 @@ export function CustomInput({ label, ...props }) {
   );
 }
 
-// export function CustomCheckBox({ label, ...props }) {
-//   const [field, meta] = useField(props);
-//   //   console.log(`field: ${field}  meta: ${meta}`);
-//   // console.log(field, meta);
-//   return (
-//     <div className="flex items-center gap-[16px]">
-//       <input
-//         {...field}
-//         {...props}
-//         className="w-[20px] h-[20px] form-checkbox bg-gray-0 border-gray-300  transition duration-150 ease-in-out"
-//       />
-//       <span className="text-gray-400">Remember</span>
-//     </div>
-//   );
-// }
+
 
 export function CustomCheckBox({ label, ...props }) {
   const [field, meta, helpers] = useField(props);

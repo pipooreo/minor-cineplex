@@ -31,7 +31,7 @@ export async function createPayment(req, res) {
     if (customers.data.length > 0) {
       // ถ้าพบลูกค้า
       customer = customers.data[0];
-      console.log("customerData", customer);
+      // console.log("customerData", customer);
       // res.json(customers.data[0]); // ส่งข้อมูลลูกค้าคนแรกที่พบ
     } else {
       // ถ้าไม่พบลูกค้า
@@ -154,7 +154,7 @@ export async function updatePayment(req, res, next) {
     payment_id,
     coupon,
   } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   let result;
   try {
     for (let seat of seats) {
@@ -223,17 +223,31 @@ export async function updatePayment(req, res, next) {
   }
 }
 export async function updatePaymentQR(req, res, next) {
-  const { user, cinema, movie, select_date, time, hall, seats } = req.body;
+  const {
+    user,
+    cinema,
+    movie,
+    select_date,
+    time,
+    hall,
+    seats,
+    payment_id,
+    coupon,
+  } = req.body;
   // console.log(req.body);
   let result;
   try {
     for (let seat of seats) {
-      result = await connectionPool.query(
-        `UPDATE booking
+      if (coupon) {
+        result = await connectionPool.query(
+          `UPDATE booking
        SET status = 'booked',
+       payment_id = $8,
         payment_method = 'QR code', 
         payment_status = 'success', 
-        updated_at = CURRENT_TIMESTAMP
+        updated_at = CURRENT_TIMESTAMP,
+        coupon_id = (
+        select id from coupons where coupon_code = $9)
        WHERE user_id = $1
          AND cinema_id = (SELECT id FROM cinemas WHERE name = $2)
          AND movie_id = (SELECT id FROM movies WHERE title = $3)
@@ -241,8 +255,36 @@ export async function updatePaymentQR(req, res, next) {
          AND time_id = (SELECT id FROM screentime WHERE time = $5)
          AND hall_id = (SELECT id FROM halls WHERE hall_number = $6)
           AND seat_id = (SELECT id FROM seat_number WHERE seat_num = $7)`,
-        [user, cinema, movie, select_date, time, hall, seat]
-      );
+          [
+            user,
+            cinema,
+            movie,
+            select_date,
+            time,
+            hall,
+            seat,
+            payment_id,
+            coupon,
+          ]
+        );
+      } else {
+        result = await connectionPool.query(
+          `UPDATE booking
+         SET status = 'booked',
+         payment_id = $8,
+          payment_method = 'QR code', 
+          payment_status = 'success', 
+          updated_at = CURRENT_TIMESTAMP
+         WHERE user_id = $1
+           AND cinema_id = (SELECT id FROM cinemas WHERE name = $2)
+           AND movie_id = (SELECT id FROM movies WHERE title = $3)
+           AND select_date = $4::date
+           AND time_id = (SELECT id FROM screentime WHERE time = $5)
+           AND hall_id = (SELECT id FROM halls WHERE hall_number = $6)
+            AND seat_id = (SELECT id FROM seat_number WHERE seat_num = $7)`,
+          [user, cinema, movie, select_date, time, hall, seat, payment_id]
+        );
+      }
     }
     if (result.rowCount === 0) {
       return res.status(404).json({
@@ -263,7 +305,7 @@ export async function updatePaymentQR(req, res, next) {
 
 export async function deletePayment(req, res, next) {
   const { user, cinema, movie, select_date, time, hall, seats } = req.body;
-  console.log("DataRequest: ", req.body);
+  // console.log("DataRequest: ", req.body);
 
   let result;
   try {

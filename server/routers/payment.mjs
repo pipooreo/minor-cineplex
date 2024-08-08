@@ -15,7 +15,7 @@ const paymentRouter = Router();
 paymentRouter.post("/", createPayment);
 paymentRouter.get("/", getPayment);
 paymentRouter.put("/", updatePayment);
-paymentRouter.put("/", updatePaymentQR);
+paymentRouter.put("/qr", updatePaymentQR);
 paymentRouter.post("/process-payment", processPayment);
 paymentRouter.delete("/", deletePayment);
 paymentRouter.get("/success", getPaymentSuccess);

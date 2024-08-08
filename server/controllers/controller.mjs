@@ -104,7 +104,6 @@ export async function getCinemasById(req, res) {
       `select * from cinemas where id = $1`,
       [cinemaId]
     );
-    console.log("result: ", results);
     if (results.rowCount == 0) {
       return res.status(404).json({
         message: "Cinema not found",
@@ -284,7 +283,7 @@ export async function getMoviesByGenres(req, res) {
         message: "movies not found",
       });
     } else {
-      console.log("Movies found:", results.rows);
+      // console.log("Movies found:", results.rows);
       return res.status(200).json({
         data: results.rows,
       });

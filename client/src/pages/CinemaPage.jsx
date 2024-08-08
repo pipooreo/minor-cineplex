@@ -15,7 +15,6 @@ function CinemaPage() {
 
   const getDataSearch = async () => {
     try {
-      console.log("Data search has been performed");
       const response = await axios.get(
         `http://localhost:4000/ticket?cinemaId=${params.title}`
       );
@@ -33,7 +32,6 @@ function CinemaPage() {
   };
 
   const handleDayClick = (day) => {
-    console.log("Day clicked:", day);
     const formattedDate = formatDate(day);
     setDateSearch(formattedDate);
     setSelectedDate(day);
@@ -102,18 +100,18 @@ function CinemaPage() {
 
   async function getTitleCinema() {
     try {
-      console.log("params", params.title);
+      // console.log("params", params.title);
       const cinemaData = await axios.get(
         `http://localhost:4000/ticket?cinemaId=${params.title}`
       );
       const cinemaInfo = cinemaData.data.data[0]?.cinemas[0];
-      console.log("cinemaAll:", cinemaData.data.data[0]?.cinemas[0]);
-      console.log("cinemaInfo:", cinemaInfo);
+      // console.log("cinemaAll:", cinemaData.data.data[0]?.cinemas[0]);
+      // console.log("cinemaInfo:", cinemaInfo);
 
       if (cinemaInfo) {
         setCinema(cinemaInfo);
-        console.log("cinema that will be put in state:", cinemaInfo);
-        console.log("cinema.image:", cinemaInfo.cinema_image);
+        // console.log("cinema that will be put in state:", cinemaInfo);
+        // console.log("cinema.image:", cinemaInfo.cinema_image);
       }
     } catch (error) {
       console.error("Error fetching Cinema:", error);
@@ -129,9 +127,9 @@ function CinemaPage() {
     getDataSearch();
   }, [dateSearch, cinemaSearch]);
 
-  useEffect(() => {
-    console.log("Updated cinema state:", cinema);
-  }, [cinema]);
+  // useEffect(() => {
+  //   console.log("Updated cinema state:", cinema);
+  // }, [cinema]);
 
   return (
     <div

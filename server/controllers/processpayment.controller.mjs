@@ -22,22 +22,14 @@ export const processPayment = async (req, res) => {
     // Create a payment intent with Stripe
     console.log("888 paymentMethodId", paymentMethodId);
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount * 100, // Convert to the smallest currency unit
+      amount: amount * 100,
       currency: "thb",
-      //   confirm: true,
       payment_method_types: ["promptpay"],
-    //   payment_method: paymentMethodId,
-      //   payment_method: paymentMethodId,
-      receipt_email: email, // Optional: Send receipt to the user
-      //   customer: user.id,
+      receipt_email: email,
     });
 
     console.log("Payment processed with the following details:", paymentIntent);
-
-
-    // Send a response back to the client
     res.json({
-    //   qrCodeUrl,
       success: true,
       message: "Payment processed successfully!",
       paymentIntent,
@@ -51,6 +43,58 @@ export const processPayment = async (req, res) => {
     });
   }
 };
+// export const processPayment = async (req, res) => {
+//   try {
+//     const { amount, currency, paymentMethodId, email } = req.body;
+
+//     // Validate inputs
+//     if (!amount) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Amount is required.",
+//       });
+//     }
+
+//     // Create a payment intent with Stripe
+//     console.log("888 paymentMethodId", paymentMethodId);
+//     const paymentIntent = await stripe.paymentIntents.create({
+//       amount: amount * 100,
+//       currency: "thb",
+//       payment_method_types: ["promptpay"],
+//       receipt_email: email,
+//     });
+
+//     console.log("Payment processed with the following details:", paymentIntent);
+//     res.json({
+//       success: true,
+//       message: "Payment processed successfully!",
+//       paymentIntent,
+//     });
+//   } catch (error) {
+//     console.error("Error processing payment:", error);
+//     res.status(500).json({
+//       success: false,
+//       message: "Failed to process payment.",
+//       error: error.message,
+//     });
+//   }
+// };
+
+// const paymentLink = await stripe.paymentLinks.create({
+//     amount: amount * 100,
+//     currency: "thb",
+//     payment_method_types: ["promptpay"],
+//     receipt_email: email,
+
+//   after_completion: {
+//     type: "redirect",
+//     redirect: {
+//       url: "https://your-success-page.com",
+//     },
+//   },
+// });
+
+// res.json({ url: paymentLink.url });
 
 // Function to handle updating payment data
 export const updatePaymentData = async (req, res) => {
