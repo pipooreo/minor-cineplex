@@ -297,6 +297,91 @@ export async function deletePayment(req, res, next) {
   }
 }
 
+export async function getPaymentSuccess(req, res) {
+  let results;
+  const { movie, hall, time, cinema, select_date, users_id } = req.query;
+  // console.log(req.query);
+  try {
+    results = await connectionPool.query(
+      `SELECT 
+          title, 
+          select_date :: text, 
+          movies.image, 
+          hall_number, 
+          time, 
+          cinemas.name AS cinema_name, 
+          array_agg(DISTINCT seat_num) AS seat_number,
+          array_agg(DISTINCT genres.genres_name) AS genres,
+          movies.language AS language,
+          users.name AS username,
+          users.email AS email,
+          status,
+          min(DISTINCT to_char(booking.created_at AT TIME ZONE 'Asia/Bangkok', 'HH24:MI:SS')) AS booking_time,
+          coupons.type AS coupon_type,
+          coupons.discount_value AS discount,
+          payment_method
+      FROM 
+          booking
+      INNER JOIN 
+          movies ON movies.id = booking.movie_id
+      INNER JOIN
+          halls ON halls.id = booking.hall_id
+      INNER JOIN 
+          screentime ON screentime.id = booking.time_id
+      INNER JOIN 
+          cinemas ON cinemas.id = booking.cinema_id
+      INNER JOIN 
+          seat_number ON seat_number.id = booking.seat_id
+      INNER JOIN 
+          users ON users.id = booking.user_id
+      INNER JOIN
+          movies_genres ON movies_genres.movie_id = movies.id
+      INNER JOIN
+          genres ON movies_genres.genre_id = genres.id
+      LEFT JOIN 
+          coupons ON coupons.id = booking.coupon_id
+      WHERE 
+          title = $1 AND 
+          hall_number = $2 AND 
+          time = $3 AND 
+          cinemas.name = $4 AND 
+          select_date = $5 AND 
+          users.id = $6 AND
+          status = 'booked'
+      GROUP BY
+          title, 
+          select_date, 
+          movies.image, 
+          hall_number, 
+          time, 
+          cinemas.name, 
+          users.name,
+          users.email,
+          movies.language,
+          status, 
+          coupons.discount_value, 
+          coupons.type,
+          payment_method`,
+      [movie, hall, time, cinema, select_date, users_id]
+    );
+    // console.log(results);
+    if (results.rowCount === 0) {
+      return res.status(404).json({
+        message: "Payment not found",
+      });
+    }
+    return res.status(200).json({
+      data: results.rows,
+      message: "Payment successfully",
+    });
+  } catch (error) {
+    console.error("Error creating payment:", error);
+    return res.status(500).json({
+      message: "Server could not create payment due to database error",
+    });
+  }
+}
+
 export async function createRefund(req, res) {
   const { paymentIntentId } = req.body;
   // console.log("bodyname: ", req.body);
