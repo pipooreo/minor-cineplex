@@ -305,6 +305,27 @@ export default function PaymentTest() {
     }
   };
 
+  const renderSelectedSeats = () => {
+    const seatNumbers = movie && movie[0].seat_number;
+    if (!seatNumbers) return null; // ตรวจสอบว่ามีค่า seatNumbers หรือไม่
+
+    const rows = seatNumbers.reduce((rows, seatNumber, index) => {
+      if (index % 4 === 0) rows.push([]);
+      rows[rows.length - 1].push(seatNumber);
+      return rows;
+    }, []);
+
+    return rows.map((row, rowIndex) => (
+      <div key={rowIndex} className="flex flex-col items-end gap-1">
+        <div key={rowIndex} className="flex gap-1">
+          <span className="inline-block p-[1px_6px] bg-blue-500 text-white text-center rounded-[4px] text-sm">
+            {row.join(", ")}
+          </span>
+        </div>
+      </div>
+    ));
+  };
+
   return (
     <div className="w-full ">
       <form onSubmit={handleSubmit}>
@@ -444,7 +465,7 @@ export default function PaymentTest() {
           </form>
 
           {/* ส่วนของงการโชว์ข้อมูลที่จองหนัง */}
-          <div className="flex max-md:w-[85%] max-sm:w-[100%] lg:flex-col md:flex-row xs:flex-col max-xl:justify-evenly pt-4 bg-gray-0 rounded-t-[8px]">
+          <div className="flex xl:w-[30%] w-[100%] flex-col max-xl:justify-evenly pt-4 bg-gray-0 rounded-t-[8px]">
             <div className="flex flex-col w-[100%] max-xl:w-[50%] max-xl:justify-center max-md:w-[100%] text-white px-[16px] pb-[24px] gap-[24px]">
               {movie && (
                 <div className="flex flex-col gap-[12px] w-[100%]">
@@ -467,25 +488,25 @@ export default function PaymentTest() {
                     />
                   )}
 
-                  <div className="flex">
+                  <div className="flex gap-[12px]">
                     <img
                       className="w-[82.21px] h-[120px] rounded-[4px]"
                       src={movie[0].image}
                     />
-                    <div className="flex flex-col gap-[8px]">
+                    <div className="flex flex-col justify-center gap-[8px]">
                       <div className="font-bold text-[20px] ">
                         {movie[0].title}
                       </div>
                       <div className="flex gap-[8px] flex-wrap">
                         {movie[0].genres.map((genres, index_genres) => (
                           <div
-                            className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-300"
+                            className="bg-gray-100 text-gray-300 text-body2R rounded-[4px] px-[6px] py-[12px]"
                             key={index_genres}
                           >
                             {genres}
                           </div>
                         ))}
-                        <div className="bg-gray-100 rouned-[4px] p-[6px_12px] text-gray-400 font-medium">
+                        <div className="bg-gray-100 text-gray-400 text-body2M rounded-[4px] px-[6px] py-[12px]">
                           {movie[0].language}
                         </div>
                       </div>
@@ -523,16 +544,8 @@ export default function PaymentTest() {
                 <div className=" border-t-[1px] max-lg:hidden pb-4"></div>
                 <div className="flex justify-between">
                   <div>Select Seat</div>
-                  <div className="flex gap-[5px] flex-wrap w-[40%] justify-end">
-                    {movie &&
-                      movie[0].seat_number.map((seatNumber, index) => (
-                        <p
-                          key={index}
-                          className="p-[1px_2px] bg-blue-100 text-white rounded-[4px]"
-                        >
-                          {seatNumber}
-                        </p>
-                      ))}
+                  <div className="flex-col w-[40%] justify-end">
+                    {renderSelectedSeats()}
                   </div>
                 </div>
                 <div className="flex justify-between ">
@@ -569,7 +582,7 @@ export default function PaymentTest() {
               )}
 
               <button
-                className="btn bg-blue-100 border-blue-100 text-[white]"
+                className="btn bg-blue-100 border-blue-100 hover:bg-blue-200 active:bg-blue-300 hover:border-blue-200 active:border-blue-300 text-[white]"
                 type="button"
                 onClick={() => setShowModal(true)}
               >
@@ -578,21 +591,25 @@ export default function PaymentTest() {
 
               {/* Popup Dialog */}
               {showModal && (
-                <div className="modal modal-open bg-gray-100">
-                  <div className="modal-box bg-gray-100">
-                    <h3 className="font-bold text-lg">Confirm booking</h3>
-                    <p className="py-4">Confirm booking and payment?</p>
-                    <div className="modal-action">
-                      <form method="dialog">
+                <div className="modal modal-open bg-gray-100 ">
+                  <div className="modal-box bg-gray-100 w-11/12 max-w-sm flex flex-col justify-center items-center">
+                    <h3 className="font-bold text-lg text-head4">
+                      Confirm booking
+                    </h3>
+                    <p className="py-4 text-gray-400 ">
+                      Confirm booking and payment?
+                    </p>
+                    <div className="flex justify-center gap-5">
+                      <form method="dialog" className="flex gap-5">
                         <button
-                          className="btn"
+                          className="btn border w-[139.5px] bg-gray-100  border-gray-300 hover:bg-gray-300 active:bg-gray-400 text-white rounded-[4px] text-body1M "
                           type="button"
                           onClick={() => setShowModal(false)}
                         >
                           Cancel
                         </button>
                         <button
-                          className="btn"
+                          className="btn text-body1M w-[139.5px] rounded-[4px] bg-blue-100 border-blue-100 hover:bg-blue-200 active:bg-blue-300 hover:border-blue-200 active:border-blue-300  text-white"
                           type="button"
                           onClick={(e) => {
                             if (method === "CreditCard") {
