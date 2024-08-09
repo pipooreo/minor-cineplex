@@ -50,7 +50,8 @@ function QRcode() {
         }
       );
       if (delete_payment.status === 200) {
-        setCountDownPopUp(true);
+        // setCountDownPopUp(true);
+        navigate(`/seat/${movie}/${cinema}/${select_date}/${hall}/${time}`);
       } else {
         console.error("Failed to delete booking");
       }

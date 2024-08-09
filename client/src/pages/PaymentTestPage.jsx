@@ -105,7 +105,7 @@ export default function PaymentTest() {
     bookingDate.setMinutes(minutes);
     bookingDate.setSeconds(seconds);
 
-    const endTime = bookingDate.getTime() + 5 * 60 * 1000;
+    const endTime = bookingDate.getTime() + 0.2 * 60 * 1000;
     setCountdownDate(endTime);
   }
 
