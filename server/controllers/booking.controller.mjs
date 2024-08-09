@@ -1,6 +1,6 @@
 import connectionPool from "../utils/db.mjs";
 
-export async function bookingReserved(req, res, next) {
+export async function bookingReserved(req, res) {
   const { user, cinema, movie, select_date, time, hall, seats } = req.body;
   let result;
   // const updated_at = new Date();
@@ -65,7 +65,7 @@ export async function bookingReserved(req, res, next) {
   }
 }
 
-export async function dataSeat(req, res, next) {
+export async function dataSeat(req, res) {
   const { select_date, cinema, movie, hall, time } = req.query;
   // console.log(req.query);
   try {
@@ -172,7 +172,7 @@ GROUP BY
   }
 }
 
-export async function updateBooking(req, res, next) {
+export async function updateBooking(req, res) {
   const { user, cinema, movie, select_date, time, hall, seats } = req.body;
   let result;
   try {
@@ -210,7 +210,7 @@ export async function updateBooking(req, res, next) {
   }
 }
 
-export async function deleteBooking(req, res, next) {
+export async function deleteBooking(req, res) {
   const { user, cinema, movie, select_date, time, hall, seats } = req.body;
   let result;
   try {

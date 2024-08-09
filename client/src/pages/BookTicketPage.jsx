@@ -269,19 +269,19 @@ function BookTicketPage() {
                   onChange={(event) => {
                     setCitySearch("");
                     setCinemaSearch(event.target.value);
-                    console.log("cinema search", event.target.value);
+                    // console.log("cinema search", event.target.value);
                   }}
                   className="w-full h-12 rounded-md text-body2R bg-[#21263F] border-[#565F7E] text-gray-300 border px-3 pr-12 outline-none"
                   placeholder="Search cinema"
                 />
-                <span
-                  onClick={() => {
-                    getDataSearch();
-                  }}
+                <div
+                  // onClick={() => {
+                  //   getDataSearch();
+                  // }}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-body2R text-[#8B93B0]  hover:text-[#4E7BEE]"
                 >
                   <i class="fa-solid fa-magnifying-glass"></i>
-                </span>
+                </div>
               </div>
             </div>
 
@@ -364,16 +364,16 @@ function BookTicketPage() {
                                 </div>
                               </div>
 
-                              <div
+                              <button
                                 onClick={() => {
                                   navigate(
                                     `/movie/${cinema.movie_details.movie_name}#`
                                   );
                                 }}
-                                className="text-white text-[16px] font-[700] underline mt-[40px]"
+                                className="text-white text-[16px] font-[700] w-[80px] underline mt-[20px] flex "
                               >
                                 Movie Detail
-                              </div>
+                              </button>
                             </div>
                           </div>
 

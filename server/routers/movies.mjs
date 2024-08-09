@@ -7,7 +7,7 @@ import {
   getMoviesComingSoon,
   getMoviesById,
   getMoviesByGenres,
-} from "../controllers/controller.mjs";
+} from "../controllers/movies.controller.mjs";
 const moviesRouter = Router();
 
 moviesRouter.get("/release", getMoviesReleased);

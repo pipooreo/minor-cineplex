@@ -1,16 +1,18 @@
 import { Router } from "express";
 import connectionPool from "../utils/db.mjs";
 import { protect } from "../middlewares/protect.mjs";
+
 import {
   createComment,
-  deleteComment,
+  getCommentByMovie,
   getCommentByUser,
   getCommentsAll,
   getCommentsById,
   getCommentsByMoviesName,
   updateComment,
-  getCommentByMovie,
-} from "../controllers/controller.mjs";
+  deleteComment,
+} from "../controllers/comments.controller.mjs";
+
 const commentRouter = Router();
 commentRouter.use(protect);
 commentRouter.get("/", getCommentsAll);
