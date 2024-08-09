@@ -115,8 +115,8 @@ export default function PaymentTest() {
 
   const handleSubmitQR = async (e) => {
     e.preventDefault();
-    console.log("user", user);
-    const cardOwner = user.name;
+    // console.log("user", user);
+    // const cardOwner = user.name;
     // const paymentMethod = "QR";
 
     const amount = movie[0].seat_number.length * 150 - discount;
@@ -330,7 +330,10 @@ export default function PaymentTest() {
   };
 
   return (
-    <div className="w-full " style={{ fontFamily: "Roboto Condensed" }}>
+    <div
+      className="w-full absolute "
+      style={{ fontFamily: "Roboto Condensed" }}
+    >
       <form onSubmit={handleSubmit}>
         <div className="bg-BG ">
           <div className="h-[80px] bg-BG max-md:h-[48px]"></div>

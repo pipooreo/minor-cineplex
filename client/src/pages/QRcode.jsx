@@ -62,7 +62,7 @@ function QRcode() {
   useEffect(() => {
     // Check if stripe is loaded before calling handleQr
     setRemainingTime(countdownDate);
-    console.log("remainig Tiem", setRemainingTime);
+    // console.log("remainig Tiem", setRemainingTime);
     if (stripe) {
       handleQr();
     }
@@ -72,23 +72,22 @@ function QRcode() {
       `${import.meta.env.VITE_SERVER_URL}/payment/process-payment`,
       {
         amount: amount,
-        currency: "thb",
-        payment_method_types: "promptpay",
         email: email,
       }
     );
 
     const clientSecret = response.data.paymentIntent.client_secret;
+    const paymentIntentId = response.data.paymentIntent.id;
     const check = await stripe.confirmPromptPayPayment(clientSecret, {
       payment_method: {
         type: "promptpay",
         billing_details: {
-          email: "beammy@gmail.com",
+          email: email,
         },
       },
     });
-    console.log("check", check);
-    console.log("status", check.paymentIntent.status);
+    // console.log("check", check);
+    // console.log("status", check.paymentIntent.status);
 
     if (check.paymentIntent.status === "succeeded") {
       if (!couponCode) {
@@ -100,7 +99,7 @@ function QRcode() {
           time: time,
           hall: hall,
           seats: seats,
-          payment_id: username,
+          payment_id: paymentIntentId,
         });
       } else {
         await axios.put(`${import.meta.env.VITE_SERVER_URL}/payment/qr`, {
@@ -111,7 +110,7 @@ function QRcode() {
           time: time,
           hall: hall,
           seats: seats,
-          payment_id: username,
+          payment_id: paymentIntentId,
           coupon: couponCode,
         });
       }
@@ -128,7 +127,7 @@ function QRcode() {
           time: time,
           hall: hall,
           seats: seats,
-          payment_id: username,
+          payment_id: paymentIntentId,
         },
       });
       navigate(`/seat/${movie}/${cinema}/${select_date}/${hall}/${time}`);
@@ -140,7 +139,7 @@ function QRcode() {
   };
   return (
     <div
-      className="bg-[#101525] w-full h-screen"
+      className="bg-[#101525] w-full h-screen absolute"
       style={{ fontFamily: "Roboto Condensed" }}
     >
       <div className="pt-20 h-[100%] text-white  flex flex-col justify-center items-center">
