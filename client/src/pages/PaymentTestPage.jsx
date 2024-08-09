@@ -44,15 +44,12 @@ export default function PaymentTest() {
   };
 
   const username = user.name;
-  console.log("username meow:", username);
-  console.log("stripe ja", stripe);
-  console.log("elements JA", elements);
 
   const handleOwnerChange = (event) => {
     const value = event.target.value;
     setOwnerError(""); // Clear any previous error
     setCardOwner(value);
-    console.log("card owrner", cardOwner);
+    // console.log("card owrner", cardOwner);
   };
 
   const handleExpiryDateChange = (event) => {
@@ -125,7 +122,6 @@ export default function PaymentTest() {
     const amount = movie[0].seat_number.length * 150 - discount;
     const email = movie[0].email;
     const userid = user.id;
-
     if (!couponCode) {
       navigate("/payment/qr", {
         state: {
@@ -134,6 +130,7 @@ export default function PaymentTest() {
           email,
           userid,
           username,
+          countdownDate,
           cinema: params.cinema,
           movie: params.title,
           select_date: params.date,
@@ -150,6 +147,7 @@ export default function PaymentTest() {
           username,
           email,
           userid,
+          countdownDate,
           couponCode,
           cinema: params.cinema,
           movie: params.title,
@@ -306,6 +304,7 @@ export default function PaymentTest() {
       setCouponError("");
     }
   };
+
   const renderSelectedSeats = () => {
     const seatNumbers = movie && movie[0].seat_number;
     if (!seatNumbers) return null; // ตรวจสอบว่ามีค่า seatNumbers หรือไม่
@@ -326,16 +325,14 @@ export default function PaymentTest() {
       </div>
     ));
   };
+
   return (
     <div className="w-full " style={{ fontFamily: "Roboto Condensed" }}>
       <form onSubmit={handleSubmit}>
         <div className="bg-BG ">
           <div className="h-[80px] bg-BG max-md:h-[48px]"></div>
           <header className="bg-gray-0 h-[106px] flex justify-center items-center gap-[190px] max-md:gap-[80px]">
-            <button
-              className="flex flex-col items-center w-[140px]"
-              // onClick={() => navigate(-2)}
-            >
+            <button className="flex flex-col items-center w-[140px]">
               <FaCheck className="w-[44px] h-[44px] bg-blue-300  rounded-full text-white p-3 " />
               <p className="text-white text-[16px] max-md:text-[14px]">
                 Select showtime
@@ -460,8 +457,8 @@ export default function PaymentTest() {
 
             {method === "QR" && (
               <div className="w-[100%] bg-gray-100 text-gray-400 h-[80%] p-[40px_24px_40px_24px] flex justify-center items-center">
-                {console.log("method", method)}
-                {console.log("coupon used", couponCode)}
+                {/* {console.log("method", method)} */}
+                {/* {console.log("coupon used", couponCode)} */}
                 QR Code Payment
               </div>
             )}

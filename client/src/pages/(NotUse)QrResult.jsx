@@ -37,8 +37,6 @@ function QrResult() {
     if (stripe && elements) {
       const submitQr = async () => {
         try {
-          console.log("userJa", userJA);
-          console.log("userJa", userJA.id);
           //   const cardNumberElement = elements.getElement(CardNumberElement);
 
           const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -69,7 +67,6 @@ function QrResult() {
                 hall,
                 seats,
               };
-              console.log("fuck you");
               if (couponCode) {
                 paymentData.coupon = couponCode;
               }

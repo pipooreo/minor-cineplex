@@ -115,7 +115,7 @@ function AuthProvider(props) {
   }
 
   async function updatePassword(data, actions) {
-    console.log(data);
+    // console.log(data);
     try {
       const result = await axios.put(
         `${import.meta.env.VITE_SERVER_URL}/auth/update-password`,

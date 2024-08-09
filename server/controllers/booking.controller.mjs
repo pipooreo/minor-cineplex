@@ -68,7 +68,7 @@ export async function bookingReserved(req, res, next) {
 
 export async function dataSeat(req, res, next) {
   const { select_date, cinema, movie, hall, time } = req.query;
-  console.log(req.query);
+  // console.log(req.query);
   try {
     const results = await connectionPool.query(
       `WITH movie_info AS (

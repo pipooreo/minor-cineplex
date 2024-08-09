@@ -36,13 +36,13 @@ function BookTicketPage() {
 
   const getDataSearch = async () => {
     try {
-      console.log("Data search has been performed", params.title);
+      // console.log("Data search has been performed", params.title);
       const response = await axios.get(
         `http://localhost:4000/ticket?movieName=${params.title}&moviesCity=${citySearch}&releasedDate=${dateSearch}&cinemaName=${cinemaSearch}`
       );
       setSearch(response.data.data);
 
-      console.log(response.data.data);
+      // console.log(response.data.data);
     } catch (error) {
       console.error("Error fetching search data:", error);
     }
@@ -56,7 +56,6 @@ function BookTicketPage() {
   };
 
   const handleDayClick = (day) => {
-    console.log("Day clicked:", day);
     const formattedDate = formatDate(day);
     setDateSearch(formattedDate);
     setSelectedDate(day);
@@ -131,7 +130,6 @@ function BookTicketPage() {
       const movieInfo = movieData.data.data[0];
       if (movieInfo) {
         setMovie(movieInfo);
-        console.log("movie info", movieInfo);
         // setMovieTitle(movieInfo.title);
       }
     } catch (error) {
@@ -258,7 +256,47 @@ function BookTicketPage() {
 
       <section className="bg-BG xs:pt-[24px] md:pt-[40px] md:pb-[80px] flex flex-col items-center">
         <div className="xs:w-[100%] md:w-[80%] flex flex-col gap-[24px]">
+        <div className="flex flex-col md:flex-row p-2 md:justify-between pb-[3%] gap-5">
+            <div className="flex items-center w-[100%] ">
+              <div className="relative w-[100%]">
+                <input
+                  type="text"
+                  value={cinemaSearch}
+                  onChange={(event) => {
+                    setCitySearch("");
+                    setCinemaSearch(event.target.value);
+                    console.log("cinema search", event.target.value);
+                  }}
+                  className="w-full h-12 rounded-md text-body2R bg-[#21263F] border-[#565F7E] text-gray-300 border px-3 pr-12 outline-none"
+                  placeholder="Search cinema"
+                />
+                <span
+                  onClick={() => {
+                    getDataSearch();
+                  }}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-body2R text-[#8B93B0]  hover:text-[#4E7BEE]"
+                >
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+              </div>
+            </div>
+
+            <select
+              value={citySearch}
+              onChange={(event) => {
+                setCitySearch(event.target.value);
+              }}
+              className="col-span-1 xl:w-[20%] h-[48px] rounded-[4px] text-body2R bg-[#21263F] border-[#565F7E] text-gray-300  border-[1px] p-[12px] outline-none"
+              name="city"
+            >
+              <option value="">Select city</option>
+              <option value="Bangkok">Bangkok</option>
+              <option value="Pathumthani">Pathumthani</option>
+              <option value="Nonthaburi">Nonthaburi</option>
+            </select>
+          </div>
           {(() => {
+            
             let cinemaCount = 0;
             return search.map((searchItem, index_search) => (
               <div key={index_search} className="flex flex-col gap-[24px]">
@@ -432,6 +470,7 @@ function BookTicketPage() {
 
         <div>pagination</div>
       </section>
+      
     </div>
   );
 }

@@ -197,7 +197,7 @@ function BookingHistory(props) {
   };
 
   const cancelBooking = async (movie, index) => {
-    console.log(movie);
+    // console.log(movie);
     try {
       const result = await axios.delete(
         `${import.meta.env.VITE_SERVER_URL}/booking`,
@@ -226,7 +226,7 @@ function BookingHistory(props) {
   };
 
   const sendRefund = async (movie, index) => {
-    console.log(movie);
+    // console.log(movie);
     try {
       const result = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/payment/refund`,
@@ -248,7 +248,7 @@ function BookingHistory(props) {
           },
         }
       );
-      console.log(result);
+      // console.log(result);
       // if(result)
       if (result.status === 200 && deleteBooking.status === 200) {
         const dialog = document.getElementById(`refund_${index}`);
