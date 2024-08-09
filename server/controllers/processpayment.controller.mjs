@@ -42,35 +42,3 @@ export const processPayment = async (req, res) => {
     });
   }
 };
-
-// Function to handle updating payment data
-export const updatePaymentData = async (req, res) => {
-  const { user, cinema, movie, select_date, time, hall, seats, coupon } =
-    req.body;
-
-  try {
-    const { createClient } = require("@supabase/supabase-js");
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_ANON_KEY;
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    const { data, error } = await supabase
-      .from("payments")
-      .insert([
-        { user, cinema, movie, select_date, time, hall, seats, coupon },
-      ]);
-
-    if (error) {
-      throw error;
-    }
-
-    res.json({ success: true, message: "Payment data updated successfully!" });
-  } catch (error) {
-    console.error("Error updating payment data:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to update payment data.",
-      error: error.message,
-    });
-  }
-};
