@@ -196,7 +196,7 @@ function BookingHistory(props) {
     }
   };
 
-  const cancelBooking = async (movie, index, screen) => {
+  const cancelBooking = async (movie, index) => {
     // console.log(movie);
     try {
       const result = await axios.delete(
@@ -225,7 +225,7 @@ function BookingHistory(props) {
     }
   };
 
-  const sendRefund = async (movie, index, screen) => {
+  const sendRefund = async (movie, index) => {
     // console.log(movie);
     try {
       const result = await axios.post(
