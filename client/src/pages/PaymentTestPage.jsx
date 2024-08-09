@@ -24,12 +24,14 @@ export default function PaymentTest() {
   const [couponError, setCouponError] = useState("");
   const [discount, setDiscount] = useState(0); // state สำหรับเก็บค่าลดราคา
   const [method, setMethod] = useState("CreditCard");
+
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
   const params = useParams();
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
+
   const [cardError, setCardError] = useState("");
   const [ownerError, setOwnerError] = useState("");
   const [expiryError, setexpiryError] = useState("");
@@ -105,8 +107,10 @@ export default function PaymentTest() {
     bookingDate.setMinutes(minutes);
     bookingDate.setSeconds(seconds);
 
-    const endTime = bookingDate.getTime() + 5 * 60 * 1000;
+    const startTime = bookingDate.getTime();
+    const endTime = startTime + 5 * 60 * 1000;
     setCountdownDate(endTime);
+    setRemainingTime(startTime);
   }
 
   useEffect(() => {
@@ -460,8 +464,6 @@ export default function PaymentTest() {
 
             {method === "QR" && (
               <div className="w-[100%] bg-gray-100 text-gray-400 h-[80%] p-[40px_24px_40px_24px] flex justify-center items-center">
-                {/* {console.log("method", method)} */}
-                {/* {console.log("coupon used", couponCode)} */}
                 QR Code Payment
               </div>
             )}
@@ -475,7 +477,7 @@ export default function PaymentTest() {
                   {countdownDate && (
                     <Countdown
                       date={countdownDate}
-                      onComplete={() => handleDeleteData(movie)}
+                      onComplete={() => handleDeleteData(movie)} //ถ้าเวลาหมด handleDeleteData(movie) จะทำงาน
                       intervalDelay={0}
                       precision={3}
                       renderer={({ minutes, seconds }) => (
