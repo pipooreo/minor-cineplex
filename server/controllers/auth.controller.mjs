@@ -179,12 +179,16 @@ export async function updatePassword(req, res) {
 export async function updateProfile(req, res) {
   const user = req.body;
   // console.log(user);
-  // console.log(req.files);
+  console.log(req.files);
 
   try {
     if (req.files.image) {
       // console.log(req.files.image);
-      const avatarUrl = await cloudinaryUpload(req.files);
+      // const avatarUrl = await cloudinaryUpload(req.files);
+      const avatarUrl = await cloudinaryUpload(
+        req.files.image[0].buffer,
+        req.files.image[0].originalname
+      );
       user["image"] = avatarUrl.url;
       // console.log(user);
       const updated_at = new Date();

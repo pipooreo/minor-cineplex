@@ -12,8 +12,11 @@ import multer from "multer";
 import { protect } from "../middlewares/protect.mjs";
 
 const authRouter = Router();
-const multerUpload = multer({ dest: "public\\files" });
+const storage = multer.memoryStorage();
+const multerUpload = multer({ storage: storage });
+// const multerUpload = multer({ dest: "public\\files" });
 const avatarUpload = multerUpload.fields([{ name: "image", maxCount: 1 }]);
+// console.log(avatarUpload);
 
 authRouter.post("/register", register);
 
