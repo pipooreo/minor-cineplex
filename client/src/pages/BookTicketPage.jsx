@@ -370,7 +370,7 @@ function BookTicketPage() {
                                     `/movie/${cinema.movie_details.movie_name}#`
                                   );
                                 }}
-                                className="text-white text-[16px] font-[700] underline mt-[20px] flex "
+                                className="text-white text-[16px] font-[700] w-[80px] underline mt-[20px] flex "
                               >
                                 Movie Detail
                               </button>
