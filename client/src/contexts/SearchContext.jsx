@@ -24,6 +24,7 @@ export function SearchProvider({ children }) {
   const [genreSearch, setGenreSearch] = useState("");
   const [dateSearch, setDateSearch] = useState(toDay);
   const [tagsSearch, setTagsSearch] = useState([]);
+  const [noResults, setNoResults] = useState(false);
 
   const resetSearchValues = () => {
     setCitySearch("");
@@ -32,6 +33,7 @@ export function SearchProvider({ children }) {
     setGenreSearch("");
     setDateSearch(formatDate(new Date()));
     setTagsSearch([]);
+    setNoResults(false);
   };
 
   const getDataSearch = async () => {
@@ -56,10 +58,15 @@ export function SearchProvider({ children }) {
       }/search?${params.toString()}&${tagsQuery}`;
 
       const response = await axios.get(url);
-
+      if (response.data.data.length === 0) {
+        setNoResults(true);
+      } else {
+        setNoResults(false);
+      }
       setSearch(response.data.data);
     } catch (error) {
       console.error("Error fetching search results:", error);
+      setNoResults(true);
     }
   };
 
@@ -80,6 +87,8 @@ export function SearchProvider({ children }) {
         setDateSearch,
         tagsSearch,
         setTagsSearch,
+        noResults,
+        setNoResults,
         resetSearchValues,
         getDataSearch,
       }}

@@ -10,6 +10,8 @@ import {
   FacebookIcon,
   LineIcon,
   LineShareButton,
+  EmailShareButton,
+  EmailIcon,
 } from "react-share";
 
 function BookingHistory(props) {
@@ -322,7 +324,7 @@ function BookingHistory(props) {
               </a>
               <p>Line</p>
             </li>
-            <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
+            {/* <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
               <a
                 href={messengerShareUrl}
                 target="_blank"
@@ -332,7 +334,7 @@ function BookingHistory(props) {
                 <FacebookMessengerIcon size={20} round />
               </a>
               <p>Messenger</p>
-            </li>
+            </li> */}
             <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
               <a
                 href={`https://www.facebook.com/share.php?u=${url}`}
@@ -345,6 +347,14 @@ function BookingHistory(props) {
                 </FacebookShareButton>
               </a>
               <p>Facebook</p>
+            </li>
+            <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
+              <a className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]">
+                <EmailShareButton url={shareUrl}>
+                  <EmailIcon size={20} round />
+                </EmailShareButton>
+              </a>
+              <p>Mail</p>
             </li>
             <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
               <a
