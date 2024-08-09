@@ -269,7 +269,7 @@ function BookTicketPage() {
                   onChange={(event) => {
                     setCitySearch("");
                     setCinemaSearch(event.target.value);
-                    console.log("cinema search", event.target.value);
+                    // console.log("cinema search", event.target.value);
                   }}
                   className="w-full h-12 rounded-md text-body2R bg-[#21263F] border-[#565F7E] text-gray-300 border px-3 pr-12 outline-none"
                   placeholder="Search cinema"

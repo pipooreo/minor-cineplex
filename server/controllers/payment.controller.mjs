@@ -142,7 +142,7 @@ export async function getPayment(req, res) {
   }
 }
 
-export async function updatePayment(req, res, next) {
+export async function updatePayment(req, res) {
   const {
     user,
     cinema,
@@ -222,7 +222,7 @@ export async function updatePayment(req, res, next) {
     });
   }
 }
-export async function updatePaymentQR(req, res, next) {
+export async function updatePaymentQR(req, res) {
   const {
     user,
     cinema,
@@ -303,7 +303,7 @@ export async function updatePaymentQR(req, res, next) {
   }
 }
 
-export async function deletePayment(req, res, next) {
+export async function deletePayment(req, res) {
   const { user, cinema, movie, select_date, time, hall, seats } = req.body;
   // console.log("DataRequest: ", req.body);
 
