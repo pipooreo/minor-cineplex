@@ -1,11 +1,11 @@
 {
   "name": "minor-cineplex-backend",
   "version": "1.0.0",
-  "main": "app.mjs",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node app.mjs",
-    "devStart": "nodemon app.mjs",
+    "start": "node index.js",
+    "devStart": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
