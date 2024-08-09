@@ -1,6 +1,6 @@
 import connectionPool from "../utils/db.mjs";
 
-export async function getCommentsAll(res) {
+export async function getCommentsAll(req, res, next) {
   try {
     const results = await connectionPool.query(
       `
@@ -20,7 +20,7 @@ export async function getCommentsAll(res) {
   }
 }
 
-export async function getCommentsById(req, res) {
+export async function getCommentsById(req, res, next) {
   try {
     const commentId = req.query.commentId;
     const results = await connectionPool.query(
@@ -42,7 +42,7 @@ export async function getCommentsById(req, res) {
   }
 }
 
-export async function getCommentsByMoviesName(req, res) {
+export async function getCommentsByMoviesName(req, res, next) {
   try {
     const movieName = req.query.movieName;
     const results = await connectionPool.query(

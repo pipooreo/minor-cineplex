@@ -1,5 +1,4 @@
 import connectionPool from "../utils/db.mjs";
-
 export async function getInfoForBookTicket(req, res) {
   try {
     const noResults = [];
@@ -129,7 +128,7 @@ export async function getInfoForBookTicket(req, res) {
       const {
         city_name,
         cinema_name,
-        cinema_image,
+        cinema_image, // Make sure cinema_image is used here
         cinema_tags,
         description,
         movie_genres,
