@@ -22,7 +22,6 @@ function BookingHistory(props) {
   const history = props.user;
   const myReview = props.review;
   const profile = props.profile;
-  const screen = props.screen;
   const today = new Date(formatDate(new Date()));
   const navigate = useNavigate();
 
@@ -51,32 +50,32 @@ function BookingHistory(props) {
   }
   const currentTime = getCurrentTime();
 
-  const openReview = (index, screen) => {
-    const dialog = document.getElementById(`review_${screen}_${index}`);
+  const openReview = (index) => {
+    const dialog = document.getElementById(`review_${index}`);
     // console.log(image);
     if (dialog) {
       dialog.showModal();
     }
   };
 
-  const editReview = (index, screen) => {
-    const dialog = document.getElementById(`edit_${screen}_${index}`);
+  const editReview = (index) => {
+    const dialog = document.getElementById(`edit_${index}`);
     // console.log(image);
     if (dialog) {
       dialog.showModal();
     }
   };
 
-  const handleOngoing = (index, screen) => {
-    const dialog = document.getElementById(`ongoing_${screen}_${index}`);
+  const handleOngoing = (index) => {
+    const dialog = document.getElementById(`ongoing_${index}`);
     // console.log(image);
     if (dialog) {
       dialog.showModal();
     }
   };
 
-  const handleBookingDetail = (index, screen) => {
-    const dialog = document.getElementById(`detail_${screen}_${index}`);
+  const handleBookingDetail = (index) => {
+    const dialog = document.getElementById(`detail_${index}`);
     // console.log(image);
     if (dialog) {
       dialog.showModal();
@@ -84,23 +83,23 @@ function BookingHistory(props) {
   };
 
   const handleCloseAndReload = () => {
-    const modal = document.getElementById("success_modal_${screen}_${index}");
+    const modal = document.getElementById("success_modal_${index}");
     if (modal) {
       modal.close();
     }
     window.location.reload();
   };
 
-  const handlerefund = (index, screen) => {
-    document.getElementById(`detail_${screen}_${index}`).close();
-    const dialog = document.getElementById(`refund_${screen}_${index}`);
+  const handlerefund = (index) => {
+    document.getElementById(`detail_${index}`).close();
+    const dialog = document.getElementById(`refund_${index}`);
     // console.log(image);
     if (dialog) {
       dialog.showModal();
     }
   };
 
-  const sendingReview = async (e, index, movieId, screen) => {
+  const sendingReview = async (e, index, movieId) => {
     e.preventDefault();
     try {
       const result = await axios.post(
@@ -115,9 +114,7 @@ function BookingHistory(props) {
       );
       if (result.status === 201) {
         // ปิด review dialog
-        const reviewDialog = document.getElementById(
-          `review_${screen}_${index}`
-        );
+        const reviewDialog = document.getElementById(`review_${index}`);
         if (reviewDialog) {
           reviewDialog.close();
         }
@@ -131,9 +128,7 @@ function BookingHistory(props) {
         setShowComment(getResult.data.data);
 
         // เปิด success modal
-        const successModal = document.getElementById(
-          `success_modal_${screen}_${index}`
-        );
+        const successModal = document.getElementById(`success_modal_${index}`);
         if (successModal) {
           successModal.showModal();
         }
@@ -143,7 +138,7 @@ function BookingHistory(props) {
     }
   };
 
-  const updateReview = async (e, index, movieId, screen) => {
+  const updateReview = async (e, index, movieId) => {
     e.preventDefault();
     // console.log(ratings[index], comments[index], movieId, profile);
     try {
@@ -158,7 +153,7 @@ function BookingHistory(props) {
         }
       );
       if (result.status === 200) {
-        const dialog = document.getElementById(`edit_${screen}_${index}`);
+        const dialog = document.getElementById(`edit_${index}`);
         if (dialog) {
           dialog.close();
         }
@@ -171,9 +166,7 @@ function BookingHistory(props) {
         setShowComment(getResult.data.data);
 
         // เปิด success modal
-        const successModal = document.getElementById(
-          `success_modal_${screen}_${index}`
-        );
+        const successModal = document.getElementById(`success_modal_${index}`);
         if (successModal) {
           successModal.showModal();
         }
@@ -183,14 +176,14 @@ function BookingHistory(props) {
     }
   };
 
-  const deleteReview = async (commentId, index, screen) => {
+  const deleteReview = async (commentId, index) => {
     // console.log(commentId);
     try {
       const result = await axios.delete(
         `${import.meta.env.VITE_SERVER_URL}/comments/${commentId}`
       );
       if (result.status === 200) {
-        const dialog = document.getElementById(`edit_${screen}_${index}`);
+        const dialog = document.getElementById(`edit_${index}`);
         if (dialog) {
           dialog.close();
         }
@@ -201,7 +194,7 @@ function BookingHistory(props) {
     }
   };
 
-  const cancelBooking = async (movie, index, screen) => {
+  const cancelBooking = async (movie, index) => {
     console.log(movie);
     try {
       const result = await axios.delete(
@@ -219,7 +212,7 @@ function BookingHistory(props) {
         }
       );
       if (result.status === 200) {
-        const dialog = document.getElementById(`ongoing_${screen}_${index}`);
+        const dialog = document.getElementById(`ongoing_${index}`);
         if (dialog) {
           dialog.close();
         }
@@ -230,7 +223,7 @@ function BookingHistory(props) {
     }
   };
 
-  const sendRefund = async (movie, index, screen) => {
+  const sendRefund = async (movie, index) => {
     console.log(movie);
     try {
       const result = await axios.post(
@@ -256,7 +249,7 @@ function BookingHistory(props) {
       console.log(result);
       // if(result)
       if (result.status === 200 && deleteBooking.status === 200) {
-        const dialog = document.getElementById(`refund_${screen}_${index}`);
+        const dialog = document.getElementById(`refund_${index}`);
         if (dialog) {
           dialog.close();
         }
@@ -423,7 +416,7 @@ function BookingHistory(props) {
         return (
           <div className="flex flex-col w-full xl:w-[691px]" key={index}>
             <div className="flex flex-col  text-white px-[16px] pb-[24px] pt-[16px] gap-[24px] bg-gray-0 rounded-[8px]">
-              <div className=" flex  justify-between gap-[12px]">
+              <div className="flex flex-col md:flex-row justify-between gap-[12px]">
                 <div className=" flex items-center gap-[12px]">
                   <img
                     className="w-[96.31px] h-[140px] rounded-[4px]"
@@ -506,12 +499,12 @@ function BookingHistory(props) {
                   <button
                     className="underline text-white font-bold"
                     onClick={() => {
-                      openReview(index, screen);
+                      openReview(index);
                     }}
                   >
                     Review
                   </button>
-                  <dialog id={`review_${screen}_${index}`} className="modal">
+                  <dialog id={`review_${index}`} className="modal">
                     <div className="modal-box w-11/12 max-w-2xl bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
                       <form method="dialog">
                         <h3 className="font-bold text-lg text-center text-white">
@@ -526,7 +519,7 @@ function BookingHistory(props) {
                         className="flex flex-col gap-[40px] grow "
                         onSubmit={(event) => {
                           event.preventDefault();
-                          sendingReview(event, index, movie.movie_id, screen);
+                          sendingReview(event, index, movie.movie_id);
                         }}
                       >
                         <div className="flex flex-col gap-[24px]">
@@ -608,10 +601,7 @@ function BookingHistory(props) {
                     </div>
                   </dialog>
                   {/* Add this near the end of your component */}
-                  <dialog
-                    id={`success_modal_${screen}_${index}`}
-                    className="modal"
-                  >
+                  <dialog id={`success_modal_${index}`} className="modal">
                     <div className="modal-box w-11/12 max-w-2xl bg-gray-100 border-gray-200 border flex flex-col  gap-[40px]">
                       <form method="dialog">
                         <h3 className="text-head4 text-center text-white">
@@ -737,7 +727,7 @@ function BookingHistory(props) {
                   <button
                     className="underline text-white font-bold text-body1M"
                     onClick={() => {
-                      editReview(index, screen);
+                      editReview(index);
                       setComments((prevComments) => ({
                         ...prevComments,
                         [index]: reviewRating[0].comment,
@@ -751,7 +741,7 @@ function BookingHistory(props) {
                     Edit your review
                   </button>
 
-                  <dialog id={`edit_${screen}_${index}`} className="modal ">
+                  <dialog id={`edit_${index}`} className="modal ">
                     <div className="modal-box w-11/12 max-w-2xl bg-gray-100 border-gray-200 border flex flex-col  gap-[40px]">
                       <form method="dialog">
                         <h3 className="font-bold text-lg text-center text-white">
@@ -764,7 +754,7 @@ function BookingHistory(props) {
                       <form
                         className="flex flex-col gap-[40px]"
                         onSubmit={(event) =>
-                          updateReview(event, index, movie.movie_id, screen)
+                          updateReview(event, index, movie.movie_id)
                         }
                       >
                         <div className="flex flex-col gap-[24px]">
@@ -826,7 +816,7 @@ function BookingHistory(props) {
                             className="grow bg-red text-white rounded-[4px] text-body1M font-bold  
                                 transition-all duration-300 ease-in-out p-[12px_40px] hover:bg-gray-300 active:bg-gray-400"
                             onClick={() =>
-                              deleteReview(reviewRating[0].id, index, screen)
+                              deleteReview(reviewRating[0].id, index)
                             }
                           >
                             Delete
@@ -846,10 +836,7 @@ function BookingHistory(props) {
                       </form>
                     </div>
                   </dialog>
-                  <dialog
-                    id={`success_modal_${screen}_${index}`}
-                    className="modal"
-                  >
+                  <dialog id={`success_modal_${index}`} className="modal">
                     <div className="modal-box w-11/12 max-w-2xl bg-gray-100 border-gray-200 border flex flex-col  gap-[40px]">
                       <form method="dialog">
                         <h3 className="text-head4 text-center text-white">
@@ -962,11 +949,11 @@ function BookingHistory(props) {
                 <div className="flex justify-end  items-center gap-[8px]">
                   <button
                     className="bg-green p-[6px_16px] rounded-[100px] font-medium text-white text-[14px] "
-                    onClick={() => handleBookingDetail(index, screen)}
+                    onClick={() => handleBookingDetail(index)}
                   >
                     Paid
                   </button>
-                  <dialog id={`detail_${screen}_${index}`} className="modal">
+                  <dialog id={`detail_${index}`} className="modal">
                     {/* <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[20px] p-[24px_0px]"> */}
                     <div className="modal-box w-11/12 max-w-2xl bg-gray-100 border-gray-200 border flex flex-col  gap-[20px] p-[24px_0px]">
                       <form method="dialog">
@@ -1164,14 +1151,11 @@ function BookingHistory(props) {
                         <div className="grow flex justify-end">
                           <button
                             className="border rounded-[4px] p-[12px_40px] text-body1M text-white"
-                            onClick={() => handlerefund(index, screen)}
+                            onClick={() => handlerefund(index)}
                           >
                             Cancel booking
                           </button>
-                          <dialog
-                            id={`refund_${screen}_${index}`}
-                            className="modal"
-                          >
+                          <dialog id={`refund_${index}`} className="modal">
                             <div className="modal-box  max-w-2xl bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
                               <form method="dialog">
                                 <h3 className="font-bold text-lg text-center text-white">
@@ -1358,9 +1342,7 @@ function BookingHistory(props) {
                                 </form>
                                 <button
                                   // type="submit"
-                                  onClick={() =>
-                                    sendRefund(movie, index, screen)
-                                  }
+                                  onClick={() => sendRefund(movie, index)}
                                   className={`text-body1M font-bold rounded-[4px] 
                                 transition-all duration-300 ease-in-out   p-[12px_40px] ${
                                   reasonRefunds[index]
@@ -1382,11 +1364,11 @@ function BookingHistory(props) {
                 <div className="flex justify-end items-center gap-[8px]">
                   <button
                     className="bg-gray-200 p-[6px_16px] rounded-[100px] font-medium text-white text-[14px] "
-                    onClick={() => handleOngoing(index, screen)}
+                    onClick={() => handleOngoing(index)}
                   >
                     Ongoing
                   </button>
-                  <dialog id={`ongoing_${screen}_${index}`} className="modal ">
+                  <dialog id={`ongoing_${index}`} className="modal ">
                     <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[40px]">
                       <form method="dialog">
                         <h3 className="font-bold text-lg text-center text-white">
@@ -1436,7 +1418,7 @@ function BookingHistory(props) {
                         <button
                           className="grow bg-red text-white rounded-[4px] text-body1M font-bold  
                                 transition-all duration-300 ease-in-out p-[12px_40px] hover:bg-gray-300 active:bg-gray-400"
-                          onClick={() => cancelBooking(movie, index, screen)}
+                          onClick={() => cancelBooking(movie, index)}
                         >
                           Cancel booking
                         </button>
