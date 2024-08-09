@@ -139,7 +139,7 @@ function QRcode() {
   };
   return (
     <div
-      className="bg-[#101525] w-full h-screen absolute"
+      className="bg-BG w-full h-screen absolute"
       style={{ fontFamily: "Roboto Condensed" }}
     >
       <div className="pt-20 h-[100%] text-white  flex flex-col justify-center items-center">

@@ -153,8 +153,11 @@ function SeatSelectorPage() {
   };
 
   return (
-    <section className=" w-full bg-BG absolute">
-      <div className=" h-screen">
+    <section
+      className=" w-full  h-screen bg-BG absolute"
+      style={{ fontFamily: "Roboto Condensed" }}
+    >
+      <div>
         <div className="h-[80px] bg-BG max-md:h-[48px]"></div>
         <header className="bg-gray-0 h-[106px] flex justify-center items-center gap-[190px]   max-md:gap-[80px]">
           <div className="flex flex-col items-center w-[140px]">
@@ -235,14 +238,14 @@ function SeatSelectorPage() {
           <div className="max-md:w-[375px] max-lg:w-[100%] xl:[350px]">
             <div className="flex flex-col w-[320px] text-white px-[16px] pb-[24px] pt-[16px] gap-[24px] bg-gray-0 rounded-[8px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
               {movie && (
-                <div className=" flex gap-[12px] ">
+                <div className=" flex gap-[12px] items-center">
                   <img
                     className="w-[82.21px] h-[120px] rounded-[4px]"
                     src={movie.movie_image}
                   />
                   <div className="flex flex-col gap-[8px]">
                     <div className="font-bold text-[20px] ">{movie.title}</div>
-                    <div className="py-[10px] pr-[10px] grid-cols-4 grid lg:grid-cols-3 text-center gap-3">
+                    <div className="grid-cols-4 grid lg:grid-cols-3 text-center gap-[8px]">
                       {movie.movie_genres.map((item, index) => {
                         return (
                           <p
