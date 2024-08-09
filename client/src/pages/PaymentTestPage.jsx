@@ -187,17 +187,20 @@ export default function PaymentTest() {
         const name = cardOwner;
         const email = movie[0].email;
 
-        const response = await axios.post("http://localhost:4000/payment", {
-          amount,
-          paymentMethodId: id,
-          name,
-          email,
-        });
+        const response = await axios.post(
+          `${import.meta.env.VITE_SERVER_URL}/payment`,
+          {
+            amount,
+            paymentMethodId: id,
+            name,
+            email,
+          }
+        );
         // console.log("response: " ,response);
 
         if (response.data.success) {
           if (!couponCode) {
-            await axios.put("http://localhost:4000/payment", {
+            await axios.put(`${import.meta.env.VITE_SERVER_URL}/payment`, {
               user: user.id,
               cinema: params.cinema,
               movie: params.title,
@@ -208,7 +211,7 @@ export default function PaymentTest() {
               payment_id: response.data.paymentId,
             });
           } else {
-            await axios.put("http://localhost:4000/payment", {
+            await axios.put(`${import.meta.env.VITE_SERVER_URL}/payment`, {
               user: user.id,
               cinema: params.cinema,
               movie: params.title,
@@ -243,7 +246,7 @@ export default function PaymentTest() {
   const handleDeleteData = async (movie) => {
     try {
       const delete_payment = await axios.delete(
-        "http://localhost:4000/payment",
+        `${import.meta.env.VITE_SERVER_URL}/payment`,
         {
           data: {
             user: user.id,

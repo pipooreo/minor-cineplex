@@ -10,14 +10,18 @@ function MoviePage() {
   async function getTitleMovie() {
     // console.log(params);
     let movieData = await axios.get(
-      `http://localhost:4000/movies/movie?movieSearch=${params.title}`
+      `${import.meta.env.VITE_SERVER_URL}/movies/movie?movieSearch=${
+        params.title
+      }`
     );
     setMovie(movieData.data.data[0]);
   }
   async function getCommentMovie() {
     // console.log(params);
     let commentsData = await axios.get(
-      `http://localhost:4000/comments/moviesComment?movieName=${params.title}`
+      `${import.meta.env.VITE_SERVER_URL}/comments/moviesComment?movieName=${
+        params.title
+      }`
     );
     // console.log(comments.data.data);
     setComents(commentsData.data.data);

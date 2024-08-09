@@ -35,7 +35,7 @@ function QRcode() {
   const handleDeleteData = async (movie) => {
     try {
       const delete_payment = await axios.delete(
-        "http://localhost:4000/payment",
+        `${import.meta.env.VITE_SERVER_URL}/payment`,
         {
           data: {
             user: userid,
@@ -69,7 +69,7 @@ function QRcode() {
   }, [stripe]);
   async function handleQr() {
     const response = await axios.post(
-      "http://localhost:4000/payment/process-payment",
+      `${import.meta.env.VITE_SERVER_URL}/payment/process-payment`,
       {
         amount: amount,
         currency: "thb",
@@ -92,7 +92,7 @@ function QRcode() {
 
     if (check.paymentIntent.status === "succeeded") {
       if (!couponCode) {
-        await axios.put("http://localhost:4000/payment/qr", {
+        await axios.put(`${import.meta.env.VITE_SERVER_URL}/payment/qr`, {
           user: userid,
           cinema: cinema,
           movie: movie,
@@ -103,7 +103,7 @@ function QRcode() {
           payment_id: username,
         });
       } else {
-        await axios.put("http://localhost:4000/payment/qr", {
+        await axios.put(`${import.meta.env.VITE_SERVER_URL}/payment/qr`, {
           user: userid,
           cinema: cinema,
           movie: movie,
@@ -119,7 +119,7 @@ function QRcode() {
         `/paymentsuccess/${movie}/${cinema}/${select_date}/${hall}/${time}`
       );
     } else {
-      await axios.delete("http://localhost:4000/payment", {
+      await axios.delete(`${import.meta.env.VITE_SERVER_URL}/payment`, {
         data: {
           user: userid,
           cinema: cinema,
