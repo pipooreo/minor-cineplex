@@ -35,7 +35,7 @@ function QRcode() {
   const handleDeleteData = async (movie) => {
     try {
       const delete_payment = await axios.delete(
-        "http://localhost:4000/payment",
+        `${import.meta.env.VITE_SERVER_URL}/payment`,
         {
           data: {
             user: userid,
@@ -62,37 +62,36 @@ function QRcode() {
   useEffect(() => {
     // Check if stripe is loaded before calling handleQr
     setRemainingTime(countdownDate);
-    console.log("remainig Tiem", setRemainingTime);
+    // console.log("remainig Tiem", setRemainingTime);
     if (stripe) {
       handleQr();
     }
   }, [stripe]);
   async function handleQr() {
     const response = await axios.post(
-      "http://localhost:4000/payment/process-payment",
+      `${import.meta.env.VITE_SERVER_URL}/payment/process-payment`,
       {
         amount: amount,
-        currency: "thb",
-        payment_method_types: "promptpay",
         email: email,
       }
     );
 
     const clientSecret = response.data.paymentIntent.client_secret;
+    const paymentIntentId = response.data.paymentIntent.id;
     const check = await stripe.confirmPromptPayPayment(clientSecret, {
       payment_method: {
         type: "promptpay",
         billing_details: {
-          email: "beammy@gmail.com",
+          email: email,
         },
       },
     });
-    console.log("check", check);
-    console.log("status", check.paymentIntent.status);
+    // console.log("check", check);
+    // console.log("status", check.paymentIntent.status);
 
     if (check.paymentIntent.status === "succeeded") {
       if (!couponCode) {
-        await axios.put("http://localhost:4000/payment/qr", {
+        await axios.put(`${import.meta.env.VITE_SERVER_URL}/payment/qr`, {
           user: userid,
           cinema: cinema,
           movie: movie,
@@ -100,10 +99,10 @@ function QRcode() {
           time: time,
           hall: hall,
           seats: seats,
-          payment_id: username,
+          payment_id: paymentIntentId,
         });
       } else {
-        await axios.put("http://localhost:4000/payment/qr", {
+        await axios.put(`${import.meta.env.VITE_SERVER_URL}/payment/qr`, {
           user: userid,
           cinema: cinema,
           movie: movie,
@@ -111,7 +110,7 @@ function QRcode() {
           time: time,
           hall: hall,
           seats: seats,
-          payment_id: username,
+          payment_id: paymentIntentId,
           coupon: couponCode,
         });
       }
@@ -119,7 +118,7 @@ function QRcode() {
         `/paymentsuccess/${movie}/${cinema}/${select_date}/${hall}/${time}`
       );
     } else {
-      await axios.delete("http://localhost:4000/payment", {
+      await axios.delete(`${import.meta.env.VITE_SERVER_URL}/payment`, {
         data: {
           user: userid,
           cinema: cinema,
@@ -128,7 +127,7 @@ function QRcode() {
           time: time,
           hall: hall,
           seats: seats,
-          payment_id: username,
+          payment_id: paymentIntentId,
         },
       });
       navigate(`/seat/${movie}/${cinema}/${select_date}/${hall}/${time}`);
@@ -140,7 +139,7 @@ function QRcode() {
   };
   return (
     <div
-      className="bg-[#101525] w-full h-screen"
+      className="bg-[#101525] w-full h-screen absolute"
       style={{ fontFamily: "Roboto Condensed" }}
     >
       <div className="pt-20 h-[100%] text-white  flex flex-col justify-center items-center">

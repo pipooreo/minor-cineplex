@@ -38,7 +38,9 @@ function BookTicketPage() {
     try {
       // console.log("Data search has been performed", params.title);
       const response = await axios.get(
-        `http://localhost:4000/ticket?movieName=${params.title}&moviesCity=${citySearch}&releasedDate=${dateSearch}&cinemaName=${cinemaSearch}`
+        `${import.meta.env.VITE_SERVER_URL}/ticket?movieName=${
+          params.title
+        }&moviesCity=${citySearch}&releasedDate=${dateSearch}&cinemaName=${cinemaSearch}`
       );
       setSearch(response.data.data);
 
@@ -125,7 +127,9 @@ function BookTicketPage() {
   async function getTitleMovie() {
     try {
       const movieData = await axios.get(
-        `http://localhost:4000/movies/movie?movieSearch=${params.title}`
+        `${import.meta.env.VITE_SERVER_URL}/movies/movie?movieSearch=${
+          params.title
+        }`
       );
       const movieInfo = movieData.data.data[0];
       if (movieInfo) {
@@ -256,7 +260,7 @@ function BookTicketPage() {
 
       <section className="bg-BG xs:pt-[24px] md:pt-[40px] md:pb-[80px] flex flex-col items-center">
         <div className="xs:w-[100%] md:w-[80%] flex flex-col gap-[24px]">
-        <div className="flex flex-col md:flex-row p-2 md:justify-between pb-[3%] gap-5">
+          <div className="flex flex-col md:flex-row p-2 md:justify-between pb-[3%] gap-5">
             <div className="flex items-center w-[100%] ">
               <div className="relative w-[100%]">
                 <input
@@ -296,7 +300,6 @@ function BookTicketPage() {
             </select>
           </div>
           {(() => {
-            
             let cinemaCount = 0;
             return search.map((searchItem, index_search) => (
               <div key={index_search} className="flex flex-col gap-[24px]">
@@ -470,7 +473,6 @@ function BookTicketPage() {
 
         <div>pagination</div>
       </section>
-      
     </div>
   );
 }

@@ -17,7 +17,9 @@ function MovieList() {
   };
   const releasedData = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/movies/release");
+      const response = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/movies/release`
+      );
       setMovies(response.data.data);
     } catch (error) {
       console.log("Failed to fetch data", error);
@@ -26,7 +28,7 @@ function MovieList() {
   const comingSoonData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/movies/comingSoon"
+        `${import.meta.env.VITE_SERVER_URL}/movies/comingSoon`
       );
       setMovies(response.data.data);
     } catch (error) {

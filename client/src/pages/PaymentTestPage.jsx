@@ -115,8 +115,8 @@ export default function PaymentTest() {
 
   const handleSubmitQR = async (e) => {
     e.preventDefault();
-    console.log("user", user);
-    const cardOwner = user.name;
+    // console.log("user", user);
+    // const cardOwner = user.name;
     // const paymentMethod = "QR";
 
     const amount = movie[0].seat_number.length * 150 - discount;
@@ -187,17 +187,20 @@ export default function PaymentTest() {
         const name = cardOwner;
         const email = movie[0].email;
 
-        const response = await axios.post("http://localhost:4000/payment", {
-          amount,
-          paymentMethodId: id,
-          name,
-          email,
-        });
+        const response = await axios.post(
+          `${import.meta.env.VITE_SERVER_URL}/payment`,
+          {
+            amount,
+            paymentMethodId: id,
+            name,
+            email,
+          }
+        );
         // console.log("response: " ,response);
 
         if (response.data.success) {
           if (!couponCode) {
-            await axios.put("http://localhost:4000/payment", {
+            await axios.put(`${import.meta.env.VITE_SERVER_URL}/payment`, {
               user: user.id,
               cinema: params.cinema,
               movie: params.title,
@@ -208,7 +211,7 @@ export default function PaymentTest() {
               payment_id: response.data.paymentId,
             });
           } else {
-            await axios.put("http://localhost:4000/payment", {
+            await axios.put(`${import.meta.env.VITE_SERVER_URL}/payment`, {
               user: user.id,
               cinema: params.cinema,
               movie: params.title,
@@ -243,7 +246,7 @@ export default function PaymentTest() {
   const handleDeleteData = async (movie) => {
     try {
       const delete_payment = await axios.delete(
-        "http://localhost:4000/payment",
+        `${import.meta.env.VITE_SERVER_URL}/payment`,
         {
           data: {
             user: user.id,
@@ -327,7 +330,10 @@ export default function PaymentTest() {
   };
 
   return (
-    <div className="w-full " style={{ fontFamily: "Roboto Condensed" }}>
+    <div
+      className="w-full absolute "
+      style={{ fontFamily: "Roboto Condensed" }}
+    >
       <form onSubmit={handleSubmit}>
         <div className="bg-BG ">
           <div className="h-[80px] bg-BG max-md:h-[48px]"></div>

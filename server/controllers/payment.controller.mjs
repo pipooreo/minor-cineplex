@@ -428,16 +428,25 @@ export async function createRefund(req, res) {
   const { paymentIntentId } = req.body;
   // console.log("bodyname: ", req.body);
   // console.log("Received payment_method.id: ", paymentMethodId);
-
+  let refund;
   try {
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
     // console.log("paymentIntent", paymentIntent);
 
-    const refund = await stripe.refunds.create({
-      payment_intent: paymentIntentId,
-      amount: paymentIntent.amount,
-      reason: "requested_by_customer",
-    });
+    if (paymentIntent.payment_method_types[0] === "card") {
+      refund = await stripe.refunds.create({
+        payment_intent: paymentIntentId,
+        amount: paymentIntent.amount,
+        reason: "requested_by_customer",
+      });
+    } else {
+      refund = await stripe.refunds.create({
+        payment_intent: paymentIntentId,
+        amount: paymentIntent.amount,
+        reason: "requested_by_customer",
+        instructions_email: paymentIntent.receipt_email,
+      });
+    }
     // console.log("refund", refund);
 
     res.status(200).json({

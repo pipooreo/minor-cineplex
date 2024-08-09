@@ -153,8 +153,8 @@ function SeatSelectorPage() {
   };
 
   return (
-    <section className=" w-full h-screen absolute">
-      <div className="bg-BG">
+    <section className=" w-full bg-BG absolute">
+      <div className=" h-screen">
         <div className="h-[80px] bg-BG max-md:h-[48px]"></div>
         <header className="bg-gray-0 h-[106px] flex justify-center items-center gap-[190px]   max-md:gap-[80px]">
           <div className="flex flex-col items-center w-[140px]">

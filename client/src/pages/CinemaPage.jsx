@@ -16,7 +16,7 @@ function CinemaPage() {
   const getDataSearch = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:4000/ticket?cinemaId=${params.title}`
+        `${import.meta.env.VITE_SERVER_URL}/ticket?cinemaId=${params.title}`
       );
       setSearchResult(response.data.data);
     } catch (error) {
@@ -102,7 +102,7 @@ function CinemaPage() {
     try {
       // console.log("params", params.title);
       const cinemaData = await axios.get(
-        `http://localhost:4000/ticket?cinemaId=${params.title}`
+        `${import.meta.env.VITE_SERVER_URL}/ticket?cinemaId=${params.title}`
       );
       const cinemaInfo = cinemaData.data.data[0]?.cinemas[0];
       // console.log("cinemaAll:", cinemaData.data.data[0]?.cinemas[0]);
