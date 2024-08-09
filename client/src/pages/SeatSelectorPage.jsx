@@ -157,15 +157,12 @@ function SeatSelectorPage() {
       <div className="bg-BG">
         <div className="h-[80px] bg-BG max-md:h-[48px]"></div>
         <header className="bg-gray-0 h-[106px] flex justify-center items-center gap-[190px]   max-md:gap-[80px]">
-          <button
-            className="flex flex-col items-center w-[140px]"
-            onClick={() => navigate(-1)}
-          >
+          <div className="flex flex-col items-center w-[140px]">
             <FaCheck className="w-[44px] h-[44px] bg-blue-300  rounded-full text-white p-3 " />
             <p className="text-white text-[16px] max-md:text-[14px]">
               Select showtime
             </p>
-          </button>
+          </div>
           <div className="flex flex-col items-center w-[140px] absolute z-10">
             <div className="w-[44px] h-[44px] bg-blue-100  rounded-full text-white text-center pt-[9px]">
               2
