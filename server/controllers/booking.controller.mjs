@@ -16,9 +16,8 @@ export async function bookingReserved(req, res, next) {
      AND hall_id = (SELECT id FROM halls WHERE hall_number = $3)
      AND seat_id = (SELECT id FROM seat_number WHERE number = $4)
      AND movie_id = (SELECT id FROM movies WHERE title = $5)
-     AND cinema_id = (SELECT id FROM cinemas WHERE name = $6)
-     AND user_id = $7`,
-        [select_date, time, hall, seat, movie, cinema, user]
+     AND cinema_id = (SELECT id FROM cinemas WHERE name = $6)`,
+        [select_date, time, hall, seat, movie, cinema]
       );
       // console.log("data1", conflictCheckResult);
       const conflictCount = conflictCheckResult.rows[0].conflict_count;

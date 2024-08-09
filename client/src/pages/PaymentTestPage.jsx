@@ -331,7 +331,7 @@ export default function PaymentTest() {
 
   return (
     <div
-      className="w-full absolute "
+      className="w-full h-full bg-BG absolute "
       style={{ fontFamily: "Roboto Condensed" }}
     >
       <form onSubmit={handleSubmit}>
