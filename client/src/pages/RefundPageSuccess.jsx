@@ -6,7 +6,7 @@ function RefundPageSuccess() {
   const nevigate = useNavigate();
   const params = useParams();
   return (
-    <div className="bg-BG">
+    <div className="bg-BG" style={{ fontFamily: "Roboto Condensed" }}>
       <section className="w-full h-screen absolute flex flex-col items-center justify-center bg-BG">
         <div className=" w-full flex flex-col items-center justify-center gap-[48px] align-center">
           <div className="flex flex-col gap-[24px] items-center justify-center">
@@ -30,7 +30,7 @@ function RefundPageSuccess() {
             </div>
           </div>
           <button
-            className="btn btn-primary hover:bg-blue-200 active:bg-blue-300 h-[48px] w-[380px] bg-[color:hsla(223, 82%, 62%, 1)]] text-white text-[16px] font-bold max-sm:w-[343px]"
+            className="btn bg-blue-100 border-blue-100 hover:bg-blue-200 active:bg-blue-300 hover:border-blue-200 active:border-blue-300 h-[48px] w-[380px] bg-[color:hsla(223, 82%, 62%, 1)]] text-white text-[16px] font-bold max-sm:w-[343px]"
             type="text"
             onClick={() => nevigate("/")}
           >
