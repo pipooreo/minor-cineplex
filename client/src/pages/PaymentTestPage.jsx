@@ -122,7 +122,6 @@ export default function PaymentTest() {
     const amount = movie[0].seat_number.length * 150 - discount;
     const email = movie[0].email;
     const userid = user.id;
-
     if (!couponCode) {
       navigate("/payment/qr", {
         state: {
@@ -131,6 +130,7 @@ export default function PaymentTest() {
           email,
           userid,
           username,
+          countdownDate,
           cinema: params.cinema,
           movie: params.title,
           select_date: params.date,
@@ -147,6 +147,7 @@ export default function PaymentTest() {
           username,
           email,
           userid,
+          countdownDate,
           couponCode,
           cinema: params.cinema,
           movie: params.title,
