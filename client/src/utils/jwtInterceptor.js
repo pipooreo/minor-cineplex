@@ -20,11 +20,8 @@ function jwtInterceptor() {
     (err) => {
       // console.log(err.response.status, err.response.statusText);
       if (err.response.status === 401) {
-        console.log(err.response.status, err.response.statusText);
         localStorage.removeItem("token");
-        console.log(window.location.pathname);
-        const newPath = "/login";
-        window.location.replace(newPath);
+        window.location.replace("/login");
       }
       return Promise.reject(err);
     }
