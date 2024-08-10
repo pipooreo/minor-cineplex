@@ -18,16 +18,13 @@ function jwtInterceptor() {
       return req;
     },
     (err) => {
+      console.log(err.response.status, err.response.statusText);
       if (
         err.response.status === 401 &&
         err.response.statusText === "Unauthorized"
       ) {
+        console.log(err.response.status, err.response.statusText);
         localStorage.removeItem("token");
-        // if (navigate) {
-        //   navigate("/login");
-        // } else {
-        //   window.location.href = "/login";
-        // }
         console.log(window.location.pathname);
         const newPath = "/login";
         window.location.replace(newPath);
