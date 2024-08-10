@@ -1,7 +1,5 @@
 import "./App.css";
 import "@fontsource/roboto";
-import { useNavigate } from "react-router-dom";
-import jwtInterceptor from "./utils/jwtInterceptor";
 import RegisterPage from "./pages/RegisterPage";
 import RegisterPageSuccess from "./pages/RegisterPageSuccess";
 import MoviePage from "./pages/MoviePage";
@@ -26,15 +24,10 @@ import PaymentPageSuccess from "./pages/PaymentPageSuccess";
 import StripeQr from "./pages/StripeQrCode";
 // import StripeQrResult from "./pages/StripeQrResult";
 import RefundPageSuccess from "./pages/RefundPageSuccess";
-import { useEffect } from "react";
 
 function App() {
   const auth = useAuth();
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    jwtInterceptor(navigate);
-  }, [navigate]);
   return (
     <>
       <SearchProvider>

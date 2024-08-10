@@ -1,6 +1,6 @@
 import axios from "axios";
 
-function jwtInterceptor(navigate) {
+function jwtInterceptor() {
   axios.interceptors.request.use((req) => {
     const hasToken = Boolean(localStorage.getItem("token"));
 
@@ -23,12 +23,8 @@ function jwtInterceptor(navigate) {
         err.response.statusText === "Unauthorized"
       ) {
         localStorage.removeItem("token");
-        // window.location.replace("/login");
-        if (navigate) {
-          navigate("/login");
-        } else {
-          window.location.href = "/login";
-        }
+
+        window.location.href = "/login";
       }
       return Promise.reject(err);
     }
