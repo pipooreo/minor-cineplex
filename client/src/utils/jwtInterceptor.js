@@ -18,11 +18,8 @@ function jwtInterceptor() {
       return req;
     },
     (err) => {
-      console.log(err.response.status, err.response.statusText);
-      if (
-        err.response.status === 401 &&
-        err.response.statusText === "Unauthorized"
-      ) {
+      // console.log(err.response.status, err.response.statusText);
+      if (err.response.status === 401) {
         console.log(err.response.status, err.response.statusText);
         localStorage.removeItem("token");
         console.log(window.location.pathname);
