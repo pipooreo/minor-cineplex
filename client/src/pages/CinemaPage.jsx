@@ -18,7 +18,6 @@ function CinemaPage() {
   const params = useParams();
 
   const getDataSearch = async () => {
-    setLoading(true);
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}/ticket?cinemaId=${params.title}`
