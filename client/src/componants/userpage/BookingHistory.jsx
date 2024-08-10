@@ -289,8 +289,7 @@ function BookingHistory(props) {
     setIsOpen(!isOpen);
   };
 
-  const shareUrl = "https://github.com/pipooreo/minor-cineplex";
-  // const shareUrl = window.location.href;
+  const shareUrl = window.location.href;
 
   const SocialShareButtons = ({ url }) => {
     const handleCopyLink = () => {
