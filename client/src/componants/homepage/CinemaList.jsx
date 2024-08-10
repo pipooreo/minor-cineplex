@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import ClockLoader from "react-spinners/ClockLoader";
+
 function CinemaList() {
   const [province, setProvince] = useState([]);
   const navigate = useNavigate();
@@ -23,7 +25,6 @@ function CinemaList() {
     <section className="bg-BG px-[5px] lg:px-[120px] py-[80px] flex justify-center">
       <div className="flex flex-col gap-[40px] max-[375px]:w-[345px]">
         <div className="text-[white] text-[36px] font-[700]">All cinemas</div>
-
         {province && province.length > 0 ? (
           province.map((city) => (
             <div
@@ -59,7 +60,9 @@ function CinemaList() {
             </div>
           ))
         ) : (
-          <div className="text-[white] text-[24px]">Loading...</div>
+          <div className="sweet-loading flex justify-center items-center">
+            <ClockLoader color="#4f7cee" />
+          </div>
         )}
       </div>
     </section>
