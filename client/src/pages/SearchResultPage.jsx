@@ -5,6 +5,7 @@ import { formatDate } from "../contexts/SearchContext";
 import * as React from "react";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import ClockLoader from "react-spinners/ClockLoader";
 
 function SearchResultPage() {
   const {
@@ -148,7 +149,7 @@ function SearchResultPage() {
 
   return (
     <div style={{ fontFamily: "Roboto Condensed" }}>
-      <section className="bg-gray-0 pt-[120px] pb-[40px] flex flex-col items-center gap-[24px]">
+      <section className="bg-gray-0 pt-[120px] pb-[40px] flex flex-col items-center gap-[24px] ">
         <div className="bg-gray-0 rounded-[4px] sm:w-[60%] flex flex-col justify-between items-center xl:w-[80%] xl:flex xl:flex-row xs:gap-[24px] xs:flex-col">
           <div className="bg-gray-0 w-[100%] grid grid-cols-2 gap-[12px] xl:flex xl:justify-between xl:gap-[12px]">
             <select
@@ -168,6 +169,7 @@ function SearchResultPage() {
               <option>Django Unchained</option>
               <option>DUNE: Part Two</option>
               <option>Interstellar</option>
+              <option>La La Land</option>
             </select>
 
             <select
@@ -205,6 +207,7 @@ function SearchResultPage() {
               <option>Crime</option>
               <option>Comedy</option>
               <option>Drama</option>
+              <option>Music</option>
               <option>Sci-fi</option>
             </select>
 
@@ -296,7 +299,7 @@ function SearchResultPage() {
         </div>
       </section>
 
-      <section className="bg-BG xs:pt-[24px] md:pt-[40px] md:pb-[80px] flex flex-col items-center">
+      <section className="bg-BG xs:pt-[24px] md:pt-[40px] md:pb-[80px] h-[100%] flex flex-col items-center">
         <div className="xs:w-[100%] md:w-[80%] flex flex-col gap-[24px]">
           {noResults ? (
             <div className="text-gray-400 text-center py-8 h-screen">
@@ -480,6 +483,11 @@ function SearchResultPage() {
               ));
             })()
           )}
+          :(
+          <div className="sweet-loading flex justify-center h-[10vh] m-10 items-center ">
+            <ClockLoader color="#4f7cee" />
+          </div>
+          )
         </div>
       </section>
     </div>

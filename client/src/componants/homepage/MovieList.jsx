@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ClockLoader from "react-spinners/ClockLoader";
 
 function MovieList() {
   const [movies, setMovies] = useState([]);
@@ -68,7 +69,7 @@ function MovieList() {
           </button>
         </div>
         <div className="grid grid-cols-2 gap-[20px] xl:grid-cols-4">
-          {movies &&
+          {movies && movies.length > 0 ? (
             movies.map((data) => {
               const releaseDate = new Date(data.theatrical_release);
               const formattedDate = releaseDate.toISOString().split("T")[0];
@@ -121,7 +122,12 @@ function MovieList() {
                   </div>
                 </div>
               );
-            })}
+            })
+          ) : (
+            <div className="sweet-loading flex justify-center m-10 items-center col-span-full">
+              <ClockLoader color="#4f7cee" />
+            </div>
+          )}
         </div>
       </div>
     </section>

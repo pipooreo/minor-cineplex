@@ -57,6 +57,7 @@ function Header() {
             <option>Django Unchained</option>
             <option>DUNE: Part Two</option>
             <option>Interstellar</option>
+            <option>La La Land</option>
           </select>
 
           <select
@@ -86,6 +87,7 @@ function Header() {
             <option>Crime</option>
             <option>Comedy</option>
             <option>Drama</option>
+            <option>Music</option>
             <option>Sci-fi</option>
           </select>
 

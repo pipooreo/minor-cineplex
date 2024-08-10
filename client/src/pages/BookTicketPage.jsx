@@ -4,9 +4,12 @@ import axios from "axios";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import ClockLoader from "react-spinners/ClockLoader";
+
 function BookTicketPage() {
   const navigate = useNavigate();
   const [search, setSearch] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
 
   const [movie, setMovie] = useState(null);
 
@@ -47,6 +50,8 @@ function BookTicketPage() {
       // console.log(response.data.data);
     } catch (error) {
       console.error("Error fetching search data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -150,6 +155,14 @@ function BookTicketPage() {
   useEffect(() => {
     getDataSearch();
   }, [dateSearch, citySearch, cinemaSearch]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-BG">
+        <ClockLoader color="#4f7cee" />
+      </div>
+    );
+  }
 
   return (
     <div
@@ -470,8 +483,6 @@ function BookTicketPage() {
             ));
           })()}
         </div>
-
-        <div>pagination</div>
       </section>
     </div>
   );
