@@ -4,11 +4,14 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import ClockLoader from "react-spinners/ClockLoader";
 
 function SeatSelectorPage() {
   const [movie, setMovie] = useState();
   // const [seatStatuses, setSeatStatuses] = useState(Array(50).fill("available"));
   const [seatStatuses, setSeatStatuses] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const params = useParams();
   const seatPrice = 150;
   const token = localStorage.getItem("token");
@@ -28,16 +31,22 @@ function SeatSelectorPage() {
 
   async function getMovie() {
     // console.log(params);
-    let movieData = await axios.get(
-      `${import.meta.env.VITE_SERVER_URL}/booking?cinema=${
-        params.cinema
-      }&movie=${params.title}&hall=${params.hall}&time=${
-        params.time
-      }&select_date=${params.date}`
-    );
-    // console.log("MovieListData: ", movieData.data.data);
-    setMovie(movieData.data.data);
-    setSeatStatuses(movieData.data.data.seat_status_array);
+    try {
+      setLoading(true);
+      let movieData = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/booking?cinema=${
+          params.cinema
+        }&movie=${params.title}&hall=${params.hall}&time=${
+          params.time
+        }&select_date=${params.date}`
+      );
+      // console.log("MovieListData: ", movieData.data.data);
+      setMovie(movieData.data.data);
+      setSeatStatuses(movieData.data.data.seat_status_array);
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
   }
 
   function getSeatNumber(seatArray) {
@@ -125,10 +134,12 @@ function SeatSelectorPage() {
       </button>
     );
   };
+
   // console.log(seatStatuses);
   const reservedSeatsCount = seatStatuses.filter(
     (status) => status.status === "reserve"
   ).length;
+
   const totalPrice = reservedSeatsCount * seatPrice;
 
   const renderSelectedSeats = () => {
@@ -152,6 +163,13 @@ function SeatSelectorPage() {
     );
   };
 
+  if (loading) {
+    return (
+      <div className="sweet-loading flex justify-center h-screen bg-BG items-center ">
+        <ClockLoader color="#4f7cee" />
+      </div>
+    );
+  }
   return (
     <section
       className=" w-full  h-screen bg-BG absolute"

@@ -8,9 +8,6 @@ import { useStripe } from "@stripe/react-stripe-js";
 
 // import { loadStripe } from "@stripe/stripe-js";
 function QRcode() {
-  // const [qrValue, setQrValue] = useState("");
-  // const [ownerError, setOwnerError] = useState("");
-  // const [paymentStatus, setPaymentStatus] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const token = localStorage.getItem("token");

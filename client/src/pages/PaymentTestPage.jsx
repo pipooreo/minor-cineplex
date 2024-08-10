@@ -13,6 +13,7 @@ import {
 } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ClockLoader from "react-spinners/ClockLoader";
 
 export default function PaymentTest() {
   const [movie, setMovie] = useState();
@@ -24,12 +25,15 @@ export default function PaymentTest() {
   const [couponError, setCouponError] = useState("");
   const [discount, setDiscount] = useState(0); // state สำหรับเก็บค่าลดราคา
   const [method, setMethod] = useState("CreditCard");
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
   const stripe = useStripe();
   const elements = useElements();
   const params = useParams();
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
+
   const [cardError, setCardError] = useState("");
   const [ownerError, setOwnerError] = useState("");
   const [expiryError, setexpiryError] = useState("");
@@ -87,26 +91,34 @@ export default function PaymentTest() {
   async function getMovie() {
     // console.log(params);
 
-    let movieData = await axios.get(
-      `${import.meta.env.VITE_SERVER_URL}/payment?cinema=${
-        params.cinema
-      }&movie=${params.title}&hall=${params.hall}&time=${
-        params.time
-      }&select_date=${params.date}&users_id=${user.id}`
-    );
-    // console.log("Movie_Data: ", movieData.data.data);
-    setMovie(movieData.data.data);
+    setLoading(true);
+    try {
+      let movieData = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/payment?cinema=${
+          params.cinema
+        }&movie=${params.title}&hall=${params.hall}&time=${
+          params.time
+        }&select_date=${params.date}&users_id=${user.id}`
+      );
+      // console.log("Movie_Data: ", movieData.data.data);
+      setMovie(movieData.data.data);
 
-    const [hours, minutes, seconds] = movieData.data.data[0].booking_time
-      .split(":")
-      .map(Number);
-    const bookingDate = new Date();
-    bookingDate.setHours(hours);
-    bookingDate.setMinutes(minutes);
-    bookingDate.setSeconds(seconds);
+      const [hours, minutes, seconds] = movieData.data.data[0].booking_time
+        .split(":")
+        .map(Number);
+      const bookingDate = new Date();
+      bookingDate.setHours(hours);
+      bookingDate.setMinutes(minutes);
+      bookingDate.setSeconds(seconds);
 
-    const endTime = bookingDate.getTime() + 5 * 60 * 1000;
-    setCountdownDate(endTime);
+      const startTime = bookingDate.getTime();
+      const endTime = startTime + 5 * 60 * 1000;
+      setCountdownDate(endTime);
+      setRemainingTime(startTime);
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -329,6 +341,14 @@ export default function PaymentTest() {
     ));
   };
 
+  if (loading) {
+    return (
+      <div className="sweet-loading flex justify-center h-screen bg-BG items-center ">
+        <ClockLoader color="#4f7cee" />
+      </div>
+    );
+  }
+
   return (
     <div
       className="w-full h-full bg-BG absolute "
@@ -460,8 +480,6 @@ export default function PaymentTest() {
 
             {method === "QR" && (
               <div className="w-[100%] bg-gray-100 text-gray-400 h-[80%] p-[40px_24px_40px_24px] flex justify-center items-center">
-                {/* {console.log("method", method)} */}
-                {/* {console.log("coupon used", couponCode)} */}
                 QR Code Payment
               </div>
             )}
@@ -475,7 +493,7 @@ export default function PaymentTest() {
                   {countdownDate && (
                     <Countdown
                       date={countdownDate}
-                      onComplete={() => handleDeleteData(movie)}
+                      onComplete={() => handleDeleteData(movie)} //ถ้าเวลาหมด handleDeleteData(movie) จะทำงาน
                       intervalDelay={0}
                       precision={3}
                       renderer={({ minutes, seconds }) => (

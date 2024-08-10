@@ -3,9 +3,11 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaCheck } from "react-icons/fa6";
 import { jwtDecode } from "jwt-decode";
+import ClockLoader from "react-spinners/ClockLoader";
 
 function PaymentPageSuccess() {
   const [dataSuccess, setDataSuccess] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const params = useParams();
   const nevigate = useNavigate();
@@ -14,22 +16,35 @@ function PaymentPageSuccess() {
 
   async function getDataSuccess() {
     // console.log("params :", params);
-
-    let successData = await axios.get(
-      `${import.meta.env.VITE_SERVER_URL}/payment/success?cinema=${
-        params.cinema
-      }&movie=${params.title}&hall=${params.hall}&time=${
-        params.time
-      }&select_date=${params.date}&users_id=${user.id}`
-    );
-    // console.log("Success_Data: ", successData.data.data);
-    setDataSuccess(successData.data.data[0]);
+    try {
+      setLoading(true);
+      let successData = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/payment/success?cinema=${
+          params.cinema
+        }&movie=${params.title}&hall=${params.hall}&time=${
+          params.time
+        }&select_date=${params.date}&users_id=${user.id}`
+      );
+      // console.log("Success_Data: ", successData.data.data);
+      setDataSuccess(successData.data.data[0]);
+    } catch (error) {
+      // console.log("checkdata: ", dataSuccess);
+    } finally {
+      setLoading(false);
+    }
   }
-  // console.log("checkdata: ", dataSuccess);
 
   useEffect(() => {
     getDataSuccess();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="sweet-loading flex justify-center h-screen bg-BG items-center ">
+        <ClockLoader color="#4f7cee" />
+      </div>
+    );
+  }
   return (
     <div className="bg-BG">
       <section
