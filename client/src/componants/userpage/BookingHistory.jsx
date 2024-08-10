@@ -323,7 +323,7 @@ function BookingHistory(props) {
                 rel="noopener noreferrer"
                 className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
               >
-                <LineShareButton url={shareUrl}>
+                <LineShareButton url={getShareUrl(movie)}>
                   <LineIcon size={20} round />
                 </LineShareButton>
               </a>
@@ -635,7 +635,9 @@ function BookingHistory(props) {
                             />
                           </svg>
                         </div>
-                        {isOpen && <SocialShareButtons url={shareUrl} />}
+                        {isOpen && (
+                          <SocialShareButtons url={getShareUrl(movie)} />
+                        )}
                         <button
                           onClick={handleCloseAndReload}
                           className="btn btn-sm text-gray-400 btn-circle btn-ghost absolute right-2 top-2"
@@ -870,7 +872,9 @@ function BookingHistory(props) {
                             />
                           </svg>
                         </div>
-                        {isOpen && <SocialShareButtons url={shareUrl} />}
+                        {isOpen && (
+                          <SocialShareButtons url={getShareUrl(movie)} />
+                        )}
                         <button
                           onClick={handleCloseAndReload}
                           className="btn btn-sm text-gray-400 btn-circle btn-ghost absolute right-2 top-2"
@@ -988,7 +992,9 @@ function BookingHistory(props) {
                             />
                           </svg>
                         </div>
-                        {isOpen && <SocialShareButtons url={shareUrl} />}
+                        {isOpen && (
+                          <SocialShareButtons url={getShareUrl(movie)} />
+                        )}
                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-gray-400">
                           ✕
                         </button>
