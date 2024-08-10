@@ -34,6 +34,15 @@ function App() {
 
   useEffect(() => {
     jwtInterceptor(navigate);
+    const handleUnauthorized = () => {
+      navigate("/login");
+    };
+
+    window.addEventListener("unauthorizedAccess", handleUnauthorized);
+
+    return () => {
+      window.removeEventListener("unauthorizedAccess", handleUnauthorized);
+    };
   }, [navigate]);
 
   return (

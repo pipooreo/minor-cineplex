@@ -23,11 +23,12 @@ function jwtInterceptor(navigate) {
         err.response.statusText === "Unauthorized"
       ) {
         localStorage.removeItem("token");
-        if (navigate) {
-          navigate("/login");
-        } else {
-          window.location.href = "/login";
-        }
+        // if (navigate) {
+        //   navigate("/login");
+        // } else {
+        //   window.location.href = "/login";
+        // }
+        window.dispatchEvent(new CustomEvent("unauthorizedAccess"));
       }
       return Promise.reject(err);
     }
