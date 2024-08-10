@@ -61,6 +61,7 @@ function AuthProvider(props) {
         `${import.meta.env.VITE_SERVER_URL}/auth/request-reset-password`,
         data
       );
+      return results;
     } catch (err) {
       // console.log(err);
       actions.setErrors({ email: err.response.data.message });

@@ -3,12 +3,28 @@ import { Formik, Form } from "formik";
 import { changePassword } from "../../schemas/schema";
 import { CustomInput } from "../CustomInput";
 import { useAuth } from "../../contexts/authentication";
+import { ToastContainer, toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function UpdatePassword(props) {
   const { updatePassword } = useAuth();
   const initialValues = {
     password: "",
     confirmPassword: "",
+  };
+
+  const notify = () => {
+    toast.success("Your password has been successfully updated", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      transition: Bounce,
+    });
   };
 
   async function onSubmit(values, actions) {
@@ -18,6 +34,7 @@ function UpdatePassword(props) {
       id: props.user.id,
     });
     if (result.status == 200) {
+      notify();
       actions.resetForm();
     }
   }
@@ -68,6 +85,21 @@ function UpdatePassword(props) {
                 </button>
               </div>
             </div>
+            <ToastContainer
+              position="top-center"
+              autoClose={3000}
+              limit={1}
+              hideProgressBar
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="colored"
+              transition:Bounce
+              // className="w-[30%]"
+            />
           </Form>
         )}
       </Formik>
