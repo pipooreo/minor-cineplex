@@ -444,7 +444,8 @@ export async function createRefund(req, res) {
         payment_intent: paymentIntentId,
         amount: paymentIntent.amount,
         reason: "requested_by_customer",
-        instructions_email: paymentIntent.receipt_email,
+        // instructions_email: paymentIntent.receipt_email,
+        instructions_email: process.env.SERVICE_EMAIL,
       });
     }
     // console.log("refund", refund);
