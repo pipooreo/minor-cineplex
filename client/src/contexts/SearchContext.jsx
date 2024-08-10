@@ -25,6 +25,7 @@ export function SearchProvider({ children }) {
   const [dateSearch, setDateSearch] = useState(toDay);
   const [tagsSearch, setTagsSearch] = useState([]);
   const [noResults, setNoResults] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const resetSearchValues = () => {
     setCitySearch("");
@@ -40,6 +41,7 @@ export function SearchProvider({ children }) {
     if (!dateSearch) {
       setDateSearch(toDay);
     }
+    setLoading(true);
     try {
       const params = new URLSearchParams({
         moviesCity: citySearch,
@@ -67,6 +69,8 @@ export function SearchProvider({ children }) {
     } catch (error) {
       console.error("Error fetching search results:", error);
       setNoResults(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -91,6 +95,7 @@ export function SearchProvider({ children }) {
         setNoResults,
         resetSearchValues,
         getDataSearch,
+        loading,
       }}
     >
       {children}

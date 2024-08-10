@@ -58,6 +58,12 @@ function Header() {
             <option>DUNE: Part Two</option>
             <option>Interstellar</option>
             <option>La La Land</option>
+            <option>Pee Mak</option>
+            <option>Death Whisperer</option>
+            <option>Godzilla x Kong: The New Empire</option>
+            <option>
+              Demon Slayer: Kimetsu No Yaiba To the Hashira Training
+            </option>
           </select>
 
           <select
@@ -84,9 +90,13 @@ function Header() {
           >
             <option value="">Genre</option>
             <option>Action</option>
+            <option>Animation</option>
             <option>Crime</option>
             <option>Comedy</option>
             <option>Drama</option>
+            <option>Fantasy</option>
+            <option>History</option>
+            <option>Horror</option>
             <option>Music</option>
             <option>Sci-fi</option>
           </select>
