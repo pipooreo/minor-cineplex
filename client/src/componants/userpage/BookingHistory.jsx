@@ -289,11 +289,15 @@ function BookingHistory(props) {
     setIsOpen(!isOpen);
   };
 
-  const shareUrl = window.location.href;
+  const getShareUrl = (movie) => {
+    const baseUrl = window.location.origin;
+    return `${baseUrl}/booking/${movie.booking_id}`;
+  };
 
   const SocialShareButtons = ({ url }) => {
     const handleCopyLink = () => {
-      navigator.clipboard.writeText(url).then(
+      const link = getShareUrl(movie);
+      navigator.clipboard.writeText(link).then(
         () => alert("Link copied to clipboard!"),
         (err) => alert("Failed to copy link: " + err)
       );
@@ -312,7 +316,9 @@ function BookingHistory(props) {
           <ul className="grid gap-4 grid-cols-3 sm:grid-cols-5 text-body2R">
             <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
               <a
-                href={`https://social-plugins.line.me/lineit/share?url=${url}`}
+                href={`https://social-plugins.line.me/lineit/share?url=${getShareUrl(
+                  movie
+                )}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
@@ -323,20 +329,11 @@ function BookingHistory(props) {
               </a>
               <p>Line</p>
             </li>
-            {/* <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
-              <a
-                href={messengerShareUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
-              >
-                <FacebookMessengerIcon size={20} round />
-              </a>
-              <p>Messenger</p>
-            </li> */}
             <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
               <a
-                href={`https://www.facebook.com/share.php?u=${url}`}
+                href={`https://www.facebook.com/share.php?u=${getShareUrl(
+                  movie
+                )}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
@@ -357,7 +354,7 @@ function BookingHistory(props) {
             </li>
             <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
               <a
-                href={`https://x.com/intent/tweet?url=${url}`}
+                href={`https://x.com/intent/tweet?url=${getShareUrl(movie)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
