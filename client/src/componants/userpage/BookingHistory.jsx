@@ -298,10 +298,6 @@ function BookingHistory(props) {
         (err) => alert("Failed to copy link: " + err)
       );
     };
-    const appId = import.meta.env.VITE_FACEBOOK_APP_ID;
-    const encodedShareUrl = encodeURIComponent(url);
-    const messengerShareUrl = `https://www.facebook.com/dialog/send?app_id=${appId}&link=${encodedShareUrl}&redirect_uri=${encodedShareUrl}`;
-
     return (
       <div
         className="transition-transform transform absolute top-7 right-0 sm:right-10 z-1 mt-6"
@@ -323,17 +319,6 @@ function BookingHistory(props) {
               </a>
               <p>Line</p>
             </li>
-            {/* <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
-              <a
-                href={messengerShareUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
-              >
-                <FacebookMessengerIcon size={20} round />
-              </a>
-              <p>Messenger</p>
-            </li> */}
             <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
               <a
                 href={`https://www.facebook.com/share.php?u=${url}`}
