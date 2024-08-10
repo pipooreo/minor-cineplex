@@ -9,16 +9,16 @@ export async function createPayment(req, res) {
   // console.log("Received payment_method.id: ", paymentMethodId);
 
   try {
-    const userResult = await connectionPool.query(
-      `SELECT id, name AS username, email FROM users WHERE email = $1 AND name = $2`,
-      [email, name]
-    );
+    // const userResult = await connectionPool.query(
+    //   `SELECT id, name AS username, email FROM users WHERE email = $1 AND name = $2`,
+    //   [email, name]
+    // );
     // console.log("Result: ", userResult);
 
-    if (userResult.rowCount === 0) {
-      // ถ้าไม่พบผู้ใช้ในฐานข้อมูล
-      return res.status(404).json({ message: "User not found." });
-    }
+    // if (userResult.rowCount === 0) {
+    //   // ถ้าไม่พบผู้ใช้ในฐานข้อมูล
+    //   return res.status(404).json({ message: "User not found." });
+    // }
 
     // กำหนดผู้ใช้ด้วย stripe customer
     const customers = await stripe.customers.list({

@@ -180,6 +180,12 @@ export default function PaymentTest() {
       return;
     }
 
+    const regex = /^[a-z\s]*$/;
+    if (!regex.test(cardOwner)) {
+      setOwnerError("Card owner name is invalid");
+      return;
+    }
+
     const cardNumberElement = elements.getElement(CardNumberElement);
 
     const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -196,7 +202,7 @@ export default function PaymentTest() {
       try {
         const { id } = paymentMethod;
         const amount = (movie[0].seat_number.length * 150 - discount) * 100;
-        const name = cardOwner;
+        // const name = cardOwner;
         const email = movie[0].email;
 
         const response = await axios.post(
@@ -204,7 +210,7 @@ export default function PaymentTest() {
           {
             amount,
             paymentMethodId: id,
-            name,
+            // name,
             email,
           }
         );
@@ -244,11 +250,7 @@ export default function PaymentTest() {
           );
         }
       } catch (error) {
-        if (cardOwner !== user.id) {
-          setOwnerError("user not match");
-        } else {
-          console.log("error catch: ", error);
-        }
+        console.log("error catch: ", error);
       }
     } else {
       console.log("error: ", error.message);
