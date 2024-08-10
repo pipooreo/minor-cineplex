@@ -3,22 +3,37 @@ import { Formik, Form } from "formik";
 import { requestOtp, resetPasswordWithOtp } from "../schemas/schema";
 import { CustomInput } from "../componants/CustomInput";
 import { useAuth } from "../contexts/authentication";
+import { ToastContainer, toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ResetPassword() {
   const { requestResetPassword, resetPassword } = useAuth();
+  const notify = () => {
+    toast.success("Send OTP to your email", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      transition: Bounce,
+    });
+  };
 
-  function sendOtp(values, actions) {
-    requestResetPassword({ email: values.email }, actions);
+  async function sendOtp(values, actions) {
+    const result = await requestResetPassword({ email: values.email }, actions);
+    if (result.status == 200) {
+      notify();
+    }
   }
   function onSubmit(values, actions) {
-    resetPassword(
-      {
-        password: values.password,
-        confirmPassword: values.confirmPassword,
-        otp: values.otp,
-      },
-      actions
-    );
+    resetPassword({
+      password: values.password,
+      confirmPassword: values.confirmPassword,
+      otp: values.otp,
+    });
   }
   return (
     <section className="w-full absolute h-screen md:py-[450px] flex flex-col items-center justify-center  bg-BG ">
@@ -43,6 +58,7 @@ function ResetPassword() {
                   placeholder="Email"
                 />
                 <button
+                  type="submit"
                   disabled={isSubmitting || !(isValid && dirty)}
                   className={`w-[380px] h-[48px]  text-body1M font-bold rounded-[4px] 
                     transition-all duration-300 ease-in-out
@@ -112,6 +128,21 @@ function ResetPassword() {
                   </button>
                 </div>
               </div>
+              <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                limit={1}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+                transition:Bounce
+                // className="w-[30%]"
+              />
             </Form>
           )}
         </Formik>
