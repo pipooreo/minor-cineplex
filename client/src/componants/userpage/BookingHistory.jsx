@@ -338,7 +338,7 @@ function BookingHistory(props) {
                 rel="noopener noreferrer"
                 className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
               >
-                <FacebookShareButton url={shareUrl}>
+                <FacebookShareButton url={getShareUrl(movie)}>
                   <FacebookIcon size={20} round />
                 </FacebookShareButton>
               </a>
@@ -346,7 +346,7 @@ function BookingHistory(props) {
             </li>
             <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
               <a className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]">
-                <EmailShareButton url={shareUrl}>
+                <EmailShareButton url={getShareUrl(movie)}>
                   <EmailIcon size={20} round />
                 </EmailShareButton>
               </a>
@@ -359,7 +359,7 @@ function BookingHistory(props) {
                 rel="noopener noreferrer"
                 className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
               >
-                <TwitterShareButton url={shareUrl}>
+                <TwitterShareButton url={getShareUrl(movie)}>
                   <XIcon size={20} round />
                 </TwitterShareButton>
               </a>
