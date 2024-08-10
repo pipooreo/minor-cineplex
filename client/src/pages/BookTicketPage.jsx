@@ -74,6 +74,7 @@ function BookTicketPage() {
       selectedDate && date.toDateString() === selectedDate.toDateString();
     return result;
   };
+
   const settings = {
     dots: false,
     infinite: false,
@@ -95,6 +96,7 @@ function BookTicketPage() {
       },
     ],
   };
+
   const getDates = () => {
     const dates = [];
     const today = new Date();

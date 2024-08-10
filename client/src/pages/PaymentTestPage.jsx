@@ -13,6 +13,7 @@ import {
 } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ClockLoader from "react-spinners/ClockLoader";
 
 export default function PaymentTest() {
   const [movie, setMovie] = useState();
@@ -24,6 +25,7 @@ export default function PaymentTest() {
   const [couponError, setCouponError] = useState("");
   const [discount, setDiscount] = useState(0); // state สำหรับเก็บค่าลดราคา
   const [method, setMethod] = useState("CreditCard");
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
   const stripe = useStripe();
@@ -89,28 +91,34 @@ export default function PaymentTest() {
   async function getMovie() {
     // console.log(params);
 
-    let movieData = await axios.get(
-      `${import.meta.env.VITE_SERVER_URL}/payment?cinema=${
-        params.cinema
-      }&movie=${params.title}&hall=${params.hall}&time=${
-        params.time
-      }&select_date=${params.date}&users_id=${user.id}`
-    );
-    // console.log("Movie_Data: ", movieData.data.data);
-    setMovie(movieData.data.data);
+    setLoading(true);
+    try {
+      let movieData = await axios.get(
+        `${import.meta.env.VITE_SERVER_URL}/payment?cinema=${
+          params.cinema
+        }&movie=${params.title}&hall=${params.hall}&time=${
+          params.time
+        }&select_date=${params.date}&users_id=${user.id}`
+      );
+      // console.log("Movie_Data: ", movieData.data.data);
+      setMovie(movieData.data.data);
 
-    const [hours, minutes, seconds] = movieData.data.data[0].booking_time
-      .split(":")
-      .map(Number);
-    const bookingDate = new Date();
-    bookingDate.setHours(hours);
-    bookingDate.setMinutes(minutes);
-    bookingDate.setSeconds(seconds);
+      const [hours, minutes, seconds] = movieData.data.data[0].booking_time
+        .split(":")
+        .map(Number);
+      const bookingDate = new Date();
+      bookingDate.setHours(hours);
+      bookingDate.setMinutes(minutes);
+      bookingDate.setSeconds(seconds);
 
-    const startTime = bookingDate.getTime();
-    const endTime = startTime + 5 * 60 * 1000;
-    setCountdownDate(endTime);
-    setRemainingTime(startTime);
+      const startTime = bookingDate.getTime();
+      const endTime = startTime + 5 * 60 * 1000;
+      setCountdownDate(endTime);
+      setRemainingTime(startTime);
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -332,6 +340,14 @@ export default function PaymentTest() {
       </div>
     ));
   };
+
+  if (loading) {
+    return (
+      <div className="sweet-loading flex justify-center h-screen bg-BG items-center ">
+        <ClockLoader color="#4f7cee" />
+      </div>
+    );
+  }
 
   return (
     <div
