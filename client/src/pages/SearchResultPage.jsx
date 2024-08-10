@@ -165,6 +165,7 @@ function SearchResultPage() {
               }`}
               name="movie"
             >
+              <option value="">Movie</option>
               <option>The Dark Knight</option>
               <option>Django Unchained</option>
               <option>DUNE: Part Two</option>
