@@ -24,9 +24,17 @@ import PaymentPageSuccess from "./pages/PaymentPageSuccess";
 import StripeQr from "./pages/StripeQrCode";
 // import StripeQrResult from "./pages/StripeQrResult";
 import RefundPageSuccess from "./pages/RefundPageSuccess";
+import { useNavigate } from "react-router-dom";
+import jwtInterceptor from "./utils/jwtInterceptor";
+import { useEffect } from "react";
 
 function App() {
   const auth = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    jwtInterceptor(navigate);
+  }, [navigate]);
 
   return (
     <>

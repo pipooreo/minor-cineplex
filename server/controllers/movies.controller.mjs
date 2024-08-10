@@ -19,7 +19,7 @@ export async function getMoviesReleased(req, res) {
       movies.language,
     ROUND(AVG(comments.rating)::numeric, 1) AS average_rating FROM 
       movies
-  INNER JOIN 
+  LEFT JOIN 
       comments ON movies.id = comments.movie_id
   WHERE 
       CURRENT_TIMESTAMP BETWEEN 
