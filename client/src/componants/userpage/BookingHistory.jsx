@@ -3,7 +3,6 @@ import { useState } from "react";
 import { formatDate } from "../../contexts/SearchContext";
 import { useNavigate } from "react-router-dom";
 import {
-  FacebookMessengerIcon,
   TwitterShareButton,
   XIcon,
   FacebookShareButton,
@@ -289,19 +288,16 @@ function BookingHistory(props) {
     setIsOpen(!isOpen);
   };
 
-  const getShareUrl = (movie) => {
-    const baseUrl = window.location.origin;
-    return `${baseUrl}/booking/${movie.booking_id}`;
-  };
+  const shareUrl = window.location.href;
 
   const SocialShareButtons = ({ url }) => {
     const handleCopyLink = () => {
-      const link = getShareUrl(movie);
-      navigator.clipboard.writeText(link).then(
+      navigator.clipboard.writeText(url).then(
         () => alert("Link copied to clipboard!"),
         (err) => alert("Failed to copy link: " + err)
       );
     };
+
     return (
       <div
         className="transition-transform transform absolute top-7 right-0 sm:right-10 z-1 mt-6"
@@ -312,14 +308,12 @@ function BookingHistory(props) {
           <ul className="grid gap-4 grid-cols-3 sm:grid-cols-5 text-body2R">
             <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
               <a
-                href={`https://social-plugins.line.me/lineit/share?url=${getShareUrl(
-                  movie
-                )}`}
+                href={`https://social-plugins.line.me/lineit/share?url=${url}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
               >
-                <LineShareButton url={getShareUrl(movie)}>
+                <LineShareButton url={shareUrl}>
                   <LineIcon size={20} round />
                 </LineShareButton>
               </a>
@@ -327,14 +321,12 @@ function BookingHistory(props) {
             </li>
             <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
               <a
-                href={`https://www.facebook.com/share.php?u=${getShareUrl(
-                  movie
-                )}`}
+                href={`https://www.facebook.com/share.php?u=${url}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
               >
-                <FacebookShareButton url={getShareUrl(movie)}>
+                <FacebookShareButton url={shareUrl}>
                   <FacebookIcon size={20} round />
                 </FacebookShareButton>
               </a>
@@ -342,7 +334,7 @@ function BookingHistory(props) {
             </li>
             <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
               <a className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]">
-                <EmailShareButton url={getShareUrl(movie)}>
+                <EmailShareButton url={shareUrl}>
                   <EmailIcon size={20} round />
                 </EmailShareButton>
               </a>
@@ -350,12 +342,12 @@ function BookingHistory(props) {
             </li>
             <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
               <a
-                href={`https://x.com/intent/tweet?url=${getShareUrl(movie)}`}
+                href={`https://x.com/intent/tweet?url=${url}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
               >
-                <TwitterShareButton url={getShareUrl(movie)}>
+                <TwitterShareButton url={shareUrl}>
                   <XIcon size={20} round />
                 </TwitterShareButton>
               </a>
@@ -631,9 +623,7 @@ function BookingHistory(props) {
                             />
                           </svg>
                         </div>
-                        {isOpen && (
-                          <SocialShareButtons url={getShareUrl(movie)} />
-                        )}
+                        {isOpen && <SocialShareButtons url={shareUrl} />}
                         <button
                           onClick={handleCloseAndReload}
                           className="btn btn-sm text-gray-400 btn-circle btn-ghost absolute right-2 top-2"
@@ -868,9 +858,7 @@ function BookingHistory(props) {
                             />
                           </svg>
                         </div>
-                        {isOpen && (
-                          <SocialShareButtons url={getShareUrl(movie)} />
-                        )}
+                        {isOpen && <SocialShareButtons url={shareUrl} />}
                         <button
                           onClick={handleCloseAndReload}
                           className="btn btn-sm text-gray-400 btn-circle btn-ghost absolute right-2 top-2"
@@ -988,9 +976,7 @@ function BookingHistory(props) {
                             />
                           </svg>
                         </div>
-                        {isOpen && (
-                          <SocialShareButtons url={getShareUrl(movie)} />
-                        )}
+                        {isOpen && <SocialShareButtons url={shareUrl} />}
                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-gray-400">
                           ✕
                         </button>
