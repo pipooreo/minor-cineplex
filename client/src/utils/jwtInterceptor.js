@@ -1,6 +1,6 @@
 import axios from "axios";
 
-function jwtInterceptor(navigate) {
+function jwtInterceptor() {
   axios.interceptors.request.use((req) => {
     const hasToken = Boolean(localStorage.getItem("token"));
 
@@ -28,7 +28,9 @@ function jwtInterceptor(navigate) {
         // } else {
         //   window.location.href = "/login";
         // }
-        window.dispatchEvent(new CustomEvent("unauthorizedAccess"));
+        console.log(window.location.pathname);
+        const newPath = "/login";
+        window.location.replace(newPath);
       }
       return Promise.reject(err);
     }

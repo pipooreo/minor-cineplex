@@ -30,20 +30,6 @@ import { useEffect } from "react";
 
 function App() {
   const auth = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    jwtInterceptor(navigate);
-    const handleUnauthorized = () => {
-      navigate("/login");
-    };
-
-    window.addEventListener("unauthorizedAccess", handleUnauthorized);
-
-    return () => {
-      window.removeEventListener("unauthorizedAccess", handleUnauthorized);
-    };
-  }, [navigate]);
 
   return (
     <>
