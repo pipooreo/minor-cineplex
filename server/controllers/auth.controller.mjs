@@ -89,7 +89,7 @@ export async function requestPassword(req, res) {
     }
     const otp = Math.floor(100000 + Math.random() * 900000);
     let otpExpire = new Date();
-    otpExpire.setMinutes(otpExpire.getMinutes() + 15);
+    otpExpire.setMinutes(otpExpire.getMinutes() + 5);
     // const otpExpireString = otpExpire.toLocaleString();
 
     let result = await connectionPool.query(
@@ -110,7 +110,7 @@ export async function requestPassword(req, res) {
       from: process.env.SERVICE_EMAIL,
       to: req.body.email,
       subject: "Password reset OTP",
-      text: `Your OTP (It is expired after 15 min) : ${otp}`,
+      text: `Your OTP (It is expired after 5 min) : ${otp}`,
     };
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -136,12 +136,19 @@ export async function resetPassword(req, res) {
   const salt = await bcrypt.genSalt(10);
   password = await bcrypt.hash(password, salt);
   try {
+    const otpCheck = await connectionPool.query(
+      `select * from users where otp = $1`,
+      [otp]
+    );
+    if (!otpCheck.rows[0]) {
+      return res.status(400).json({ message: "OTP is invalid" });
+    }
     const otpExpire = await connectionPool.query(
       `select * from users where otp = $1 and otp_expire > now()`,
       [otp]
     );
     if (!otpExpire.rows[0]) {
-      return res.status(400).json({ message: " OTP is expired" });
+      return res.status(400).json({ message: "OTP is expired" });
     }
     let result = await connectionPool.query(
       `update users set password = $1, otp = null, otp_expire = null, updated_at = $2 where otp = $3`,
