@@ -165,7 +165,7 @@ function CinemaPage() {
           alt="bg at back"
         ></div>
 
-        {cinema ? (
+        {cinema && (
           <section className="absolute  top-10 md:top-20 md:w-[80%] h-[400px] backdrop-blur-md rounded-lg bg-[#070C1B]/70 max-sm:backdrop-blur-none movie-detail my-8 md:m-10 text-white">
             <div className="gap-2 pl-5 md:p-0">
               <div className="  flex flex-row ">
@@ -203,10 +203,6 @@ function CinemaPage() {
               {cinema.description}
             </span>
           </section>
-        ) : (
-          <div className="sweet-loading flex justify-center h-[10vh] m-10 items-center ">
-            <ClockLoader color="#4f7cee" />
-          </div>
         )}
       </div>
       {/* above this line is background and movie details */}

@@ -6,6 +6,7 @@ import * as React from "react";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import ClockLoader from "react-spinners/ClockLoader";
+import CustomPagination from "../componants/pagination/pagination";
 
 function SearchResultPage() {
   const {
@@ -511,6 +512,7 @@ function SearchResultPage() {
             </div>
           )}
         </div>
+        <CustomPagination />
       </section>
     </div>
   );
