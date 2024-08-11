@@ -12,7 +12,8 @@ import bookedRouter from "./routers/booking.mjs";
 import couponsRouter from "./routers/coupon.mjs";
 import { v2 as cloudinary } from "cloudinary";
 import paymentRouter from "./routers/payment.mjs";
-
+import swaggerUi from "swagger-ui-express";
+import { loadSwaggerDocument } from "./utils/swagger.mjs";
 import ticketRouter from "./routers/ticket.mjs";
 dotenv.config();
 
@@ -31,6 +32,7 @@ const corsOptions = {
 
 const app = express();
 const port = process.env.PORT || 4000;
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(loadSwaggerDocument()));
 
 app.use(express.json());
 app.use(cors({ origin: "*" }));
