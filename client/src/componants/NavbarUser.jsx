@@ -283,7 +283,7 @@ function NavbarUser() {
                     />
                   ) : // <Avatar {...stringAvatar(userProfile.name)} />
                   null}
-                  <div>{user.name}</div>
+                  <div>{userProfile && userProfile.name}</div>
                 </li>
                 <li
                   className="flex justify-start items-center gap-4 active:text-gray-300"

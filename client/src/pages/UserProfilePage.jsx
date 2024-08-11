@@ -371,6 +371,9 @@ function UserProfilePage() {
                       setIsProfile(false);
                       setIsHistory("history");
                       setIsResetPassword(false);
+                      navigate("/profile", {
+                        state: { viewType: "history" },
+                      });
                     }}
                   >
                     <div className="flex items-center gap-[12px]">
@@ -420,6 +423,9 @@ function UserProfilePage() {
                       setIsProfile(false);
                       setIsHistory("history");
                       setIsResetPassword(false);
+                      navigate("/profile", {
+                        state: { viewType: "history" },
+                      });
                     }}
                   >
                     <div className="flex items-center gap-[12px]">
@@ -470,6 +476,9 @@ function UserProfilePage() {
                       setIsProfile("profile");
                       setIsHistory(false);
                       setIsResetPassword(false);
+                      navigate("/profile", {
+                        state: { viewType: "profile" },
+                      });
                     }}
                   >
                     <div className="flex items-center gap-[12px]">
@@ -507,6 +516,9 @@ function UserProfilePage() {
                       setIsProfile("profile");
                       setIsHistory(false);
                       setIsResetPassword(false);
+                      navigate("/profile", {
+                        state: { viewType: "profile" },
+                      });
                     }}
                   >
                     <div className="flex items-center gap-[12px]">
@@ -545,6 +557,9 @@ function UserProfilePage() {
                       setIsProfile(false);
                       setIsHistory(false);
                       setIsResetPassword("resetPassword");
+                      navigate("/profile", {
+                        state: { viewType: "resetPassword" },
+                      });
                     }}
                   >
                     <div className="flex items-center gap-[12px]">
@@ -572,6 +587,9 @@ function UserProfilePage() {
                       setIsProfile(false);
                       setIsHistory(false);
                       setIsResetPassword("resetPassword");
+                      navigate("/profile", {
+                        state: { viewType: "resetPassword" },
+                      });
                     }}
                   >
                     <div className="flex items-center gap-[12px]">
