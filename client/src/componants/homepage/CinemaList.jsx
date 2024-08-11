@@ -42,7 +42,7 @@ function CinemaList() {
                       <i className="fa-solid fa-location-dot w-[52px] h-[52px] border-[#565F7E] border-[1px] rounded-[50%] bg-[#474e6e] flex justify-center items-center"></i>
                     </div>
                     <button
-                      className="flex flex-col items-start"
+                      className="flex flex-col items-start text-left"
                       onClick={() => {
                         navigate(`/cinema/${cinema.cinema_id}`);
                       }}
