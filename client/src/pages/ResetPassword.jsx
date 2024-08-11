@@ -29,11 +29,14 @@ function ResetPassword() {
     }
   }
   function onSubmit(values, actions) {
-    resetPassword({
-      password: values.password,
-      confirmPassword: values.confirmPassword,
-      otp: values.otp,
-    });
+    resetPassword(
+      {
+        password: values.password,
+        confirmPassword: values.confirmPassword,
+        otp: values.otp,
+      },
+      actions
+    );
   }
   return (
     <section className="w-full absolute h-screen md:py-[450px] flex flex-col items-center justify-center  bg-BG ">
@@ -113,7 +116,7 @@ function ResetPassword() {
                   </div>
                   <button
                     // disabled={isSubmitting}
-                    disabled={isSubmitting || !(isValid && dirty)}
+                    disabled={!(isValid && dirty)}
                     className={`w-[380px] h-[48px]  text-body1M font-bold rounded-[4px] 
                                 transition-all duration-300 ease-in-out
                                 ${
