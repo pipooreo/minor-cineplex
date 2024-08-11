@@ -52,7 +52,7 @@ function MovieList() {
 
   return (
     <section className=" bg-BG flex justify-center ">
-      <div className="flex flex-col gap-[16px] xs:px-[10px] sm:px-[120px] pt-[144px]">
+      <div className="flex flex-col gap-[16px] xs:px-[10px]  pt-[144px]">
         <div className="w-[294px] h-[38px] flex flex-row justify-between items-center pb-4">
           <button
             onClick={handleNowShowingClick}
@@ -87,7 +87,7 @@ function MovieList() {
                 const formattedDate = releaseDate.toISOString().split("T")[0];
                 return (
                   <div
-                    className="flex flex-col gap-[16px] w-[161px] xs:w-[100%]"
+                    className="flex flex-col gap-[16px] w-[161px] md:w-[285px]"
                     key={data.id}
                   >
                     <img
