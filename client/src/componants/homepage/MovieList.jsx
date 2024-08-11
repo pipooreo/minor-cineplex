@@ -80,7 +80,7 @@ function MovieList() {
             <ClockLoader color="#4f7cee" />
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-[20px] xl:grid-cols-4">
+          <div className="grid grid-cols-2  xl:grid-cols-4 gap-[20px]">
             {movies.length > 0 ? (
               movies.map((data) => {
                 const releaseDate = new Date(data.theatrical_release);
@@ -91,14 +91,14 @@ function MovieList() {
                     key={data.id}
                   >
                     <img
-                      className="lg:w-[285px] lg:h-[416px] md:w-[100%] md:h-[359px] w-[161px] h-[235px] hover:border-[#81afe7]  hover:border hover:shadow-[0px_0px_60px_-25px_#81afe7] rounded"
+                      className="w-full h-full hover:border-[#81afe7]  hover:border hover:shadow-[0px_0px_60px_-25px_#81afe7] rounded"
                       src={data.image}
                       alt=""
                       onClick={() => {
                         navigate(`/movie/${data.title}`);
                       }}
                     />
-                    <div className=" flex flex-col lg:w-[285px] md:w-[100%] w-[161px]">
+                    <div className=" flex flex-col w-[100%] ">
                       <div className="flex flex-row justify-between text-[14px]">
                         <div className="text-[#8B93B0]">{formattedDate}</div>
                         <div className="text-[#8B93B0]">
