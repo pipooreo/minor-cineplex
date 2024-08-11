@@ -4,7 +4,6 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import ClockLoader from "react-spinners/ClockLoader";
 
 function SeatSelectorPage() {
   const [movie, setMovie] = useState();
@@ -85,8 +84,8 @@ function SeatSelectorPage() {
         );
       }
     } catch (err) {
-      getMovie();
       openDialog();
+      getMovie();
     }
   }
 
@@ -163,13 +162,6 @@ function SeatSelectorPage() {
     );
   };
 
-  if (loading) {
-    return (
-      <div className="sweet-loading flex justify-center h-screen bg-BG items-center ">
-        <ClockLoader color="#4f7cee" />
-      </div>
-    );
-  }
   return (
     <section
       className=" w-full  h-screen bg-BG absolute"
@@ -340,23 +332,15 @@ function SeatSelectorPage() {
                     Please select another seat to complete your booking
                   </p>
                 </div>
-
-                {/* <div className="flex gap-[16px] justify-center"> */}
                 <form method="dialog" className="flex">
                   <button
                     className="text-body1M font-bold rounded-[4px] 
                                 transition-all duration-300 ease-in-out grow  p-[12px_40px] 
                                     bg-blue-100 hover:bg-blue-200 active:bg-blue-300 text-white"
-                    // onClick={() =>
-                    //   navigate(
-                    //     `/payment/${movie.title}/${movie.cinema_name}/${movie.select_date}/${movie.hall_number}/${movie.time}`
-                    //   )
-                    // }
                   >
                     OK
                   </button>
                 </form>
-                {/* </div> */}
               </div>
             </dialog>
           </div>
