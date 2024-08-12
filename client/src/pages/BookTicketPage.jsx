@@ -322,22 +322,26 @@ function BookTicketPage() {
                   const currentCinemaIndex = cinemaCount++;
                   return (
                     <div key={index_cinema}>
-                      <div className="bg-gray-0 px-[16px] py-[24px] rounded-[5px] flex justify-between items-center gap-[20px]">
-                        <div className="xs:grid xs:grid-cols-6 gap-2 xl:flex xl:items-center xl:gap-[20px]">
-                          <i className="fa-solid fa-location-dot w-[44px] h-[44px] text-[#4E7BEE] rounded-[50%] bg-[#474e6e] flex justify-center items-center col-span-1"></i>
-                          <div className="text-[24px] text-[white] font-[700] leading-[30px] xs:col-span-5">
-                            {cinema.cinema_name}
+                      <div className="bg-gray-0 px-[16px] py-[24px] rounded-[5px]  flex justify-between items-center gap-[20px]">
+                        <div className="flex gap-[20px] justify-center items-start md:items-center flex-col lg:flex-row">
+                          <div className="flex gap-[20px] items-center">
+                            <i className="fa-solid fa-location-dot w-[44px] h-[44px] text-[#4E7BEE] rounded-[50%] bg-[#474e6e] flex justify-center items-center col-span-1"></i>
+                            <div className="text-[24px] text-[white] font-[700] leading-[30px] ">
+                              {cinema.cinema_name}
+                            </div>
                           </div>
-                          {cinema.movie_details.cinema_tags.map(
-                            (tag, index_tag) => (
-                              <div
-                                key={index_tag}
-                                className="rounded-[4px] text-gray-300 bg-gray-100 text-[14px] leading-[20px] py-[6px] px-[12px] xs:col-span-3"
-                              >
-                                {tag}
-                              </div>
-                            )
-                          )}
+                          <div className="flex gap-3">
+                            {cinema.movie_details.cinema_tags.map(
+                              (tag, index_tag) => (
+                                <div
+                                  key={index_tag}
+                                  className="rounded-[4px] text-gray-300 bg-gray-100 text-[14px] leading-[20px] py-[6px] px-[12px]"
+                                >
+                                  {tag}
+                                </div>
+                              )
+                            )}
+                          </div>
                         </div>
                         <i
                           className={`fa-solid ${
@@ -351,7 +355,7 @@ function BookTicketPage() {
 
                       {!isOpen[currentCinemaIndex] && (
                         <div className="bg-gray-0 border-t-[1px] xs:flex xs:flex-col md:flex md:flex-row">
-                          <div className="xs:flex xs:flex-row md:flex md:flex-col p-[24px] gap-[24px] w-full md:w-[270px] ">
+                          {/* <div className="xs:flex xs:flex-row md:flex md:flex-col p-[24px] gap-[24px] w-full md:w-[270px] ">
                             <img
                               className="xs:w-[96px] xs:h-[140px] md:w-[174px] md:h-[254px] rounded-[4px]"
                               src={cinema.movie_details.movie_image}
@@ -390,7 +394,7 @@ function BookTicketPage() {
                                 Movie Detail
                               </button>
                             </div>
-                          </div>
+                          </div> */}
 
                           <div className="xs:w-[100%] w-[343px] p-[10px] md:p-[40px] flex flex-col xs:gap-[40px] gap-[60px]">
                             {Object.keys(cinema.movie_details.schedule).map(

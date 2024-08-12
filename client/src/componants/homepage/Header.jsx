@@ -60,7 +60,7 @@ function Header() {
             <option>La La Land</option>
             <option>Pee Mak</option>
             <option>Death Whisperer</option>
-            <option>Godzilla x Kong: The New Empire</option>
+            <option>Godzilla x Kong</option>
             <option>
               Demon Slayer: Kimetsu No Yaiba To the Hashira Training
             </option>
@@ -130,7 +130,7 @@ function Header() {
           className="w-[72px] h-[48px] bg-[#4E7BEE] rounded-[4px] active:w-[71.5px] active:h-[47.5px]"
           onClick={handleSearch}
         >
-          <i className="fa-solid fa-magnifying-glass"></i>
+          <i className="fa-solid fa-magnifying-glass text-white"></i>
         </button>
       </div>
     </section>

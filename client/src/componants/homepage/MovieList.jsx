@@ -120,7 +120,7 @@ function MovieList() {
                         {data.genres.map((genre) => {
                           return (
                             <div
-                              className="h-[32px] w-fit rounded-[4px] text-[#8B93B0] bg-[#0d0f1a] px-[6px] py-[6px] max-[375px]:text-[14px]"
+                              className="h-[32px] w-fit rounded-[4px] text-gray-300 bg-gray-100 px-[6px] py-[6px] max-[375px]:text-[14px]"
                               key={genre}
                             >
                               {genre}
@@ -128,7 +128,7 @@ function MovieList() {
                           );
                         })}
                       </div>
-                      <div className="h-[32px] w-fit rounded-[4px] text-[#C8CEDD] bg-[#0d0f1a] px-[12px] py-[6px] text-[14px]">
+                      <div className="h-[32px] w-fit rounded-[4px] text-gray-400 bg-gray-100 px-[12px] py-[6px] text-[14px]">
                         {data.language}
                       </div>
                     </div>
