@@ -11,7 +11,7 @@
   "paths": {
     "/": {
       "get": {
-        "description": "",
+        "description": "Test API",
         "responses": {
           "200": {
             "description": "OK"
@@ -21,7 +21,7 @@
     },
     "/auth/register": {
       "post": {
-        "description": "",
+        "description": "Create user account",
         "parameters": [
           {
             "name": "body",
@@ -57,7 +57,7 @@
     },
     "/auth/login": {
       "post": {
-        "description": "",
+        "description": "User login and create token",
         "parameters": [
           {
             "name": "body",
@@ -90,7 +90,7 @@
     },
     "/auth/request-reset-password": {
       "post": {
-        "description": "",
+        "description": "Send OTP to user's email",
         "parameters": [
           {
             "name": "body",
@@ -123,7 +123,7 @@
     },
     "/auth/reset-password": {
       "post": {
-        "description": "",
+        "description": "Update user'password by forget password",
         "parameters": [
           {
             "name": "body",
@@ -156,7 +156,7 @@
     },
     "/auth/update-password": {
       "put": {
-        "description": "",
+        "description": "Update user's password by user profile",
         "parameters": [
           {
             "name": "authorization",
@@ -194,7 +194,7 @@
     },
     "/auth/update-profile": {
       "put": {
-        "description": "",
+        "description": "file upload and update user name",
         "parameters": [
           {
             "name": "body",
@@ -227,7 +227,7 @@
     },
     "/auth/users/{userId}": {
       "get": {
-        "description": "",
+        "description": "Get user data by userid",
         "parameters": [
           {
             "name": "userId",
