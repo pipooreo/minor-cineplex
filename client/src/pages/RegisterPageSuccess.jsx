@@ -20,7 +20,7 @@ function RegisterPageSuccess() {
             </p>
           </div>
           <button
-            className="btn btn-primary hover:bg-blue-200 active:bg-blue-300 h-[48px] w-[380px] bg-[color:hsla(223, 82%, 62%, 1)]] text-white text-[16px] font-bold max-sm:w-[343px]"
+            className="btn bg-blue-100 border-blue-100 hover:bg-blue-200 active:border-blue-300 hover:border-blue-200 active:bg-blue-300 h-[48px] w-[380px] bg-[color:hsla(223, 82%, 62%, 1)]] text-white text-[16px] font-bold max-sm:w-[343px]"
             type="text"
             onClick={() => nevigate("/")}
           >
