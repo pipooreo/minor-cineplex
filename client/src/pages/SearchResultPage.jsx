@@ -174,9 +174,7 @@ function SearchResultPage() {
               <option>Pee Mak</option>
               <option>Death Whisperer</option>
               <option>Godzilla x Kong</option>
-              <option>
-                Demon Slayer: Kimetsu No Yaiba To the Hashira Training
-              </option>
+              <option>Demon Slayer</option>
             </select>
 
             <select
@@ -313,7 +311,7 @@ function SearchResultPage() {
       <section className="bg-BG xs:pt-[24px] md:pt-[40px] md:pb-[80px] h-[100%] flex flex-col items-center">
         <div className="xs:w-[100%] md:w-[80%] flex flex-col gap-[24px]">
           {loading ? (
-            <div className="sweet-loading flex justify-center h-[30vh] m-10 items-center ">
+            <div className="sweet-loading flex justify-center h-screen m-10 items-center ">
               <ClockLoader color="#4f7cee" />
             </div>
           ) : (

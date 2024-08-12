@@ -61,9 +61,7 @@ function Header() {
             <option>Pee Mak</option>
             <option>Death Whisperer</option>
             <option>Godzilla x Kong</option>
-            <option>
-              Demon Slayer: Kimetsu No Yaiba To the Hashira Training
-            </option>
+            <option>Demon Slayer</option>
           </select>
 
           <select

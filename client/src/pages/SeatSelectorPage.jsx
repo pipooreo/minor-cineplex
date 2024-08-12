@@ -4,6 +4,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import ClockLoader from "react-spinners/ClockLoader";
 
 function SeatSelectorPage() {
   const [movie, setMovie] = useState();
@@ -221,9 +222,15 @@ function SeatSelectorPage() {
               ))}
             </div>
             <div className="flex gap-[40px] p-[16px_0px] border-t border-gray-100 max-md:flex-col ">
-              <div className="bg-gray-100 text-gray-400 rounded-[4px] p-[12px_16px] font-bold text-[24px] max-md:w-[100px]">
-                {movie && movie.hall_number}
-              </div>
+              {loading ? (
+                <div className="bg-gray-100 text-gray-400 rounded-[4px] p-[12px_16px] font-bold text-[24px] max-md:w-[100px]">
+                  <ClockLoader color="#4f7cee" />
+                </div>
+              ) : (
+                <div className="bg-gray-100 text-gray-400 rounded-[4px] p-[12px_16px] font-bold text-[24px] max-md:w-[100px]">
+                  {movie && movie.hall_number}
+                </div>
+              )}
               <div className="flex gap-[40px]">
                 <div className="flex gap-[16px] p-2 items-center max-md:grid-cols-2">
                   <img
@@ -246,55 +253,70 @@ function SeatSelectorPage() {
             </div>
           </div>
           <div className="max-md:w-[375px] max-lg:w-[100%] xl:[350px]">
-            <div className="flex flex-col w-[320px] text-white px-[16px] pb-[24px] pt-[16px] gap-[24px] bg-gray-0 rounded-[8px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
-              {movie && (
-                <div className=" flex gap-[12px] items-center">
-                  <img
-                    className="w-[82.21px] h-[120px] rounded-[4px]"
-                    src={movie.movie_image}
-                  />
-                  <div className="flex flex-col gap-[8px]">
-                    <div className="font-bold text-[20px] ">{movie.title}</div>
-                    <div className="grid-cols-4 grid lg:grid-cols-3 text-center gap-[8px]">
-                      {movie.movie_genres.map((item, index) => {
-                        return (
-                          <p
-                            className="bg-gray-100 text-gray-300 text-body2R rounded-[4px] px-[6px] py-[12px]"
-                            key={index}
-                          >
-                            {item}
-                          </p>
-                        );
-                      })}
+            {loading ? (
+              <div className="sweet-loading flex justify-center m-10 items-center bg-gray-0 rounded-[8px]  lg:w-[250px] xl:w-[375px] h-[375px] ">
+                <ClockLoader color="#4f7cee" />
+              </div>
+            ) : (
+              <div className="flex flex-col w-[320px] text-white px-[16px] pb-[24px] pt-[16px] gap-[24px] bg-gray-0 rounded-[8px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
+                {movie && (
+                  <div className=" flex gap-[12px] items-center">
+                    <img
+                      className="w-[82.21px] h-[120px] rounded-[4px]"
+                      src={movie.movie_image}
+                    />
+                    <div className="flex flex-col gap-[8px]">
+                      <div className="font-bold text-[20px] ">
+                        {movie.title}
+                      </div>
+                      <div className="grid-cols-4 grid lg:grid-cols-3 text-center gap-[8px]">
+                        {movie.movie_genres.map((item, index) => {
+                          return (
+                            <p
+                              className="bg-gray-100 text-gray-300 text-body2R rounded-[4px] px-[6px] py-[12px]"
+                              key={index}
+                            >
+                              {item}
+                            </p>
+                          );
+                        })}
 
-                      <p className="bg-gray-100 text-gray-400 text-body2M rounded-[4px] px-[6px] py-[12px]">
-                        {movie.language}
-                      </p>
+                        <p className="bg-gray-100 text-gray-400 text-body2M rounded-[4px] px-[6px] py-[12px]">
+                          {movie.language}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-              <div className="flex flex-col gap-[8px]">
-                <div className="flex gap-[12px] items-center">
-                  <i className="fa-solid fa-location-dot w-[16px] h-[16px] text-gray-200"></i>
-                  <p className="text-gray-400">{movie && movie.cinema_name}</p>
-                </div>
-                <div className="flex gap-[12px] items-center">
-                  <i className="fa-solid fa-calendar-days w-[16px] h-[16px] text-gray-200"></i>
-                  <p className="text-gray-400">{movie && movie.select_date}</p>
-                </div>
-                <div className="flex gap-[12px] items-center">
-                  <i className="fa-solid fa-clock w-[16px] h-[16px] text-gray-200"></i>
-                  <p className="text-gray-400">
-                    {movie && movie.screening_time}
-                  </p>
-                </div>
-                <div className="flex gap-[12px] items-center">
-                  <i className="fa-solid fa-shop w-[16px] h-[16px] text-gray-200"></i>
-                  <p className="text-gray-400">{movie && movie.hall_number}</p>
+                )}
+                <div className="flex flex-col gap-[8px]">
+                  <div className="flex gap-[12px] items-center">
+                    <i className="fa-solid fa-location-dot w-[16px] h-[16px] text-gray-200"></i>
+                    <p className="text-gray-400">
+                      {movie && movie.cinema_name}
+                    </p>
+                  </div>
+                  <div className="flex gap-[12px] items-center">
+                    <i className="fa-solid fa-calendar-days w-[16px] h-[16px] text-gray-200"></i>
+                    <p className="text-gray-400">
+                      {movie && movie.select_date}
+                    </p>
+                  </div>
+                  <div className="flex gap-[12px] items-center">
+                    <i className="fa-solid fa-clock w-[16px] h-[16px] text-gray-200"></i>
+                    <p className="text-gray-400">
+                      {movie && movie.screening_time}
+                    </p>
+                  </div>
+                  <div className="flex gap-[12px] items-center">
+                    <i className="fa-solid fa-shop w-[16px] h-[16px] text-gray-200"></i>
+                    <p className="text-gray-400">
+                      {movie && movie.hall_number}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
+
             {seatStatuses.some((seat) => seat.status === "reserve") && (
               <div className="flex flex-col p-[16px] mt-[-10px] bg-gray-0 max-h-full rounded-[8px] gap-[16px] max-md:w-[375px] max-lg:w-[100%] max-xl:w-[300px]">
                 <div className="flex justify-between">
@@ -315,7 +337,7 @@ function SeatSelectorPage() {
                 </button>
               </div>
             )}
-            <dialog id="alert" className="modal ">
+            <dialog id="alert" className="modal">
               <div className="modal-box bg-gray-100 border-gray-200 border flex flex-col gap-[40px] w-[343px]">
                 <form method="dialog">
                   <h3 className="font-bold text-[20px] text-center text-white">
