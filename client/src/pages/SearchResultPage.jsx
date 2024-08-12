@@ -173,7 +173,7 @@ function SearchResultPage() {
               <option>La La Land</option>
               <option>Pee Mak</option>
               <option>Death Whisperer</option>
-              <option>Godzilla x Kong: The New Empire</option>
+              <option>Godzilla x Kong</option>
               <option>
                 Demon Slayer: Kimetsu No Yaiba To the Hashira Training
               </option>
