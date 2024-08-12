@@ -12,6 +12,8 @@ import {
   EmailShareButton,
   EmailIcon,
 } from "react-share";
+import { ToastContainer, toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function BookingHistory(props) {
   const [ratings, setRatings] = useState({});
@@ -288,13 +290,32 @@ function BookingHistory(props) {
     setIsOpen(!isOpen);
   };
 
-  const shareUrl = window.location.href;
+  const shareTicket = window.location.href;
 
   const SocialShareButtons = ({ url }) => {
     const handleCopyLink = () => {
       navigator.clipboard.writeText(url).then(
-        () => alert("Link copied to clipboard!"),
-        (err) => alert("Failed to copy link: " + err)
+        () => {
+          toast.info("Link copied to clipboard!", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            theme: "colored",
+            transition: Bounce,
+          });
+
+          // ปิดเมนูแชร์
+          toggleShareMenu();
+
+          // รีเฟรชหน้า
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        },
+        (err) => toast.error("Failed to copy link: " + err)
       );
     };
 
@@ -313,7 +334,7 @@ function BookingHistory(props) {
                 rel="noopener noreferrer"
                 className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
               >
-                <LineShareButton url={shareUrl}>
+                <LineShareButton url={url}>
                   <LineIcon size={20} round />
                 </LineShareButton>
               </a>
@@ -326,7 +347,7 @@ function BookingHistory(props) {
                 rel="noopener noreferrer"
                 className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
               >
-                <FacebookShareButton url={shareUrl}>
+                <FacebookShareButton url={url}>
                   <FacebookIcon size={20} round />
                 </FacebookShareButton>
               </a>
@@ -334,7 +355,7 @@ function BookingHistory(props) {
             </li>
             <li className="flex flex-col justify-center gap-[4px] items-center w-[80px] h-[80px]">
               <a className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]">
-                <EmailShareButton url={shareUrl}>
+                <EmailShareButton url={url}>
                   <EmailIcon size={20} round />
                 </EmailShareButton>
               </a>
@@ -347,7 +368,7 @@ function BookingHistory(props) {
                 rel="noopener noreferrer"
                 className="flex justify-center items-center bg-gray-0 rounded-full text-center w-[40px] h-[40px]"
               >
-                <TwitterShareButton url={shareUrl}>
+                <TwitterShareButton url={url}>
                   <XIcon size={20} round />
                 </TwitterShareButton>
               </a>
@@ -597,73 +618,83 @@ function BookingHistory(props) {
                   {/* Add this near the end of your component */}
                   <dialog id={`success_modal_${index}`} className="modal">
                     <div className="modal-box w-11/12 max-w-2xl bg-gray-100 border-gray-200 border flex flex-col  gap-[40px]">
-                      <form method="dialog">
-                        <h3 className="text-head4 text-center text-white">
-                          Your rating & review
-                        </h3>
-                        <div
-                          className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-10 top-[9px]"
-                          onClick={toggleShareMenu}
-                        >
-                          <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M20 3V2.5H20.5V3H20ZM10.3536 13.3536C10.1583 13.5488 9.84171 13.5488 9.64645 13.3536C9.45118 13.1583 9.45118 12.8417 9.64645 12.6464L10.3536 13.3536ZM19.5 11V3H20.5V11H19.5ZM20 3.5H12V2.5H20V3.5ZM20.3536 3.35355L10.3536 13.3536L9.64645 12.6464L19.6464 2.64645L20.3536 3.35355Z"
-                              fill="#C8CEDD"
-                            />
-                            <path
-                              d="M18 14.625V14.625C18 15.9056 18 16.5459 17.8077 17.0568C17.5034 17.8653 16.8653 18.5034 16.0568 18.8077C15.5459 19 14.9056 19 13.625 19H10C7.17157 19 5.75736 19 4.87868 18.1213C4 17.2426 4 15.8284 4 13V9.375C4 8.09442 4 7.45413 4.19228 6.94325C4.4966 6.1347 5.1347 5.4966 5.94325 5.19228C6.45413 5 7.09442 5 8.375 5V5"
-                              stroke="#C8CEDD"
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                        </div>
-                        {isOpen && <SocialShareButtons url={shareUrl} />}
-                        <button
-                          onClick={handleCloseAndReload}
-                          className="btn btn-sm text-gray-400 btn-circle btn-ghost absolute right-2 top-2"
-                        >
-                          ✕
-                        </button>
-                      </form>
                       {showComment && (
-                        <div className="flex flex-col gap-[16px] md:px-[24px] px-[16px]">
-                          <div className="flex justify-between  md:gap-2">
-                            <div className="flex gap-[10px]">
-                              <img
-                                className="w-[44px] h-[44px] bg-white rounded-full"
-                                src={showComment.image}
-                                alt={showComment.name}
+                        <div>
+                          <form method="dialog">
+                            <h3 className="text-head4 text-center text-white">
+                              Your rating & review
+                            </h3>
+                            <div
+                              className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-10 top-[9px]"
+                              onClick={toggleShareMenu}
+                            >
+                              <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M20 3V2.5H20.5V3H20ZM10.3536 13.3536C10.1583 13.5488 9.84171 13.5488 9.64645 13.3536C9.45118 13.1583 9.45118 12.8417 9.64645 12.6464L10.3536 13.3536ZM19.5 11V3H20.5V11H19.5ZM20 3.5H12V2.5H20V3.5ZM20.3536 3.35355L10.3536 13.3536L9.64645 12.6464L19.6464 2.64645L20.3536 3.35355Z"
+                                  fill="#C8CEDD"
+                                />
+                                <path
+                                  d="M18 14.625V14.625C18 15.9056 18 16.5459 17.8077 17.0568C17.5034 17.8653 16.8653 18.5034 16.0568 18.8077C15.5459 19 14.9056 19 13.625 19H10C7.17157 19 5.75736 19 4.87868 18.1213C4 17.2426 4 15.8284 4 13V9.375C4 8.09442 4 7.45413 4.19228 6.94325C4.4966 6.1347 5.1347 5.4966 5.94325 5.19228C6.45413 5 7.09442 5 8.375 5V5"
+                                  stroke="#C8CEDD"
+                                  strokeLinecap="round"
+                                />
+                              </svg>
+                            </div>
+                            {isOpen && (
+                              <SocialShareButtons
+                                url={`${
+                                  window.location.origin
+                                }/movie/${encodeURIComponent(
+                                  showComment.title
+                                )}`}
                               />
-                              <div>
-                                <h3 className="text-body1M text-gray-400">
-                                  {showComment.name}
-                                </h3>
-                                <p className="text-body2R text-gray-300">
-                                  {showComment.created_at}
-                                </p>
+                            )}
+                            <button
+                              onClick={handleCloseAndReload}
+                              className="btn btn-sm text-gray-400 btn-circle btn-ghost absolute right-2 top-2"
+                            >
+                              ✕
+                            </button>
+                          </form>
+                          <div className="flex flex-col gap-[16px] my-5 md:px-[24px] px-[16px]">
+                            <div className="flex justify-between  md:gap-2">
+                              <div className="flex gap-[10px]">
+                                <img
+                                  className="w-[44px] h-[44px] bg-white rounded-full"
+                                  src={showComment.image}
+                                  alt={showComment.name}
+                                />
+                                <div>
+                                  <h3 className="text-body1M text-gray-400">
+                                    {showComment.name}
+                                  </h3>
+                                  <p className="text-body2R text-gray-300">
+                                    {showComment.created_at}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex gap-1 md:gap-3">
+                                {Array.from({ length: showComment.rating }).map(
+                                  (_, i) => (
+                                    <i
+                                      className="fas fa-star text-[#4E7BEE]"
+                                      key={i}
+                                    ></i>
+                                  )
+                                )}
                               </div>
                             </div>
-                            <div className="flex gap-1 md:gap-3">
-                              {Array.from({ length: showComment.rating }).map(
-                                (_, i) => (
-                                  <i
-                                    className="fas fa-star text-[#4E7BEE]"
-                                    key={i}
-                                  ></i>
-                                )
-                              )}
-                            </div>
-                          </div>
 
-                          <p className="py-[20px] text-body2R text-gray-300">
-                            {showComment.comment}
-                          </p>
+                            <p className="py-[20px] text-body2R text-gray-300">
+                              {showComment.comment}
+                            </p>
+                          </div>
                         </div>
                       )}
                       <form
@@ -699,6 +730,7 @@ function BookingHistory(props) {
                       </form>
                     </div>
                   </dialog>
+                  <ToastContainer />
                   <div className="text-white text-[14px] font-medium border border-gray-100 p-[6px_16px] rounded-[100px]">
                     Completed
                   </div>
@@ -832,72 +864,82 @@ function BookingHistory(props) {
                   </dialog>
                   <dialog id={`success_modal_${index}`} className="modal">
                     <div className="modal-box w-11/12 max-w-2xl bg-gray-100 border-gray-200 border flex flex-col  gap-[40px]">
-                      <form method="dialog">
-                        <h3 className="text-head4 text-center text-white">
-                          Your rating & review
-                        </h3>
-                        <div
-                          className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-10 top-[9px]"
-                          onClick={toggleShareMenu}
-                        >
-                          <svg
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M20 3V2.5H20.5V3H20ZM10.3536 13.3536C10.1583 13.5488 9.84171 13.5488 9.64645 13.3536C9.45118 13.1583 9.45118 12.8417 9.64645 12.6464L10.3536 13.3536ZM19.5 11V3H20.5V11H19.5ZM20 3.5H12V2.5H20V3.5ZM20.3536 3.35355L10.3536 13.3536L9.64645 12.6464L19.6464 2.64645L20.3536 3.35355Z"
-                              fill="#C8CEDD"
-                            />
-                            <path
-                              d="M18 14.625V14.625C18 15.9056 18 16.5459 17.8077 17.0568C17.5034 17.8653 16.8653 18.5034 16.0568 18.8077C15.5459 19 14.9056 19 13.625 19H10C7.17157 19 5.75736 19 4.87868 18.1213C4 17.2426 4 15.8284 4 13V9.375C4 8.09442 4 7.45413 4.19228 6.94325C4.4966 6.1347 5.1347 5.4966 5.94325 5.19228C6.45413 5 7.09442 5 8.375 5V5"
-                              stroke="#C8CEDD"
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                        </div>
-                        {isOpen && <SocialShareButtons url={shareUrl} />}
-                        <button
-                          onClick={handleCloseAndReload}
-                          className="btn btn-sm text-gray-400 btn-circle btn-ghost absolute right-2 top-2"
-                        >
-                          ✕
-                        </button>
-                      </form>
                       {showComment && (
-                        <div className="flex flex-col gap-[16px] md:px-[24px] px-[16px]">
-                          <div className="flex justify-between  md:gap-2">
-                            <div className="flex gap-[10px]">
-                              <img
-                                className="w-[44px] h-[44px] bg-white rounded-full"
-                                src={showComment.image}
-                                alt={showComment.name}
+                        <div>
+                          <form method="dialog">
+                            <h3 className="text-head4 text-center text-white">
+                              Your rating & review
+                            </h3>
+                            <div
+                              className="btn text-gray-400 btn-sm btn-circle btn-ghost absolute right-10 top-[9px]"
+                              onClick={toggleShareMenu}
+                            >
+                              <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M20 3V2.5H20.5V3H20ZM10.3536 13.3536C10.1583 13.5488 9.84171 13.5488 9.64645 13.3536C9.45118 13.1583 9.45118 12.8417 9.64645 12.6464L10.3536 13.3536ZM19.5 11V3H20.5V11H19.5ZM20 3.5H12V2.5H20V3.5ZM20.3536 3.35355L10.3536 13.3536L9.64645 12.6464L19.6464 2.64645L20.3536 3.35355Z"
+                                  fill="#C8CEDD"
+                                />
+                                <path
+                                  d="M18 14.625V14.625C18 15.9056 18 16.5459 17.8077 17.0568C17.5034 17.8653 16.8653 18.5034 16.0568 18.8077C15.5459 19 14.9056 19 13.625 19H10C7.17157 19 5.75736 19 4.87868 18.1213C4 17.2426 4 15.8284 4 13V9.375C4 8.09442 4 7.45413 4.19228 6.94325C4.4966 6.1347 5.1347 5.4966 5.94325 5.19228C6.45413 5 7.09442 5 8.375 5V5"
+                                  stroke="#C8CEDD"
+                                  strokeLinecap="round"
+                                />
+                              </svg>
+                            </div>
+                            {isOpen && (
+                              <SocialShareButtons
+                                url={`${
+                                  window.location.origin
+                                }/movie/${encodeURIComponent(
+                                  showComment.title
+                                )}`}
                               />
-                              <div>
-                                <h3 className="text-body1M text-gray-400">
-                                  {showComment.name}
-                                </h3>
-                                <p className="text-body2R text-gray-300">
-                                  {showComment.created_at}
-                                </p>
+                            )}
+                            <button
+                              onClick={handleCloseAndReload}
+                              className="btn btn-sm text-gray-400 btn-circle btn-ghost absolute right-2 top-2"
+                            >
+                              ✕
+                            </button>
+                          </form>
+                          <div className="flex flex-col gap-[16px] my-5 md:px-[24px] px-[16px]">
+                            <div className="flex justify-between  md:gap-2">
+                              <div className="flex gap-[10px]">
+                                <img
+                                  className="w-[44px] h-[44px] bg-white rounded-full"
+                                  src={showComment.image}
+                                  alt={showComment.name}
+                                />
+                                <div>
+                                  <h3 className="text-body1M text-gray-400">
+                                    {showComment.name}
+                                  </h3>
+                                  <p className="text-body2R text-gray-300">
+                                    {showComment.created_at}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex gap-1 md:gap-3">
+                                {Array.from({ length: showComment.rating }).map(
+                                  (_, i) => (
+                                    <i
+                                      className="fas fa-star text-[#4E7BEE]"
+                                      key={i}
+                                    ></i>
+                                  )
+                                )}
                               </div>
                             </div>
-                            <div className="flex gap-1 md:gap-3">
-                              {Array.from({ length: showComment.rating }).map(
-                                (_, i) => (
-                                  <i
-                                    className="fas fa-star text-[#4E7BEE]"
-                                    key={i}
-                                  ></i>
-                                )
-                              )}
-                            </div>
+                            <p className="py-[20px] text-body2R text-gray-300">
+                              {showComment.comment}
+                            </p>
                           </div>
-                          <p className="py-[20px] text-body2R text-gray-300">
-                            {showComment.comment}
-                          </p>
                         </div>
                       )}
                       <form
@@ -931,6 +973,7 @@ function BookingHistory(props) {
                       </form>
                     </div>
                   </dialog>
+                  <ToastContainer />
                   <div className="text-white text-[14px] font-medium border border-gray-100 p-[6px_16px] rounded-[100px]">
                     Completed
                   </div>
@@ -976,7 +1019,7 @@ function BookingHistory(props) {
                             />
                           </svg>
                         </div>
-                        {isOpen && <SocialShareButtons url={shareUrl} />}
+                        {isOpen && <SocialShareButtons url={shareTicket} />}
                         <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-gray-400">
                           ✕
                         </button>
