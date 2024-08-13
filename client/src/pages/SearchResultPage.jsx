@@ -313,7 +313,7 @@ function SearchResultPage() {
           </div>
         </div>
 
-        <div className="flex xs:flex-col xs:justify-between xs:items-center xl:w-[80%] xl:flex-row xl:justify-between">
+        <div className="flex xs:flex-col md:justify-between md:items-center xl:w-[80%] xl:flex-row xl:justify-between">
           <div className="flex">
             <FormControlLabel
               label="Wheelchair access"
@@ -375,7 +375,7 @@ function SearchResultPage() {
                   return paginatedSearch.map((searchItem, index_search) => (
                     <div
                       key={index_search}
-                      className="flex flex-col gap-[24px]"
+                      className="flex flex-col  gap-[24px]"
                     >
                       {searchItem.cinemas.map((cinema, index_cinema) => {
                         const currentCinemaIndex = cinemaCount++;
@@ -385,21 +385,25 @@ function SearchResultPage() {
                               onClick={() => toggleMenu(currentCinemaIndex)}
                               className="bg-gray-0 px-[16px] py-[24px] rounded-[5px] w-[100%] flex justify-between items-center gap-[20px]"
                             >
-                              <div className="xs:grid xs:grid-cols-6 gap-2 xl:flex xl:items-center xl:gap-[20px]">
-                                <i className="fa-solid fa-location-dot w-[44px] h-[44px] text-[#4E7BEE] rounded-[50%] bg-[#474e6e] flex justify-center items-center col-span-1"></i>
-                                <div className="text-[24px] text-[white] font-[700] leading-[30px] xs:col-span-5 text-left">
-                                  {cinema.cinema_name}
+                              <div className="flex gap-[20px] items-start md:items-start flex-col lg:flex-row lg:items-center">
+                                <div className="flex gap-[20px] items-center">
+                                  <i className="fa-solid fa-location-dot w-[44px] h-[44px] text-[#4E7BEE] rounded-[50%] bg-[#474e6e] flex justify-center items-center "></i>
+                                  <div className="text-[24px] text-[white] font-[700] leading-[30px] text-left">
+                                    {cinema.cinema_name}
+                                  </div>
                                 </div>
-                                {cinema.movie_details.cinema_tags.map(
-                                  (tag, index_tag) => (
-                                    <div
-                                      key={index_tag}
-                                      className="rounded-[4px] text-gray-300 bg-gray-100 text-[14px] leading-[20px] py-[6px] px-[12px] xs:col-span-3"
-                                    >
-                                      {tag}
-                                    </div>
-                                  )
-                                )}
+                                <div className="flex gap-3">
+                                  {cinema.movie_details.cinema_tags.map(
+                                    (tag, index_tag) => (
+                                      <div
+                                        key={index_tag}
+                                        className="rounded-[4px] text-gray-300 bg-gray-100 text-[14px] leading-[20px] py-[6px] px-[12px] "
+                                      >
+                                        {tag}
+                                      </div>
+                                    )
+                                  )}
+                                </div>
                               </div>
                               <i
                                 className={`fa-solid ${
