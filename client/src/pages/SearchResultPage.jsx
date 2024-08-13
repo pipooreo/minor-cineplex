@@ -315,7 +315,7 @@ function SearchResultPage() {
               <ClockLoader color="#4f7cee" />
             </div>
           ) : (
-            <div>
+            <div className="flex flex-col  p-2 md:justify-between  gap-5">
               {noResults ? (
                 <div className="text-gray-400 text-center py-8 h-screen">
                   <h2 className="text-2xl font-bold mb-4">No results found</h2>
@@ -334,8 +334,11 @@ function SearchResultPage() {
                       {searchItem.cinemas.map((cinema, index_cinema) => {
                         const currentCinemaIndex = cinemaCount++;
                         return (
-                          <div key={index_cinema}>
-                            <div className="bg-gray-0 px-[16px] py-[24px] rounded-[5px] flex justify-between items-center gap-[20px]">
+                          <div key={index_cinema} className="w-[100%]">
+                            <button
+                              onClick={() => toggleMenu(currentCinemaIndex)}
+                              className="bg-gray-0 px-[16px] py-[24px] rounded-[5px] w-[100%] flex justify-between items-center gap-[20px]"
+                            >
                               <div className="xs:grid xs:grid-cols-6 gap-2 xl:flex xl:items-center xl:gap-[20px]">
                                 <i className="fa-solid fa-location-dot w-[44px] h-[44px] text-[#4E7BEE] rounded-[50%] bg-[#474e6e] flex justify-center items-center col-span-1"></i>
                                 <div className="text-[24px] text-[white] font-[700] leading-[30px] xs:col-span-5">
@@ -352,11 +355,8 @@ function SearchResultPage() {
                                   )
                                 )}
                               </div>
-                              <i
-                                className="fa-solid fa-angle-down text-gray-400"
-                                onClick={() => toggleMenu(currentCinemaIndex)}
-                              ></i>
-                            </div>
+                              <i className="fa-solid fa-angle-down text-gray-400"></i>
+                            </button>
 
                             {isOpen[currentCinemaIndex] && (
                               <div className="bg-gray-0 border-t-[1px] xs:flex xs:flex-col md:flex md:flex-row">
