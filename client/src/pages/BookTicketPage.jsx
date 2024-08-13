@@ -328,7 +328,7 @@ function BookTicketPage() {
                       >
                         <div className="flex gap-[20px] items-start md:items-start flex-col lg:flex-row lg:items-center">
                           <div className="flex gap-[20px] items-center">
-                            <i className="fa-solid fa-location-dot w-[44px] h-[44px] text-[#4E7BEE] rounded-[50%] bg-[#474e6e] flex justify-center items-center col-span-1"></i>
+                            <i className="fa-solid fa-location-dot w-[44px] h-[44px] text-[#4E7BEE] rounded-[50%] bg-[#474e6e] flex justify-center items-center "></i>
                             <div className="text-[24px] text-[white] font-[700] leading-[30px] text-left ">
                               {cinema.cinema_name}
                             </div>
