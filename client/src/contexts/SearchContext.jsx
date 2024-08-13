@@ -65,7 +65,6 @@ export function SearchProvider({ children }) {
       } else {
         setNoResults(false);
       }
-      console.log(response.data.data);
 
       setSearch(response.data.data);
     } catch (error) {

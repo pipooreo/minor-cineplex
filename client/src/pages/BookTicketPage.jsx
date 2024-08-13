@@ -273,7 +273,7 @@ function BookTicketPage() {
       </div>
       {/* above is the slider part */}
 
-      <section className="bg-BG xs:pt-[24px] md:pt-[40px] md:pb-[80px] flex flex-col items-center">
+      <section className="bg-BG xs:py-[24px] md:pt-[40px] md:pb-[80px] flex flex-col items-center">
         <div className="xs:w-[100%] md:w-[80%] flex flex-col gap-[24px]">
           <div className="flex flex-col md:flex-row p-2 md:justify-between pb-[3%] gap-5">
             <div className="flex items-center w-[100%] ">
@@ -329,7 +329,7 @@ function BookTicketPage() {
                         <div className="flex gap-[20px] items-start md:items-start flex-col lg:flex-row lg:items-center">
                           <div className="flex gap-[20px] items-center">
                             <i className="fa-solid fa-location-dot w-[44px] h-[44px] text-[#4E7BEE] rounded-[50%] bg-[#474e6e] flex justify-center items-center col-span-1"></i>
-                            <div className="text-[24px] text-[white] font-[700] leading-[30px] ">
+                            <div className="text-[24px] text-[white] font-[700] leading-[30px] text-left ">
                               {cinema.cinema_name}
                             </div>
                           </div>

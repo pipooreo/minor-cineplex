@@ -387,7 +387,7 @@ function SearchResultPage() {
                             >
                               <div className="xs:grid xs:grid-cols-6 gap-2 xl:flex xl:items-center xl:gap-[20px]">
                                 <i className="fa-solid fa-location-dot w-[44px] h-[44px] text-[#4E7BEE] rounded-[50%] bg-[#474e6e] flex justify-center items-center col-span-1"></i>
-                                <div className="text-[24px] text-[white] font-[700] leading-[30px] xs:col-span-5">
+                                <div className="text-[24px] text-[white] font-[700] leading-[30px] xs:col-span-5 text-left">
                                   {cinema.cinema_name}
                                 </div>
                                 {cinema.movie_details.cinema_tags.map(
@@ -401,7 +401,13 @@ function SearchResultPage() {
                                   )
                                 )}
                               </div>
-                              <i className="fa-solid fa-angle-down text-gray-400"></i>
+                              <i
+                                className={`fa-solid ${
+                                  isOpen[currentCinemaIndex]
+                                    ? "fa-angle-up"
+                                    : "fa-angle-down"
+                                } text-gray-400`}
+                              ></i>
                             </button>
 
                             {isOpen[currentCinemaIndex] && (
