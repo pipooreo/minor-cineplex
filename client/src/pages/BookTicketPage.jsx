@@ -321,9 +321,12 @@ function BookTicketPage() {
                 {searchItem.cinemas.map((cinema, index_cinema) => {
                   const currentCinemaIndex = cinemaCount++;
                   return (
-                    <div key={index_cinema}>
-                      <div className="bg-gray-0 px-[16px] py-[24px] rounded-[5px]  flex justify-between items-center gap-[20px]">
-                        <div className="flex gap-[20px] justify-center items-start md:items-center flex-col lg:flex-row">
+                    <div key={index_cinema} className="w-[100%]">
+                      <button
+                        onClick={() => toggleMenu(currentCinemaIndex)}
+                        className="bg-gray-0 px-[16px] py-[24px] rounded-[5px] w-[100%] flex justify-between items-center gap-[20px]"
+                      >
+                        <div className="flex gap-[20px] items-start md:items-start flex-col lg:flex-row lg:items-center">
                           <div className="flex gap-[20px] items-center">
                             <i className="fa-solid fa-location-dot w-[44px] h-[44px] text-[#4E7BEE] rounded-[50%] bg-[#474e6e] flex justify-center items-center col-span-1"></i>
                             <div className="text-[24px] text-[white] font-[700] leading-[30px] ">
@@ -349,9 +352,8 @@ function BookTicketPage() {
                               ? "fa-angle-up"
                               : "fa-angle-down"
                           } text-gray-400`}
-                          onClick={() => toggleMenu(currentCinemaIndex)}
                         ></i>
-                      </div>
+                      </button>
 
                       {!isOpen[currentCinemaIndex] && (
                         <div className="bg-gray-0 border-t-[1px] xs:flex xs:flex-col md:flex md:flex-row">
