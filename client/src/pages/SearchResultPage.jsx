@@ -6,6 +6,7 @@ import * as React from "react";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import ClockLoader from "react-spinners/ClockLoader";
+import Pagination from "@mui/material/Pagination";
 
 function SearchResultPage() {
   const {
@@ -33,6 +34,8 @@ function SearchResultPage() {
   const [wheelchairAccess, setWheelchairAccess] = useState(false);
   const [hearingAssistance, setHearingAssistance] = useState(false);
   const [searchTriggered, setSearchTriggered] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   useEffect(() => {
     getDataSearch();
@@ -71,6 +74,7 @@ function SearchResultPage() {
     genreSearch,
     dateSearch,
     tagsSearch,
+    currentPage,
   ]);
 
   useEffect(() => {
@@ -90,6 +94,7 @@ function SearchResultPage() {
 
   const handleSearch = () => {
     setSearchTriggered(true);
+    setCurrentPage(1);
   };
 
   const handleClear = () => {
@@ -102,6 +107,7 @@ function SearchResultPage() {
     setWheelchairAccess(false);
     setHearingAssistance(false);
     setSearchTriggered(false);
+    setCurrentPage(1);
     navigate("/moviesearch");
   };
 
@@ -146,6 +152,46 @@ function SearchResultPage() {
       newIsOpen[index] = !newIsOpen[index];
       return newIsOpen;
     });
+  };
+
+  const totalItems = search.reduce((acc, item) => acc + item.cinemas.length, 0);
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const paginateData = (data, page, perPage) => {
+    let totalItems = 0;
+    let paginatedData = [];
+
+    for (let item of data) {
+      const createNewItem = (item) => ({
+        ...item,
+        cinemas: [],
+      });
+
+      let newItem = createNewItem(item);
+      const startIndex = (page - 1) * perPage;
+      const endIndex = page * perPage;
+
+      for (let cinema of item.cinemas) {
+        if (totalItems >= startIndex && totalItems < endIndex) {
+          newItem.cinemas.push(cinema);
+          console.log(newItem);
+        }
+        totalItems++;
+      }
+
+      if (newItem.cinemas.length > 0) {
+        paginatedData.push(newItem);
+      }
+
+      if (totalItems >= endIndex) break;
+    }
+    return paginatedData;
+  };
+
+  const paginatedSearch = paginateData(search, currentPage, itemsPerPage);
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
   };
 
   return (
@@ -256,14 +302,14 @@ function SearchResultPage() {
               }}
               className="w-[72px] h-[48px] bg-[#4E7BEE] rounded-[4px] active:w-[71.5px] active:h-[47.5px]"
             >
-              <i className="fa-solid fa-magnifying-glass"></i>
+              <i className="fa-solid fa-magnifying-glass text-white"></i>
             </button>
-            <div
+            <button
               onClick={handleClear}
               className="text-white underline underline-offset-2 md:hidden"
             >
               Clear
-            </div>
+            </button>
           </div>
         </div>
 
@@ -299,12 +345,12 @@ function SearchResultPage() {
             />
           </div>
 
-          <div
+          <button
             onClick={handleClear}
             className="text-white underline underline-offset-2 max-md:hidden"
           >
             Clear
-          </div>
+          </button>
         </div>
       </section>
 
@@ -326,7 +372,7 @@ function SearchResultPage() {
               ) : (
                 (() => {
                   let cinemaCount = 0;
-                  return search.map((searchItem, index_search) => (
+                  return paginatedSearch.map((searchItem, index_search) => (
                     <div
                       key={index_search}
                       className="flex flex-col gap-[24px]"
@@ -507,6 +553,36 @@ function SearchResultPage() {
                 })()
               )}
             </div>
+          )}
+          {!loading && !noResults && (
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={handlePageChange}
+              size="large"
+              shape="rounded"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "20px",
+                "& .MuiPaginationItem-root": {
+                  color: "#8B93B0", // สีของตัวเลขหน้า
+                  "&.Mui-selected": {
+                    backgroundColor: "#21263F", // สีพื้นหลังของหน้าที่เลือก
+                    color: "white", // สีตัวเลขของหน้าที่เลือก
+                  },
+                  "&:hover": {
+                    backgroundColor: "#21263F", // สีเมื่อ hover
+                  },
+                },
+                "& .MuiPaginationItem-previousNext": {
+                  color: "#8B93B0", // สีของปุ่มก่อนหน้าและถัดไป
+                  "&:hover": {
+                    backgroundColor: "rgba(78, 123, 238, 0.2)", // สีเมื่อ hover
+                  },
+                },
+              }}
+            />
           )}
         </div>
       </section>

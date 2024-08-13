@@ -14,10 +14,11 @@ import {
 } from "../controllers/comments.controller.mjs";
 
 const commentRouter = Router();
+commentRouter.get("/moviesComment", getCommentsByMoviesName);
+
 commentRouter.use(protect);
 commentRouter.get("/", getCommentsAll);
 commentRouter.get("/commentId", getCommentsById);
-commentRouter.get("/moviesComment", getCommentsByMoviesName);
 commentRouter.get("/:userId", getCommentByUser);
 commentRouter.get("/:userId/:movieId", getCommentByMovie);
 commentRouter.post("/", createComment);

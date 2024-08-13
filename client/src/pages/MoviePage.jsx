@@ -67,10 +67,7 @@ function MoviePage() {
   }
 
   return (
-    <div
-      className="bg-BG relative h-screen"
-      style={{ fontFamily: "Roboto Condensed" }}
-    >
+    <div className="bg-BG relative " style={{ fontFamily: "Roboto Condensed" }}>
       <div className="absolute w-full h-[500px] hidden sm:block">
         <div
           className="bg-no-repeat w-full h-full bg-center bg-cover"
