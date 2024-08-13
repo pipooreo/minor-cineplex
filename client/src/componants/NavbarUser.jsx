@@ -48,14 +48,19 @@ function NavbarUser() {
   const [userProfile, setUserProfile] = useState();
   const token = localStorage.getItem("token");
   const user = jwtDecode(token);
+  const [isLoading, setIsLoading] = useState(true);
 
   async function getUser() {
     try {
+      setIsLoading(true);
       const results = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}/auth/users/${user.id}`
       );
       setUserProfile(results.data.data);
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -104,14 +109,17 @@ function NavbarUser() {
             className=" flex cursor-pointer justify-center items-center gap-2"
             onClick={toggleUserMenu}
           >
-            {userProfile ? (
-              <Avatar
-                alt={userProfile && userProfile.name}
-                src={userProfile && userProfile.image}
-              />
-            ) : // <Avatar {...stringAvatar(userProfile.name)} />
-            null}
-            <div className="text-white">{userProfile && userProfile.name}</div>
+            {isLoading ? (
+              <div className="text-gray-400">Loading...</div>
+            ) : userProfile?.image ? (
+              <Avatar alt={userProfile.name} src={userProfile.image} />
+            ) : (
+              <Avatar {...stringAvatar(userProfile.name)} />
+            )}
+
+            <div className="text-gray-400">
+              {userProfile && userProfile.name}
+            </div>
             <svg
               width="14"
               height="8"
@@ -276,13 +284,11 @@ function NavbarUser() {
             <nav className="flex flex-col justify-center items-center">
               <ul className="w-full flex flex-col gap-6">
                 <li className="flex justify-start items-center gap-4 active:text-gray-300">
-                  {userProfile ? (
-                    <Avatar
-                      alt={userProfile && userProfile.name}
-                      src={userProfile && userProfile.image}
-                    />
-                  ) : // <Avatar {...stringAvatar(userProfile.name)} />
-                  null}
+                  {userProfile.image ? (
+                    <Avatar alt={userProfile.name} src={userProfile.image} />
+                  ) : (
+                    <Avatar {...stringAvatar(userProfile.name)} />
+                  )}
                   <div>{userProfile && userProfile.name}</div>
                 </li>
                 <li

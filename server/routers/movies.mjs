@@ -13,6 +13,6 @@ const moviesRouter = Router();
 moviesRouter.get("/release", getMoviesReleased);
 moviesRouter.get("/comingSoon", getMoviesComingSoon);
 moviesRouter.get("/genres", [protect], getMoviesByGenres);
-moviesRouter.get("/movie", [protect], getMoviesById);
+moviesRouter.get("/movie", getMoviesById);
 
 export default moviesRouter;
