@@ -21,6 +21,7 @@ export default function PaymentTest() {
   const [countdownDate, setCountdownDate] = useState(null);
   const [countDownPopUp, setCountDownPopUp] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showModalFail, setShowModalFail] = useState(false);
   const [couponCode, setCouponCode] = useState(""); // เพิ่ม state สำหรับเก็บคูปอง
   const [couponError, setCouponError] = useState("");
   const [discount, setDiscount] = useState(0); // state สำหรับเก็บค่าลดราคา
@@ -250,6 +251,12 @@ export default function PaymentTest() {
           );
         }
       } catch (error) {
+        // if (error.response.data.error.type.includes("CardError")) {
+        //   setShowModalFail(true);
+        // } else {
+        //   console.log("error catch: ", error);
+        // }
+        setShowModalFail(true);
         console.log("error catch: ", error);
       }
     } else {
@@ -644,6 +651,27 @@ export default function PaymentTest() {
                           }}
                         >
                           Confirm
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {showModalFail && (
+                <div className="modal modal-open bg-gray-100 ">
+                  <div className="modal-box bg-gray-100 w-11/12 max-w-sm flex flex-col justify-center items-center">
+                    <h3 className="font-bold text-lg text-head4">
+                      Payment Failure
+                    </h3>
+                    <p className="py-4 text-gray-400 ">Please try again</p>
+                    <div className="flex justify-center gap-5">
+                      <form method="dialog" className="flex gap-5">
+                        <button
+                          className="btn text-body1M w-[139.5px] rounded-[4px] bg-blue-100 border-blue-100 hover:bg-blue-200 active:bg-blue-300 hover:border-blue-200 active:border-blue-300  text-white"
+                          type="button"
+                          onClick={() => setShowModalFail(false)}
+                        >
+                          OK
                         </button>
                       </form>
                     </div>
