@@ -15,7 +15,10 @@ function SeatSelectorPage() {
   const params = useParams();
   const seatPrice = 150;
   const token = localStorage.getItem("token");
-  const user = jwtDecode(token);
+  let user;
+  if (token) {
+    user = jwtDecode(token);
+  }
 
   const navigate = useNavigate();
 
